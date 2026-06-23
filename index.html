@@ -96,6 +96,48 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .loading{text-align:center;padding:60px 28px;color:var(--mu);font-size:.9rem}
 .tst{position:fixed;bottom:20px;right:20px;background:var(--tx);color:#fff;padding:9px 16px;border-radius:5px;font-size:.8rem;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:9999;transform:translateY(70px);opacity:0;transition:all .22s}
 .tst.show{transform:translateY(0);opacity:1}
+
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #login-screen, nav, .fi, .sb, .ha, .tst { display: none !important; }
+  header { padding: 10px 16px; }
+  body { font-size: 12px; }
+
+  /* Verberg alle tabbladen behalve het afdrukbare */
+  .pg { display: none !important; }
+  .pg.print-active { display: block !important; }
+
+  /* Groepskaarten */
+  .gc { break-inside: avoid; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px; }
+  .gh { padding: 8px 12px; background: #f5f5f5 !important; }
+  .gt { font-size: .9rem; font-weight: 700; }
+
+  /* Leerlingkaarten altijd open */
+  .gll { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 6px; padding: 8px 12px; }
+  .lc-wrap { display: block !important; break-inside: avoid; }
+  .lc { border-radius: 6px 6px 0 0 !important; background: #eee !important; font-size: .75rem; }
+  .lc .arr { display: none; }
+  .lc-det { display: block !important; border: 1px solid #ddd; border-top: none; border-radius: 0 0 6px 6px; padding: 6px 10px; }
+  .lc-dh { font-size: .65rem; margin: 4px 0 2px; }
+  .lc-dr { margin-bottom: 1px; }
+  .lc-dbw { width: 30px; }
+  .lc-dn { font-size: .7rem; }
+  .lc-dp { font-size: .64rem; }
+
+  /* Werkpunten */
+  .gwp { padding: 6px 12px; border-top: 1px solid #eee; }
+  .wt { font-size: .65rem; }
+  .wc { font-size: .68rem; padding: 2px 6px; }
+
+  /* Paginanummer */
+  .groep-print-title { display: block !important; font-size: .7rem; color: #999; text-align: right; margin-bottom: 4px; }
+  .print-page-break { page-break-after: always; }
+}
+
+/* Verberg in normale weergave */
+.groep-print-title { display: none; }
+.print-toolbar { display: flex; gap: 8px; padding: 10px 28px; background: #fff; border-bottom: 1px solid var(--bo); flex-wrap: wrap; align-items: center; }
+.print-toolbar select { padding: 5px 9px; border: 1px solid var(--bo2); border-radius: 4px; font-size: .77rem; }
 </style>
 </head>
 <body>
@@ -166,7 +208,7 @@ function checkPW(){
     <span style="font-size:.78rem;color:var(--mu)">Op basis van jouw beslissingen in tabblad ①</span>
     <div style="display:flex;gap:6px">
       <button class="btn bp bs" onclick="genGr()">⚙ Genereer</button>
-      <button class="btn bgy bs" onclick="window.print()">🖨 Afdrukken</button>
+      <button class="btn bgy bs" onclick="printGroep('grw')">🖨 Afdrukken</button>
     </div>
   </div>
   <div class="gw" id="grw"><div class="em"><h3>Nog geen groepen</h3><p>Vul beslissingen in bij ①, dan klik je op Genereer.</p></div></div>
@@ -179,7 +221,7 @@ function checkPW(){
     </div>
     <div style="display:flex;gap:6px">
       <button class="btn bp bs" onclick="genAu()">↺ Herbereken</button>
-      <button class="btn bgy bs" onclick="window.print()">🖨 Afdrukken</button>
+      <button class="btn bgy bs" onclick="printGroep('auw')">🖨 Afdrukken</button>
     </div>
   </div>
   <div class="ib">💡 <span>Automatisch voorstel op basis van scores. Gebruik tabblad ② om bij te sturen.</span></div>
@@ -357,6 +399,39 @@ function togLC(uid){
     if(arr)arr.textContent='▴';
   }
 }
+function printGroep(wrapId) {
+  // Zorg dat alle lc-det open zijn voor afdrukken
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+
+  // Sla huidige open staat op
+  const wasOpen = [];
+  wrap.querySelectorAll('.lc-det').forEach((el,i) => {
+    wasOpen.push(el.classList.contains('open'));
+    el.classList.add('open');
+  });
+  wrap.querySelectorAll('.lc').forEach(el => el.classList.add('open'));
+
+  // Markeer actief tabblad voor print
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('print-active'));
+  const tabId = wrapId === 'grw' ? 'tab-gr' : 'tab-au';
+  document.getElementById(tabId).classList.add('print-active');
+
+  window.print();
+
+  // Herstel na afdrukken
+  setTimeout(() => {
+    wrap.querySelectorAll('.lc-det').forEach((el,i) => {
+      if (!wasOpen[i]) el.classList.remove('open');
+    });
+    wrap.querySelectorAll('.lc').forEach(el => {
+      if (!el.classList.contains('open')) return;
+      // enkel sluiten als det gesloten is
+    });
+    document.getElementById(tabId).classList.remove('print-active');
+  }, 500);
+}
+
 function toast(msg){const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 </script>
 </body>
