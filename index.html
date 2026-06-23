@@ -99,6 +99,37 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 </style>
 </head>
 <body>
+
+<div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#18170F;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#2A2925;border-radius:10px;padding:40px 48px;text-align:center;max-width:340px;width:90%">
+    <div style="font-size:1.4rem;margin-bottom:6px;">🔒</div>
+    <div style="color:#fff;font-size:1rem;font-weight:700;margin-bottom:4px;">Rekengroepen</div>
+    <div style="color:#999;font-size:.78rem;margin-bottom:24px;">BuLO Sint-Franciscus</div>
+    <input type="password" id="pw-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPW()"
+      style="width:100%;padding:10px 14px;border-radius:6px;border:1px solid #444;background:#18170F;color:#fff;font-size:.9rem;margin-bottom:10px;outline:none;font-family:inherit">
+    <button onclick="checkPW()" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1A4D8C;color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;">Aanmelden</button>
+    <div id="pw-error" style="color:#E05050;font-size:.76rem;margin-top:8px;display:none;">Fout wachtwoord. Probeer opnieuw.</div>
+  </div>
+</div>
+<script>
+(function(){
+  const ok=sessionStorage.getItem('rg_auth');
+  if(ok==='1')document.getElementById('login-screen').style.display='none';
+})();
+function checkPW(){
+  const v=document.getElementById('pw-input').value;
+  // Eenvoudige hash vergelijking
+  if(v==='MeesterNils'){
+    sessionStorage.setItem('rg_auth','1');
+    document.getElementById('login-screen').style.display='none';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+</script>
+
 <header>
   <div><div class="sub">BuLO Sint-Franciscus · Rekengroepen Wiskunde</div><h1 id="htit">Laden…</h1></div>
   <div class="ha">
