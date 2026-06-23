@@ -54,6 +54,8 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .fnb.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
 .nt{width:100%;padding:4px 7px;border:1px solid var(--bo2);border-radius:3px;font-size:.72rem;color:var(--tx);background:var(--sf);resize:none;font-family:inherit}
 .nt::placeholder{color:#BBB}
+.verwijder-btn{width:100%;margin-top:5px;padding:4px 8px;border-radius:3px;border:1px solid #ddd;background:none;color:var(--mu);font-size:.7rem;cursor:pointer;text-align:left;transition:all .12s}
+.verwijder-btn:hover{background:var(--rl);border-color:var(--re);color:var(--re)}
 .dtt{width:100%;padding:5px 12px;font-size:.7rem;color:var(--ac);cursor:pointer;background:none;border:none;border-top:1px solid var(--bo);text-align:left}
 .dtp{display:none;padding:8px 12px;border-top:1px solid var(--bo);max-height:300px;overflow-y:auto}.dtp.open{display:block}
 .ddh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:6px 0 3px;display:flex;align-items:center;gap:6px}
@@ -230,7 +232,7 @@ function checkPW(){
 var DVK=['GK','HR','MK','MT','CY'];
 var DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cijferen'};
 var KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
-var DB={}, LL=[];
+var DB={}, LL=[], _verwijderd=[];
 
 fetch('data.json')
   .then(function(r){return r.json();})
@@ -355,6 +357,7 @@ function mkKrt(ll){
     +'<div class="ljr" id="ljr_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'" style="'+(ll.b?'':'display:none')+'"><label>Leerjaar:</label><select onchange="setLJ(\''+ll.i+'\',this.value)">'+ljO+'</select></div>'
     +'<div class="fnb '+(ll.f?'on':'')+'" onclick="togFN(\''+ll.i+'\')">&#9670; Functioneel traject</div>'
     +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
+    +'<button class="verwijder-btn" onclick="verwijderLL(this.closest(\".krt\").id.replace(\"k_\",\"\"))">&#128465; Verwijderen als schoolverlater</button>'
     +'</div>'
     +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
     +'<div class="dtp">'+detH+'</div>';
@@ -598,7 +601,7 @@ function genAu(){
 
 function expJS(){
   var data=LL.map(function(ll){return {i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt};});
-  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data},null,2)],{type:'application/json'});
+  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data,verwijderd:_verwijderd},null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();
   toast('Opgeslagen');
@@ -614,10 +617,28 @@ function impJS(e){
         var b=LL.find(function(l){return l.i===imp.i||l.i===imp.id;});
         if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}
       });
+      // Herstel verwijderde leerlingen markering
+      if(d.verwijderd){
+        _verwijderd=d.verwijderd;
+        LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
+      }
       renderLL();updS();toast('Geladen: '+f.name);
     }catch(err){toast('Fout: '+err.message);}
   };
   r.readAsText(f);e.target.value='';
+}
+
+function verwijderLL(id){
+  var ll=LL.find(function(l){return l.i===id;});
+  if(!ll) return;
+  if(!confirm(ll.n+' verwijderen als schoolverlater? Deze leerling wordt volgend jaar niet ingedeeld in een rekengroep.')){return;}
+  _verwijderd.push(id);
+  LL=LL.filter(function(l){return l.i!==id;});
+  var el=document.getElementById('k_'+id.replace(/[^a-z0-9]/gi,'_'));
+  if(el) el.remove();
+  updS();
+  document.getElementById('fc_').textContent=LL.filter(function(ll){return true;}).length+' leerlingen';
+  toast(ll.n+' verwijderd');
 }
 
 function toast(msg){
