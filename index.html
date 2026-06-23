@@ -538,7 +538,8 @@ function genGr(){
     var copy=Object.assign({},ll);
     copy._lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
     // Voeg zwakke domeinen toe voor visuele indicatie
-    var adv=calcAdv(ll,75);
+    var dr2=parseInt((document.getElementById('adr')||{value:'75'}).value)||75;
+    var adv=calcAdv(ll,dr2);
     copy._zw=adv?adv.zw:[];
     return copy;
   }),wrap);
