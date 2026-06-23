@@ -59,7 +59,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .ddh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:6px 0 3px;display:flex;align-items:center;gap:6px}
 .dr{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:.72rem}
 .dbw{width:40px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}.db{height:100%;border-radius:2px}
-.dp{font-size:.65rem;font-weight:700;width:28px;text-align:right;flex-shrink:0}
+.dp{font-size:.65rem;font-weight:700;width:28px;text-align:right;flex-shrink:0;color:var(--tx)}
 .dn{flex:1;line-height:1.3}.dn.zw{color:var(--re)}.dn.st{color:var(--gr)}
 .gw{padding:16px 28px}
 .gc{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
@@ -68,8 +68,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .gll{padding:10px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px;border-bottom:1px solid var(--bo)}
 .lc-wrap{display:block;width:100%}
 .lc{padding:6px 10px;border-radius:6px;font-size:.76rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;transition:background .12s;width:100%}
-.lc:hover{background:var(--bo2)}
-.lc.open{border-radius:6px 6px 0 0;background:var(--bo2)}
+.lc:hover,.lc.open{background:var(--bo2)}.lc.open{border-radius:6px 6px 0 0}
 .lc .ks{font-size:.66rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.62rem;color:var(--re);font-weight:700}
 .lc .arr{margin-left:auto;font-size:.65rem;color:var(--mu)}
 .lc-det{display:none;background:var(--sf);border:1px solid var(--bo2);border-top:none;border-radius:0 0 6px 6px;padding:10px 14px;font-size:.72rem}
@@ -80,9 +79,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .lc-dbw{width:50px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}
 .lc-db{height:100%;border-radius:2px}
 .lc-dp{font-size:.66rem;font-weight:700;width:28px;text-align:right;flex-shrink:0;color:var(--tx)}
-.lc-dn{flex:1;line-height:1.4;color:var(--tx)}
-.lc-dn.zw{color:var(--re)}.lc-dn.st{color:var(--gr)}
-@media print{.lc-det{display:block!important}.lc .arr{display:none}}
+.lc-dn{flex:1;line-height:1.4;color:var(--tx)}.lc-dn.zw{color:var(--re)}.lc-dn.st{color:var(--gr)}
 .gwp{padding:10px 16px}.wt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px}
 .wcs{display:flex;flex-wrap:wrap;gap:4px}.wc{font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--sf2);border:1px solid var(--bo);display:flex;align-items:center;gap:4px}
 .dd_{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -96,84 +93,40 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .loading{text-align:center;padding:60px 28px;color:var(--mu);font-size:.9rem}
 .tst{position:fixed;bottom:20px;right:20px;background:var(--tx);color:#fff;padding:9px 16px;border-radius:5px;font-size:.8rem;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:9999;transform:translateY(70px);opacity:0;transition:all .22s}
 .tst.show{transform:translateY(0);opacity:1}
-
-@media print {
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #login-screen, nav, .fi, .sb, .ha, .tst, .pg, .print-toolbar, .groep-afdruk-btn { display: none !important; }
-  header { padding: 10px 16px; }
-  body { font-size: 12px; background: #fff !important; }
-
-  /* Enkel afdrukblok tonen */
-  #print-block { display: block !important; }
-  #print-block .gc { break-inside: avoid; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; }
-  #print-block .gh { padding: 10px 14px; background: #f0f0f0 !important; display: flex; align-items: center; gap: 10px; }
-  #print-block .gt { font-size: 1rem; font-weight: 700; }
-  #print-block .gn { margin-left: auto; font-size: .8rem; color: #666; }
-  #print-block .gll { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 6px; padding: 10px 14px; border-bottom: 1px solid #eee; }
-  #print-block .lc-wrap { display: block !important; break-inside: avoid; }
-  #print-block .lc { border-radius: 6px 6px 0 0 !important; background: #f5f5f5 !important; font-size: .75rem; padding: 5px 8px; }
-  #print-block .lc .arr { display: none; }
-  #print-block .lc-det { display: block !important; border: 1px solid #ddd; border-top: none; border-radius: 0 0 6px 6px; padding: 6px 10px; background: #fff; }
-  #print-block .lc-dh { font-size: .65rem; margin: 5px 0 2px; color: #555; }
-  #print-block .lc-dr { margin-bottom: 2px; }
-  #print-block .lc-dbw { width: 32px; }
-  #print-block .lc-dn { font-size: .7rem; }
-  #print-block .lc-dp { font-size: .64rem; }
-  #print-block .gwp { padding: 8px 14px; }
-  #print-block .wt { font-size: .65rem; color: #666; }
-  #print-block .wcs { display: flex; flex-wrap: wrap; gap: 4px; }
-  #print-block .wc { font-size: .68rem; padding: 2px 6px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; }
-  #print-block .print-header { display: block !important; padding: 0 0 12px; border-bottom: 2px solid #333; margin-bottom: 16px; }
-  #print-block .print-header h2 { font-size: 1.1rem; font-weight: 700; }
-  #print-block .print-header p { font-size: .78rem; color: #666; margin-top: 2px; }
+#print-block{display:none}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #login-screen,nav,.fi,.sb,.ha,.tst,.pg,.groep-afdruk-btn{display:none!important}
+  header{padding:10px 16px}
+  body{font-size:12px;background:#fff!important}
+  #print-block{display:block!important}
+  #print-block .print-hdr{padding-bottom:10px;border-bottom:2px solid #333;margin-bottom:14px}
+  #print-block .print-hdr h2{font-size:1rem;font-weight:700}
+  #print-block .print-hdr p{font-size:.76rem;color:#666;margin-top:2px}
+  #print-block .gc{break-inside:avoid;margin-bottom:16px;border:1px solid #ccc;border-radius:6px}
+  #print-block .gh{padding:8px 12px;background:#f0f0f0!important}
+  #print-block .gt{font-size:.9rem;font-weight:700}
+  #print-block .gll{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;padding:8px 12px}
+  #print-block .lc-wrap{display:block!important;break-inside:avoid}
+  #print-block .lc{border-radius:6px 6px 0 0!important;background:#f5f5f5!important;font-size:.73rem;padding:5px 8px}
+  #print-block .lc .arr{display:none}
+  #print-block .lc-det{display:block!important;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px;padding:6px 10px;background:#fff}
+  #print-block .lc-dh{font-size:.64rem;margin:4px 0 2px}
+  #print-block .lc-dr{margin-bottom:2px}
+  #print-block .lc-dbw{width:32px}
+  #print-block .lc-dn{font-size:.68rem}
+  #print-block .lc-dp{font-size:.62rem}
+  #print-block .gwp{padding:6px 12px}
+  #print-block .wt{font-size:.63rem}
+  #print-block .wc{font-size:.66rem;padding:2px 5px}
 }
-  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #login-screen, nav, .fi, .sb, .ha, .tst { display: none !important; }
-  header { padding: 10px 16px; }
-  body { font-size: 12px; }
-
-  /* Verberg alle tabbladen behalve het afdrukbare */
-  .pg { display: none !important; }
-  .pg.print-active { display: block !important; }
-
-  /* Groepskaarten */
-  .gc { break-inside: avoid; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 6px; }
-  .gh { padding: 8px 12px; background: #f5f5f5 !important; }
-  .gt { font-size: .9rem; font-weight: 700; }
-
-  /* Leerlingkaarten altijd open */
-  .gll { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 6px; padding: 8px 12px; }
-  .lc-wrap { display: block !important; break-inside: avoid; }
-  .lc { border-radius: 6px 6px 0 0 !important; background: #eee !important; font-size: .75rem; }
-  .lc .arr { display: none; }
-  .lc-det { display: block !important; border: 1px solid #ddd; border-top: none; border-radius: 0 0 6px 6px; padding: 6px 10px; }
-  .lc-dh { font-size: .65rem; margin: 4px 0 2px; }
-  .lc-dr { margin-bottom: 1px; }
-  .lc-dbw { width: 30px; }
-  .lc-dn { font-size: .7rem; }
-  .lc-dp { font-size: .64rem; }
-
-  /* Werkpunten */
-  .gwp { padding: 6px 12px; border-top: 1px solid #eee; }
-  .wt { font-size: .65rem; }
-  .wc { font-size: .68rem; padding: 2px 6px; }
-
-  /* Paginanummer */
-  .groep-print-title { display: block !important; font-size: .7rem; color: #999; text-align: right; margin-bottom: 4px; }
-  .print-page-break { page-break-after: always; }
-}
-
-/* Verberg in normale weergave */
-.groep-print-title { display: none; }
-.print-toolbar { display: flex; gap: 8px; padding: 10px 28px; background: #fff; border-bottom: 1px solid var(--bo); flex-wrap: wrap; align-items: center; }
-.print-toolbar select { padding: 5px 9px; border: 1px solid var(--bo2); border-radius: 4px; font-size: .77rem; }
 </style>
 </head>
 <body>
 
 <div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#18170F;z-index:9999;display:flex;align-items:center;justify-content:center;">
   <div style="background:#2A2925;border-radius:10px;padding:40px 48px;text-align:center;max-width:340px;width:90%">
-    <div style="font-size:1.4rem;margin-bottom:6px;">🔒</div>
+    <div style="font-size:1.4rem;margin-bottom:6px;">&#128274;</div>
     <div style="color:#fff;font-size:1rem;font-weight:700;margin-bottom:4px;">Rekengroepen</div>
     <div style="color:#999;font-size:.78rem;margin-bottom:24px;">BuLO Sint-Franciscus</div>
     <input type="password" id="pw-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPW()"
@@ -182,40 +135,23 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
     <div id="pw-error" style="color:#E05050;font-size:.76rem;margin-top:8px;display:none;">Fout wachtwoord. Probeer opnieuw.</div>
   </div>
 </div>
-<script>
-(function(){
-  const ok=sessionStorage.getItem('rg_auth');
-  if(ok==='1')document.getElementById('login-screen').style.display='none';
-})();
-function checkPW(){
-  const v=document.getElementById('pw-input').value;
-  // Eenvoudige hash vergelijking
-  if(v==='MeesterNils'){
-    sessionStorage.setItem('rg_auth','1');
-    document.getElementById('login-screen').style.display='none';
-  } else {
-    document.getElementById('pw-error').style.display='block';
-    document.getElementById('pw-input').value='';
-    document.getElementById('pw-input').focus();
-  }
-}
-</script>
 
 <header>
-  <div><div class="sub">BuLO Sint-Franciscus · Rekengroepen Wiskunde</div><h1 id="htit">Laden…</h1></div>
+  <div><div class="sub">BuLO Sint-Franciscus &middot; Rekengroepen Wiskunde</div><h1 id="htit">Laden&hellip;</h1></div>
   <div class="ha">
-    <button class="btn bg_ bs" onclick="expJS()">💾 Opslaan</button>
-    <label class="btn bg_ bs" style="cursor:pointer">📂 Laden<input type="file" accept=".json" style="display:none" onchange="impJS(event)"></label>
+    <button class="btn bg_ bs" onclick="expJS()">&#128190; Opslaan</button>
+    <label class="btn bg_ bs" style="cursor:pointer">&#128194; Laden<input type="file" accept=".json" style="display:none" onchange="impJS(event)"></label>
   </div>
 </header>
 <nav>
-  <button class="active" onclick="showTab('ll',this)">① Leerlingoverzicht</button>
-  <button onclick="showTab('gr',this)">② Groepsvoorstel</button>
-  <button onclick="showTab('au',this)">③ Automatisch voorstel</button>
+  <button class="active" onclick="showTab('ll',this)">&#9312; Leerlingoverzicht</button>
+  <button onclick="showTab('gr',this)">&#9313; Groepsvoorstel</button>
+  <button onclick="showTab('au',this)">&#9314; Automatisch voorstel</button>
 </nav>
+
 <div id="tab-ll" class="pg active">
   <div class="sb">
-    <div class="st"><strong id="s1">–</strong>&nbsp;leerlingen</div>
+    <div class="st"><strong id="s1">-</strong>&nbsp;leerlingen</div>
     <div class="st"><span class="sdg sds" id="s2">0</span>&nbsp;doorstroom</div>
     <div class="st"><span class="sdg sfn" id="s3">0</span>&nbsp;functioneel</div>
     <div class="st"><span class="sdg sob" id="s4">0</span>&nbsp;onbeslist</div>
@@ -226,22 +162,21 @@ function checkPW(){
     <select id="flj" onchange="renderLL()"><option value="">Alle LJ</option><option value="1">LJ1</option><option value="2">LJ2</option><option value="3">LJ3</option><option value="4">LJ4</option></select>
     <select id="fkl" onchange="renderLL()"><option value="">Alle klassen</option></select>
     <select id="fbe" onchange="renderLL()"><option value="">Alle beslissingen</option><option value="onbeslist">Onbeslist</option><option value="doorstroom">Doorstroom</option><option value="herhaling">Herhaling</option></select>
-    <input type="text" id="fnm" placeholder="Naam…" oninput="renderLL()" style="width:130px">
-    <button class="btn bgy bs" onclick="resetF()">✕</button>
+    <input type="text" id="fnm" placeholder="Naam&hellip;" oninput="renderLL()" style="width:130px">
+    <button class="btn bgy bs" onclick="resetF()">&#10005;</button>
     <span class="fc" id="fc_"></span>
   </div>
-  <div id="grid_" class="grid"><div class="loading">Gegevens laden…</div></div>
+  <div id="grid_" class="grid"><div class="loading">Gegevens laden&hellip;</div></div>
 </div>
+
 <div id="tab-gr" class="pg">
   <div class="fi" style="justify-content:space-between">
-    <span style="font-size:.78rem;color:var(--mu)">Op basis van jouw beslissingen in tabblad ①</span>
-    <div style="display:flex;gap:6px">
-      <button class="btn bp bs" onclick="genGr()">⚙ Genereer</button>
-      <button class="btn bgy bs" onclick="printGroep('grw')">🖨 Afdrukken</button>
-    </div>
+    <span style="font-size:.78rem;color:var(--mu)">Op basis van jouw beslissingen in tabblad &#9312;</span>
+    <button class="btn bp bs" onclick="genGr()">&#9881; Genereer</button>
   </div>
-  <div class="gw" id="grw"><div class="em"><h3>Nog geen groepen</h3><p>Vul beslissingen in bij ①, dan klik je op Genereer.</p></div></div>
+  <div class="gw" id="grw"><div class="em"><h3>Nog geen groepen</h3><p>Vul beslissingen in bij &#9312;, dan klik je op Genereer.</p></div></div>
 </div>
+
 <div id="tab-au" class="pg">
   <div class="fi" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
     <div style="display:flex;gap:10px;align-items:center">
@@ -249,11 +184,10 @@ function checkPW(){
       <select id="adr" onchange="genAu()"><option value="65">65%</option><option value="70">70%</option><option value="75" selected>75%</option><option value="80">80%</option></select>
     </div>
     <div style="display:flex;gap:6px">
-      <button class="btn bp bs" onclick="genAu()">↺ Herbereken</button>
-      <button class="btn bgy bs" onclick="printGroep('auw')">🖨 Afdrukken</button>
+      <button class="btn bp bs" onclick="genAu()">&#8635; Herbereken</button>
     </div>
   </div>
-  <div class="ib">💡 <span>Automatisch voorstel op basis van scores. Gebruik tabblad ② om bij te sturen.</span></div>
+  <div class="ib">&#128161; <span>Automatisch voorstel op basis van scores. Gebruik tabblad &#9313; om bij te sturen.</span></div>
   <div class="leg">
     <span class="lt">Groepen:</span>
     <div class="li_"><div class="lkl" style="background:#2A6048"></div>Doorstroom sterk</div>
@@ -261,240 +195,436 @@ function checkPW(){
     <div class="li_"><div class="lkl" style="background:#C05A20"></div>Herhaling</div>
     <div class="li_"><div class="lkl" style="background:#5E4B8B"></div>Functioneel</div>
     <span class="lt" style="margin-left:8px">Domeinen:</span>
-    <div class="li_"><span class="dd_ dGK"></span>GK</div><div class="li_"><span class="dd_ dHR"></span>HR</div>
-    <div class="li_"><span class="dd_ dMK"></span>MK</div><div class="li_"><span class="dd_ dMT"></span>MT</div><div class="li_"><span class="dd_ dCY"></span>CY</div>
+    <div class="li_"><span class="dd_ dGK"></span>GK</div>
+    <div class="li_"><span class="dd_ dHR"></span>HR</div>
+    <div class="li_"><span class="dd_ dMK"></span>MK</div>
+    <div class="li_"><span class="dd_ dMT"></span>MT</div>
+    <div class="li_"><span class="dd_ dCY"></span>CY</div>
     <span style="font-size:.72rem;color:var(--mu);margin-left:8px">Rode letters = domeinen onder drempel</span>
   </div>
   <div class="as" id="aus"></div>
-  <div class="gw" id="auw"><div class="em"><h3>Laden…</h3></div></div>
+  <div class="gw" id="auw"><div class="em"><h3>Laden&hellip;</h3></div></div>
 </div>
+
 <div class="tst" id="tst"></div>
-<div id="print-block" style="display:none"></div>
+<div id="print-block"></div>
+
 <script>
-const DVK=['GK','HR','MK','MT','CY'];
-const DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cijferen'};
-const KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
-let DB={}, LL=[];
+(function(){
+  var ok=sessionStorage.getItem('rg_auth');
+  if(ok==='1') document.getElementById('login-screen').style.display='none';
+})();
+function checkPW(){
+  var v=document.getElementById('pw-input').value;
+  if(v==='MeesterNils'){
+    sessionStorage.setItem('rg_auth','1');
+    document.getElementById('login-screen').style.display='none';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+</script>
+<script>
+var DVK=['GK','HR','MK','MT','CY'];
+var DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cijferen'};
+var KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
+var DB={}, LL=[];
 
 fetch('data.json')
-  .then(r=>r.json())
-  .then(td=>{
+  .then(function(r){return r.json();})
+  .then(function(td){
     DB=td.db;
     LL=td.ll;
-    LL.forEach(ll=>{ll.id=ll.i;ll.naam=ll.n;ll.klas=ll.k;ll.leerjaar=ll.l;ll.domeinen=ll.d;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;ll.functioneel=ll.f;ll.notitie=ll.nt;ll.advies=calcAdv(ll,75);});
-    document.getElementById('htit').textContent='Kinderstappen LJ1–LJ4 · '+LL.length+' leerlingen';
+    LL.forEach(function(ll){
+      ll.id=ll.i;ll.naam=ll.n;ll.klas=ll.k;ll.leerjaar=ll.l;
+      ll.domeinen=ll.d;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
+      ll.functioneel=ll.f;ll.notitie=ll.nt;ll.advies=calcAdv(ll,75);
+    });
+    document.getElementById('htit').textContent='Kinderstappen LJ1-LJ4 - '+LL.length+' leerlingen';
     vulKF();renderLL();updS();genAu();
   })
-  .catch(e=>{document.getElementById('grid_').innerHTML='<div class="em"><h3>Fout bij laden</h3><p>'+e.message+'</p></div>';});
+  .catch(function(e){
+    document.getElementById('grid_').innerHTML='<div class="em"><h3>Fout bij laden</h3><p>'+e.message+'</p></div>';
+  });
 
-function showTab(id,btn){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');(btn||event.target).classList.add('active');}
-function vulKF(){const s=document.getElementById('fkl');[...new Set(LL.map(l=>l.k))].sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}
-function calcAdv(ll,dr){const doms=Object.keys(ll.d||{});if(!doms.length)return null;const stk=[],zw=[];doms.forEach(d=>{const p=(ll.d[d]||{}).p||0;(p>=dr?stk:zw).push(d);});const type=zw.length===0?'doorstroom':stk.length>zw.length?'gemengd':'herhaling';return{type,lj:type==='herhaling'?ll.l:ll.l+1,stk,zw};}
-function getDoel(ll,dom){const d=ll.d[dom];if(!d||!DB[d.k])return[];return DB[d.k].map((naam,i)=>[naam,d.ps[i]||0]);}
+function showTab(id,btn){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  (btn||event.target).classList.add('active');
+}
+
+function vulKF(){
+  var s=document.getElementById('fkl');
+  var klassen=[...new Set(LL.map(function(l){return l.k;}))].sort();
+  klassen.forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
+}
+
+function calcAdv(ll,dr){
+  var doms=Object.keys(ll.d||{});
+  if(!doms.length) return null;
+  var stk=[],zw=[];
+  doms.forEach(function(d){var p=(ll.d[d]||{}).p||0;(p>=dr?stk:zw).push(d);});
+  var type=zw.length===0?'doorstroom':stk.length>zw.length?'gemengd':'herhaling';
+  return {type:type,lj:type==='herhaling'?ll.l:ll.l+1,stk:stk,zw:zw};
+}
+
+function getDoel(ll,dom){
+  var d=ll.d[dom];
+  if(!d||!DB[d.k]) return [];
+  return DB[d.k].map(function(naam,i){return [naam,d.ps[i]||0];});
+}
 
 function renderLL(){
-  const fLJ=document.getElementById('flj').value,fKL=document.getElementById('fkl').value,fBE=document.getElementById('fbe').value,fNM=document.getElementById('fnm').value.toLowerCase();
-  let list=LL.filter(ll=>{
-    if(fLJ&&ll.l!=fLJ)return false;if(fKL&&ll.k!==fKL)return false;
-    if(fNM&&!ll.n.toLowerCase().includes(fNM))return false;
-    if(fBE){const b=ll.b||'onbeslist';if(b!==fBE)return false;}return true;
+  var fLJ=document.getElementById('flj').value;
+  var fKL=document.getElementById('fkl').value;
+  var fBE=document.getElementById('fbe').value;
+  var fNM=document.getElementById('fnm').value.toLowerCase();
+  var list=LL.filter(function(ll){
+    if(fLJ&&ll.l!=fLJ) return false;
+    if(fKL&&ll.k!==fKL) return false;
+    if(fNM&&!ll.n.toLowerCase().includes(fNM)) return false;
+    if(fBE){var b=ll.b||'onbeslist';if(b!==fBE) return false;}
+    return true;
   });
-  list.sort((a,b)=>a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n));
+  list.sort(function(a,b){return a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n);});
   document.getElementById('fc_').textContent=list.length+' leerlingen';
-  const g=document.getElementById('grid_');g.innerHTML='';
-  list.forEach(ll=>g.appendChild(mkKrt(ll)));
+  var g=document.getElementById('grid_');g.innerHTML='';
+  list.forEach(function(ll){g.appendChild(mkKrt(ll));});
 }
 
 function mkKrt(ll){
-  const besl=ll.b||'onbeslist';
-  const div=document.createElement('div');
-  div.className='krt '+(besl==='doorstroom'?'bd':besl==='herhaling'?'bh':'bn');
+  var besl=ll.b||'onbeslist';
+  var div=document.createElement('div');
+  var bc=besl==='doorstroom'?'bd':besl==='herhaling'?'bh':'bn';
+  div.className='krt '+bc;
   div.id='k_'+ll.i.replace(/[^a-z0-9]/gi,'_');
-  let domH='';
-  DVK.forEach(dk=>{const d=ll.d[dk];if(!d)return;const c=d.p>=75?'hg':d.p>=55?'md':'lg';domH+=`<div class="dsc"><span class="dl">${dk}</span><div class="bw"><div class="bar ${c}" style="width:${d.p}%"></div></div><span class="pc ${c}">${d.p}%</span></div>`;});
-  const adv=ll.advies;
-  let advB='';if(adv){const ac=adv.type==='doorstroom'?'ads':adv.type==='gemengd'?'adm':'adh';advB=`<span class="bdg ${ac}">💡${adv.type==='doorstroom'?'↑ DS':adv.type==='gemengd'?'~ Mix':'↺ HH'} LJ${adv.lj}</span>`;}
-  let beslB='';if(ll.b){beslB=`<span class="sdg ${ll.b==='doorstroom'?'sds':'sob'}" style="font-size:.62rem">${ll.b==='doorstroom'?'↑ DS':'↺ HH'}${ll.dl?' LJ'+ll.dl:''}</span>`;}
-  const bkH=[{k:'doorstroom',l:'↑ Doorstroom'},{k:'herhaling',l:'↺ Zelfde LJ'}].map(b=>`<button class="bkn ${besl===b.k?'ak'+b.k[0]:''}" onclick="setBes('${ll.i}','${b.k}')">${b.l}</button>`).join('');
-  const ljO=[1,2,3,4,5].map(n=>`<option value="${n}" ${ll.dl==n?'selected':''}>${n}</option>`).join('');
-  let detH='';
-  DVK.forEach(dk=>{
-    const d=ll.d[dk];if(!d)return;
-    const pc=d.p>=75?'hg':d.p>=55?'md':'lg';
-    const ljlbl=d.lj&&d.lj!==ll.l?` <span style="font-size:.6rem;color:var(--mu)">(LJ${d.lj})</span>`:'';
-    detH+=`<div class="ddh"><span>${DVL[dk]||dk}${ljlbl}</span><span class="pc ${pc}" style="font-size:.72rem;margin-left:6px">${d.p}%</span></div>`;
-    getDoel(ll,dk).forEach(([naam,pct])=>{
-      const bc=pct>=75?'hg':pct>=55?'md':'lg',nc=pct>=75?'st':pct<55?'zw':'';
-      const icon=pct>=75?'✅':pct<55?'❌':'〰';
-      const kort=naam.length>62?naam.substring(0,60)+'…':naam;
-      detH+=`<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center">${icon}</span><div class="dbw"><div class="db ${bc}" style="width:${pct}%"></div></div><span class="dp">${pct}%</span><span class="dn ${nc}" title="${naam}">${kort}</span></div>`;
+
+  var domH='';
+  DVK.forEach(function(dk){
+    var d=ll.d[dk];if(!d)return;
+    var c=d.p>=75?'hg':d.p>=55?'md':'lg';
+    domH+='<div class="dsc"><span class="dl">'+dk+'</span><div class="bw"><div class="bar '+c+'" style="width:'+d.p+'%"></div></div><span class="pc">'+d.p+'%</span></div>';
+  });
+
+  var adv=ll.advies;
+  var advB='';
+  if(adv){
+    var ac=adv.type==='doorstroom'?'ads':adv.type==='gemengd'?'adm':'adh';
+    var at=adv.type==='doorstroom'?'&#8593; DS':adv.type==='gemengd'?'~ Mix':'&#8635; HH';
+    advB='<span class="bdg '+ac+'">'+at+' LJ'+adv.lj+'</span>';
+  }
+  var beslB='';
+  if(ll.b){
+    var bm=ll.b==='doorstroom'?'sds':'sob';
+    var bt=ll.b==='doorstroom'?'&#8593; DS':'&#8635; HH';
+    beslB='<span class="sdg '+bm+'" style="font-size:.62rem">'+bt+(ll.dl?' LJ'+ll.dl:'')+'</span>';
+  }
+
+  var bkH='<button class="bkn '+(besl==='doorstroom'?'akd':'')+'" onclick="setBes(\''+ll.i+'\',\'doorstroom\')">&#8593; Doorstroom</button>'
+         +'<button class="bkn '+(besl==='herhaling'?'akh':'')+'" onclick="setBes(\''+ll.i+'\',\'herhaling\')">&#8635; Zelfde LJ</button>';
+
+  var ljO='';
+  [1,2,3,4,5].forEach(function(n){ljO+='<option value="'+n+'"'+(ll.dl==n?' selected':'')+'>'+n+'</option>';});
+
+  var detH='';
+  DVK.forEach(function(dk){
+    var d=ll.d[dk];if(!d)return;
+    var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+    var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
+    detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
+    getDoel(ll,dk).forEach(function(item){
+      var naam=item[0],pct=item[1];
+      var bc=pct>=75?'hg':pct>=55?'md':'lg';
+      var nc=pct>=75?'st':pct<55?'zw':'';
+      var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+      var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+      var kort=naam.length>62?naam.substring(0,60)+'...':naam;
+      detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
     });
   });
-  div.innerHTML=`
-  <div class="kt"><div class="knr"><span class="kn">${ll.n}</span><span class="bdg bkl">${ll.k}</span><span class="bdg blj">LJ${ll.l}</span>${advB}${beslB}${ll.f?'<span class="bdg bfn">◆FN</span>':''}</div><div class="ds2">${domH}</div></div>
-  <div class="la">
-    ${adv?`<div class="ar"><span class="al_">Advies:</span><span class="at">${adv.type==='doorstroom'?'Doorstroom':adv.type==='gemengd'?'Gemengd':'Herhaling'} LJ${adv.lj}${adv.zw.length?' — aandacht '+adv.zw.join(', '):''}</span></div>`:''}
-    <div class="ar"><span class="al_">Beslissing:</span></div>
-    <div class="bwr">${bkH}</div>
-    <div class="ljr" id="ljr_${ll.i.replace(/[^a-z0-9]/gi,'_')}" style="${ll.b?'':'display:none'}"><label>Leerjaar:</label><select onchange="setLJ('${ll.i}',this.value)">${ljO}</select></div>
-    <div class="fnb ${ll.f?'on':''}" onclick="togFN('${ll.i}')">◆ Functioneel traject</div>
-    <textarea class="nt" rows="1" placeholder="Notitie…" onchange="setNt('${ll.i}',this.value)">${ll.nt||''}</textarea>
-  </div>
-  <button class="dtt" onclick="togDet(this)">▾ Doelen per domein</button>
-  <div class="dtp">${detH}</div>`;
-  if(ll.b&&!ll.dl){const s=div.querySelector('.ljr select');if(s){const dfl=ll.b==='herhaling'?ll.l:ll.l+1;s.value=dfl;ll.dl=dfl;}}
+
+  div.innerHTML=
+    '<div class="kt"><div class="knr"><span class="kn">'+ll.n+'</span><span class="bdg bkl">'+ll.k+'</span><span class="bdg blj">LJ'+ll.l+'</span>'+advB+beslB+(ll.f?'<span class="bdg bfn">&#9670;FN</span>':'')+'</div><div class="ds2">'+domH+'</div></div>'
+    +'<div class="la">'
+    +(adv?'<div class="ar"><span class="al_">Advies:</span><span class="at">'+(adv.type==='doorstroom'?'Doorstroom':adv.type==='gemengd'?'Gemengd':'Herhaling')+' LJ'+adv.lj+(adv.zw.length?' &mdash; aandacht '+adv.zw.join(', '):'')+'</span></div>':'')
+    +'<div class="ar"><span class="al_">Beslissing:</span></div>'
+    +'<div class="bwr">'+bkH+'</div>'
+    +'<div class="ljr" id="ljr_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'" style="'+(ll.b?'':'display:none')+'"><label>Leerjaar:</label><select onchange="setLJ(\''+ll.i+'\',this.value)">'+ljO+'</select></div>'
+    +'<div class="fnb '+(ll.f?'on':'')+'" onclick="togFN(\''+ll.i+'\')">&#9670; Functioneel traject</div>'
+    +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
+    +'</div>'
+    +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
+    +'<div class="dtp">'+detH+'</div>';
+
+  if(ll.b&&!ll.dl){
+    var s=div.querySelector('.ljr select');
+    if(s){var dfl=ll.b==='herhaling'?ll.l:ll.l+1;s.value=dfl;ll.dl=dfl;}
+  }
   return div;
 }
 
-function togDet(btn){const p=btn.nextElementSibling;p.classList.toggle('open');btn.textContent=p.classList.contains('open')?'▴ Doelen verbergen':'▾ Doelen per domein';}
-function setBes(id,b){const ll=LL.find(l=>l.i===id);if(!ll)return;ll.b=ll.b===b?null:b;if(ll.b&&!ll.dl)ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;if(!ll.b)ll.dl=null;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;updS();hl(ll);}
-function setLJ(id,v){const ll=LL.find(l=>l.i===id);if(ll){ll.dl=parseInt(v);ll.doelleerjaar=ll.dl;hl(ll);}}
-function togFN(id){const ll=LL.find(l=>l.i===id);if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
-function setNt(id,v){const ll=LL.find(l=>l.i===id);if(ll){ll.nt=v;ll.notitie=v;}}
-function hl(ll){const o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));if(o){const n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}}
-function updS(){const t=LL.length,ds=LL.filter(l=>l.b==='doorstroom').length,fn=LL.filter(l=>l.f).length,ob=LL.filter(l=>!l.b).length;document.getElementById('s1').textContent=t;document.getElementById('s2').textContent=ds;document.getElementById('s3').textContent=fn;document.getElementById('s4').textContent=ob;const p=t>0?Math.round((t-ob)/t*100):0;document.getElementById('pg_').style.width=p+'%';document.getElementById('pt_').textContent=p+'% beslist';}
-function resetF(){['flj','fkl','fbe'].forEach(id=>document.getElementById(id).value='');document.getElementById('fnm').value='';renderLL();}
+function togDet(btn){
+  var p=btn.nextElementSibling;
+  p.classList.toggle('open');
+  btn.textContent=p.classList.contains('open')?'&#9650; Doelen verbergen':'&#9660; Doelen per domein';
+}
 
-function wpB(list){if(!list.length)return[];const c={};list.forEach(ll=>{DVK.forEach(dk=>{if(!ll.d[dk])return;getDoel(ll,dk).forEach(([naam,pct])=>{if(pct<60){const k=dk+'|'+naam;if(!c[k])c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'…':naam,n:0};c[k].n++;}});});});const min=Math.ceil(list.length*.5);return Object.values(c).filter(x=>x.n>=min).sort((a,b)=>b.n-a.n);}
+function setBes(id,b){
+  var ll=LL.find(function(l){return l.i===id;});if(!ll)return;
+  ll.b=ll.b===b?null:b;
+  if(ll.b&&!ll.dl) ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;
+  if(!ll.b) ll.dl=null;
+  ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
+  updS();hl(ll);
+}
+function setLJ(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.dl=parseInt(v);ll.doelleerjaar=ll.dl;hl(ll);}}
+function togFN(id){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
+function setNt(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.nt=v;ll.notitie=v;}}
+function hl(ll){
+  var o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
+  if(o){var n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}
+}
 
-function renGr(list,wrap){
-  const gm={};
-  list.forEach(ll=>{const lj=ll._lj||(ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1));const sk='lj'+lj+(ll.f?'_fn':'')+(ll._sub||'');if(!gm[sk])gm[sk]={lj,fn:ll.f,label:(ll.f?'Functioneel — ':'')+'Leerjaar '+lj,sub:ll._subL||null,list:[]};gm[sk].list.push(ll);});
-  const sorte=Object.entries(gm).sort(([a],[b])=>a.localeCompare(b));wrap.innerHTML='';
-  if(!sorte.length){wrap.innerHTML='<div class="em"><h3>Geen leerlingen ingedeeld</h3></div>';return;}
-  sorte.forEach(([,g],gi)=>{
-    const kl=g.fn?'#5E4B8B':KL[gi%KL.length];const wp=wpB(g.list);
-    const chips=g.list.map(ll=>{
-    const uid='gc_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'_'+gi;
-    let detH='';
-    DVK.forEach(dk=>{
-      const d=ll.d[dk];if(!d)return;
-      const pc=d.p>=75?'hg':d.p>=55?'md':'lg';
-      detH+=`<div class="lc-dh"><span>${DVL[dk]||dk}</span><span class="pc" style="margin-left:4px">${d.p}%</span></div>`;
-      getDoel(ll,dk).forEach(([naam,pct])=>{
-        const bc=pct>=75?'hg':pct>=55?'md':'lg',nc=pct>=75?'st':pct<55?'zw':'';
-        const icon=pct>=75?'✅':pct<55?'❌':'〰';
-        const kort=naam.length>55?naam.substring(0,53)+'…':naam;
-        detH+=`<div class="lc-dr"><span style="font-size:.75rem;width:16px;flex-shrink:0;text-align:center">${icon}</span><div class="lc-dbw"><div class="lc-db ${bc}" style="width:${pct}%"></div></div><span class="lc-dp">${pct}%</span><span class="lc-dn ${nc}" title="${naam}">${kort}</span></div>`;
+function updS(){
+  var t=LL.length;
+  var ds=LL.filter(function(l){return l.b==='doorstroom';}).length;
+  var fn=LL.filter(function(l){return l.f;}).length;
+  var ob=LL.filter(function(l){return !l.b;}).length;
+  document.getElementById('s1').textContent=t;
+  document.getElementById('s2').textContent=ds;
+  document.getElementById('s3').textContent=fn;
+  document.getElementById('s4').textContent=ob;
+  var p=t>0?Math.round((t-ob)/t*100):0;
+  document.getElementById('pg_').style.width=p+'%';
+  document.getElementById('pt_').textContent=p+'% beslist';
+}
+
+function resetF(){
+  ['flj','fkl','fbe'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('fnm').value='';
+  renderLL();
+}
+
+function wpB(list){
+  if(!list.length) return [];
+  var c={};
+  list.forEach(function(ll){
+    DVK.forEach(function(dk){
+      if(!ll.d[dk]) return;
+      getDoel(ll,dk).forEach(function(item){
+        var naam=item[0],pct=item[1];
+        if(pct<60){
+          var k=dk+'|'+naam;
+          if(!c[k]) c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'...':naam,n:0};
+          c[k].n++;
+        }
       });
     });
-    return `<div class="lc-wrap">
-      <div class="lc" id="${uid}" onclick="togLC('${uid}')">
-        <strong>${ll.n}</strong><span class="ks">${ll.k} LJ${ll.l}</span>
-        ${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆FN</span>':''}
-        ${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}
-        ${ll.nt?'<span title="'+ll.nt+'" style="font-size:.7rem">📝</span>':''}
-        <span class="arr">▾</span>
-      </div>
-      <div class="lc-det" id="${uid}_det">${detH}</div>
-    </div>`;
+  });
+  var min=Math.ceil(list.length*.5);
+  return Object.values(c).filter(function(x){return x.n>=min;}).sort(function(a,b){return b.n-a.n;});
+}
+
+function maakChips(list,gi){
+  return list.map(function(ll){
+    var uid='lc_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'_'+gi;
+    var detH='';
+    DVK.forEach(function(dk){
+      var d=ll.d[dk];if(!d)return;
+      var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+      detH+='<div class="lc-dh"><span>'+(DVL[dk]||dk)+'</span><span class="pc" style="margin-left:4px">'+d.p+'%</span></div>';
+      getDoel(ll,dk).forEach(function(item){
+        var naam=item[0],pct=item[1];
+        var bc=pct>=75?'hg':pct>=55?'md':'lg';
+        var nc=pct>=75?'st':pct<55?'zw':'';
+        var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+        var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+        var kort=naam.length>55?naam.substring(0,53)+'...':naam;
+        detH+='<div class="lc-dr"><span style="font-size:.75rem;width:16px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="lc-dbw"><div class="lc-db '+bc+'" style="width:'+pct+'%"></div></div><span class="lc-dp">'+pct+'%</span><span class="lc-dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+      });
+    });
+    var zds=(ll._zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
+    return '<div class="lc-wrap">'
+      +'<div class="lc" id="'+uid+'" onclick="togLC(\''+uid+'\')">'
+      +'<strong>'+ll.n+'</strong> <span class="ks">'+ll.k+' LJ'+ll.l+'</span>'
+      +(ll.f?'<span style="color:var(--pu);font-size:.65rem">&#9670;FN</span>':'')
+      +zds
+      +(ll.nt?'<span title="'+ll.nt+'" style="font-size:.7rem">&#128221;</span>':'')
+      +'<span class="arr">&#9660;</span>'
+      +'</div>'
+      +'<div class="lc-det" id="'+uid+'_det">'+detH+'</div>'
+      +'</div>';
   }).join('');
-    const wpC=wp.slice(0,8).map(w=>`<div class="wc"><span class="dd_ d${w.dom}"></span>${w.doel}</div>`).join('')||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
-    const card=document.createElement('div');card.className='gc';
-    const cardId='gc_'+gi+'_'+wrapId;
+}
+
+function renGr(list,wrap){
+  var gm={};
+  list.forEach(function(ll){
+    var lj=ll._lj||(ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1));
+    var sk='lj'+lj+(ll.f?'_fn':'')+(ll._sub||'');
+    if(!gm[sk]) gm[sk]={lj:lj,fn:ll.f,label:(ll.f?'Functioneel - ':'')+'Leerjaar '+lj,sub:ll._subL||null,list:[]};
+    gm[sk].list.push(ll);
+  });
+  var sorte=Object.entries(gm).sort(function(a,b){return a[0].localeCompare(b[0]);});
+  wrap.innerHTML='';
+  if(!sorte.length){wrap.innerHTML='<div class="em"><h3>Geen leerlingen ingedeeld</h3></div>';return;}
+  sorte.forEach(function(entry,gi){
+    var g=entry[1];
+    var kl=g.fn?'#5E4B8B':KL[gi%KL.length];
+    var wp=wpB(g.list);
+    var chips=maakChips(g.list,gi);
+    var wpC=wp.slice(0,8).map(function(w){return '<div class="wc"><span class="dd_ d'+w.dom+'"></span>'+w.doel+'</div>';}).join('')
+      ||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
+    var card=document.createElement('div');card.className='gc';
+    var cardId='gc_card_'+gi+'_'+wrap.id;
     card.id=cardId;
-    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span><button class="btn bgy bs groep-afdruk-btn" data-cardid="${cardId}" data-label="${g.label}" onclick="printEenGroep(this.dataset.cardid,this.dataset.label)" style="margin-left:12px">🖨 Afdrukken</button></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
+    var subHtml=g.sub?'<div class="gs">'+g.sub+'</div>':'';
+    card.innerHTML=
+      '<div class="gh">'
+      +'<div class="gkl" style="background:'+kl+'"></div>'
+      +'<div><div class="gt">'+g.label+'</div>'+subHtml+'</div>'
+      +'<span class="gn">'+g.list.length+' leerlingen</span>'
+      +'<button class="btn bgy bs groep-afdruk-btn" data-cardid="'+cardId+'" data-label="'+g.label+'" onclick="printEenGroep(this.dataset.cardid,this.dataset.label)" style="margin-left:12px">&#128438; Afdrukken</button>'
+      +'</div>'
+      +'<div class="gll">'+chips+'</div>'
+      +'<div class="gwp"><div class="wt">Gedeelde werkpunten (min. 50% van groep onder 60%)</div><div class="wcs">'+wpC+'</div></div>';
     wrap.appendChild(card);
   });
 }
 
-function genGr(){const beslist=LL.filter(l=>l.b);if(!beslist.length){toast('Geen beslissingen ingevuld');return;}const wrap=document.getElementById('grw');renGr(beslist.map(ll=>({...ll,_lj:ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1)})),wrap);const ob=LL.filter(l=>!l.b);if(ob.length){const card=document.createElement('div');card.className='gc';card.innerHTML=`<div class="gh"><div class="gkl" style="background:var(--bo2)"></div><div class="gt" style="color:var(--mu)">Nog geen beslissing</div><span class="gn">${ob.length}</span></div><div class="gll">${ob.map(ll=>`<div class="lc" style="color:var(--mu)">${ll.n}<span class="ks">${ll.k}</span></div>`).join('')}</div>`;wrap.appendChild(card);}toast('Groepen gegenereerd');}
-
-function genAu(){
-  if(!LL.length)return;const dr=parseInt(document.getElementById('adr').value)||75;
-  LL.forEach(ll=>{ll.advies=calcAdv(ll,dr);});
-  const nDs=LL.filter(l=>l.advies&&l.advies.type!=='herhaling').length,nHh=LL.filter(l=>l.advies&&l.advies.type==='herhaling').length;
-  document.getElementById('aus').innerHTML=`<div class="st"><strong>${LL.length}</strong>&nbsp;leerlingen</div><div class="st"><span class="sdg sds">${nDs}</span>&nbsp;doorstroom</div><div class="st"><span class="sdg" style="background:var(--ol);color:var(--or)">${nHh}</span>&nbsp;herhaling</div><div class="st" style="margin-left:auto;font-size:.72rem;color:var(--mu)">Drempel: ${dr}%</div>`;
-  const gm={};
-  LL.forEach(ll=>{if(!ll.advies)return;const lj=ll.advies.lj,type=ll.advies.type,zk=(ll.advies.zw||[]).sort().join('+'),sk='lj'+lj+'_'+type+'_'+zk;if(!gm[sk])gm[sk]={lj,type,zw:ll.advies.zw||[],list:[]};gm[sk].list.push({...ll,_lj:lj,_zw:ll.advies.zw||[]});});
-  const groot=[],klein=[];Object.values(gm).forEach(g=>g.list.length>=2?groot.push(g):klein.push(...g.list.map(l=>({...l,_lj:g.lj,_zw:g.zw,_type:g.type}))));
-  klein.forEach(ll=>{const matches=groot.filter(g=>g.lj===ll._lj&&g.type===(ll.advies?.type||'doorstroom'));if(matches.length){let b=matches[0],bs=-1;matches.forEach(g=>{const ov=(ll._zw||[]).filter(d=>g.zw.includes(d)).length;if(ov>bs){bs=ov;b=g;}});b.list.push(ll);}else groot.push({lj:ll._lj,type:ll._type||'doorstroom',zw:ll._zw||[],list:[ll]});});
-  const allLL=groot.map((g,i)=>{const zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';return g.list.map(ll=>({...ll,_lj:g.lj,_zw:g.zw,_sub:'_'+i,_subL:g.type==='herhaling'?null:zl}));}).flat();
-  renGr(allLL,document.getElementById('auw'));
-}
-
-function expJS(){const data=LL.map(ll=>({i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt}));const blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Opgeslagen');}
-function impJS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);(d.data||d.leerlingen||[]).forEach(imp=>{const b=LL.find(l=>l.i===imp.i||l.i===imp.id);if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}});renderLL();updS();toast('Geladen: '+f.name);}catch(err){toast('Fout: '+err.message);}};r.readAsText(f);e.target.value='';}
 function togLC(uid){
-  const btn=document.getElementById(uid);
-  const det=document.getElementById(uid+'_det');
-  if(!btn||!det)return;
-  const isOpen=det.classList.contains('open');
-  // Sluit alle andere open chips
-  document.querySelectorAll('.lc.open').forEach(el=>el.classList.remove('open'));
-  document.querySelectorAll('.lc-det.open').forEach(el=>el.classList.remove('open'));
-  document.querySelectorAll('.lc .arr').forEach(el=>el.textContent='▾');
+  var btn=document.getElementById(uid);
+  var det=document.getElementById(uid+'_det');
+  if(!btn||!det) return;
+  var isOpen=det.classList.contains('open');
+  document.querySelectorAll('.lc.open').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.lc-det.open').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.lc .arr').forEach(function(el){el.innerHTML='&#9660;';});
   if(!isOpen){
     btn.classList.add('open');
     det.classList.add('open');
-    const arr=btn.querySelector('.arr');
-    if(arr)arr.textContent='▴';
+    var arr=btn.querySelector('.arr');
+    if(arr) arr.innerHTML='&#9650;';
   }
 }
-function printEenGroep(cardId, label) {
-  const card = document.getElementById(cardId);
-  if (!card) return;
 
-  // Kloon kaart en zet alle details open
-  const clone = card.cloneNode(true);
-  clone.querySelectorAll('.lc-det').forEach(el => el.classList.add('open'));
-  clone.querySelectorAll('.lc').forEach(el => el.classList.add('open'));
-  clone.querySelectorAll('.arr').forEach(el => el.remove());
-  clone.querySelectorAll('.groep-afdruk-btn').forEach(el => el.remove());
-
-  // Bouw print block
-  const pb = document.getElementById('print-block');
-  pb.innerHTML = `
-    <div class="print-header">
-      <h2>${label}</h2>
-      <p>BuLO Sint-Franciscus · Rekengroepen Wiskunde · ${new Date().toLocaleDateString('nl-BE')}</p>
-    </div>
-  `;
+function printEenGroep(cardId,label){
+  var card=document.getElementById(cardId);
+  if(!card) return;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.lc-det').forEach(function(el){el.classList.add('open');});
+  clone.querySelectorAll('.lc').forEach(function(el){el.classList.add('open');});
+  clone.querySelectorAll('.arr').forEach(function(el){el.remove();});
+  clone.querySelectorAll('.groep-afdruk-btn').forEach(function(el){el.remove();});
+  var pb=document.getElementById('print-block');
+  var datum=new Date().toLocaleDateString('nl-BE');
+  pb.innerHTML='<div class="print-hdr"><h2>'+label+'</h2><p>BuLO Sint-Franciscus &middot; Rekengroepen Wiskunde &middot; '+datum+'</p></div>';
   pb.appendChild(clone);
-  pb.style.display = 'block';
-
   window.print();
-
-  setTimeout(() => {
-    pb.style.display = 'none';
-    pb.innerHTML = '';
-  }, 1000);
+  setTimeout(function(){pb.innerHTML='';},1000);
 }
 
-function printGroep(wrapId) {
-  // Zorg dat alle lc-det open zijn voor afdrukken
-  const wrap = document.getElementById(wrapId);
-  if (!wrap) return;
+function genGr(){
+  var beslist=LL.filter(function(l){return l.b;});
+  if(!beslist.length){toast('Geen beslissingen ingevuld');return;}
+  var wrap=document.getElementById('grw');
+  renGr(beslist.map(function(ll){
+    var copy=Object.assign({},ll);
+    copy._lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
+    return copy;
+  }),wrap);
+  var ob=LL.filter(function(l){return !l.b;});
+  if(ob.length){
+    var card=document.createElement('div');card.className='gc';
+    card.innerHTML='<div class="gh"><div class="gkl" style="background:var(--bo2)"></div><div class="gt" style="color:var(--mu)">Nog geen beslissing</div><span class="gn">'+ob.length+'</span></div>'
+      +'<div class="gll">'+ob.map(function(ll){return '<div class="lc-wrap"><div class="lc" style="cursor:default">'+ll.n+' <span class="ks">'+ll.k+'</span></div></div>';}).join('')+'</div>';
+    wrap.appendChild(card);
+  }
+  toast('Groepen gegenereerd');
+}
 
-  // Sla huidige open staat op
-  const wasOpen = [];
-  wrap.querySelectorAll('.lc-det').forEach((el,i) => {
-    wasOpen.push(el.classList.contains('open'));
-    el.classList.add('open');
+function genAu(){
+  if(!LL.length) return;
+  var dr=parseInt(document.getElementById('adr').value)||75;
+  LL.forEach(function(ll){ll.advies=calcAdv(ll,dr);});
+  var nDs=LL.filter(function(l){return l.advies&&l.advies.type!=='herhaling';}).length;
+  var nHh=LL.filter(function(l){return l.advies&&l.advies.type==='herhaling';}).length;
+  document.getElementById('aus').innerHTML=
+    '<div class="st"><strong>'+LL.length+'</strong>&nbsp;leerlingen</div>'
+    +'<div class="st"><span class="sdg sds">'+nDs+'</span>&nbsp;doorstroom</div>'
+    +'<div class="st"><span class="sdg" style="background:var(--ol);color:var(--or)">'+nHh+'</span>&nbsp;herhaling</div>'
+    +'<div class="st" style="margin-left:auto;font-size:.72rem;color:var(--mu)">Drempel: '+dr+'%</div>';
+
+  var gm={};
+  LL.forEach(function(ll){
+    if(!ll.advies) return;
+    var lj=ll.advies.lj,type=ll.advies.type;
+    var zk=(ll.advies.zw||[]).slice().sort().join('+');
+    var sk='lj'+lj+'_'+type+'_'+zk;
+    if(!gm[sk]) gm[sk]={lj:lj,type:type,zw:ll.advies.zw||[],list:[]};
+    var copy=Object.assign({},ll);copy._lj=lj;copy._zw=ll.advies.zw||[];
+    gm[sk].list.push(copy);
   });
-  wrap.querySelectorAll('.lc').forEach(el => el.classList.add('open'));
 
-  // Markeer actief tabblad voor print
-  document.querySelectorAll('.pg').forEach(p => p.classList.remove('print-active'));
-  const tabId = wrapId === 'grw' ? 'tab-gr' : 'tab-au';
-  document.getElementById(tabId).classList.add('print-active');
+  var groot=[],klein=[];
+  Object.values(gm).forEach(function(g){
+    if(g.list.length>=2) groot.push(g);
+    else klein=klein.concat(g.list.map(function(l){var c=Object.assign({},l);c._type=g.type;return c;}));
+  });
+  klein.forEach(function(ll){
+    var matches=groot.filter(function(g){return g.lj===ll._lj&&g.type===(ll.advies?ll.advies.type:'doorstroom');});
+    if(matches.length){
+      var b=matches[0],bs=-1;
+      matches.forEach(function(g){var ov=(ll._zw||[]).filter(function(d){return g.zw.includes(d);}).length;if(ov>bs){bs=ov;b=g;}});
+      b.list.push(ll);
+    } else {
+      groot.push({lj:ll._lj,type:ll._type||'doorstroom',zw:ll._zw||[],list:[ll]});
+    }
+  });
 
-  window.print();
-
-  // Herstel na afdrukken
-  setTimeout(() => {
-    wrap.querySelectorAll('.lc-det').forEach((el,i) => {
-      if (!wasOpen[i]) el.classList.remove('open');
+  var allLL=[];
+  groot.forEach(function(g,i){
+    var zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';
+    g.list.forEach(function(ll){
+      var c=Object.assign({},ll);c._lj=g.lj;c._zw=g.zw;c._sub='_'+i;c._subL=g.type==='herhaling'?null:zl;
+      allLL.push(c);
     });
-    wrap.querySelectorAll('.lc').forEach(el => {
-      if (!el.classList.contains('open')) return;
-      // enkel sluiten als det gesloten is
-    });
-    document.getElementById(tabId).classList.remove('print-active');
-  }, 500);
+  });
+  renGr(allLL,document.getElementById('auw'));
 }
 
-function toast(msg){const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function expJS(){
+  var data=LL.map(function(ll){return {i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt};});
+  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data},null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();
+  toast('Opgeslagen');
+}
+
+function impJS(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    try{
+      var d=JSON.parse(ev.target.result);
+      (d.data||d.leerlingen||[]).forEach(function(imp){
+        var b=LL.find(function(l){return l.i===imp.i||l.i===imp.id;});
+        if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}
+      });
+      renderLL();updS();toast('Geladen: '+f.name);
+    }catch(err){toast('Fout: '+err.message);}
+  };
+  r.readAsText(f);e.target.value='';
+}
+
+function toast(msg){
+  var t=document.getElementById('tst');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
 </script>
 </body>
 </html>
