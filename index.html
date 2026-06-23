@@ -65,21 +65,24 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .gc{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .gh{padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
 .gkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}.gt{font-size:.88rem;font-weight:700}.gs{font-size:.72rem;color:var(--mu)}.gn{font-size:.72rem;color:var(--mu);margin-left:auto}
-.gll{padding:10px 16px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--bo)}
-.lc-wrap{position:relative;display:inline-block}
-.lc{padding:3px 9px;border-radius:10px;font-size:.72rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;transition:background .12s}
+.gll{padding:10px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px;border-bottom:1px solid var(--bo)}
+.lc-wrap{display:block;width:100%}
+.lc{padding:6px 10px;border-radius:6px;font-size:.76rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;transition:background .12s;width:100%}
 .lc:hover{background:var(--bo2)}
-.lc.open{border-radius:10px 10px 0 0;background:var(--bo2)}
-.lc .ks{font-size:.62rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.6rem;color:var(--re);font-weight:700}
-.lc-det{display:none;position:absolute;top:100%;left:0;z-index:100;background:var(--sf);border:1px solid var(--bo2);border-radius:0 8px 8px 8px;padding:8px 12px;min-width:260px;max-width:320px;box-shadow:0 4px 12px rgba(0,0,0,.12);font-size:.72rem}
+.lc.open{border-radius:6px 6px 0 0;background:var(--bo2)}
+.lc .ks{font-size:.66rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.62rem;color:var(--re);font-weight:700}
+.lc .arr{margin-left:auto;font-size:.65rem;color:var(--mu)}
+.lc-det{display:none;background:var(--sf);border:1px solid var(--bo2);border-top:none;border-radius:0 0 6px 6px;padding:10px 14px;font-size:.72rem}
 .lc-det.open{display:block}
-.lc-dh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:5px 0 2px;display:flex;align-items:center;gap:5px}
-.lc-dr{display:flex;align-items:center;gap:4px;margin-bottom:2px}
-.lc-dbw{width:36px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}
+.lc-dh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:8px 0 3px;display:flex;align-items:center;gap:6px}
+.lc-dh:first-child{margin-top:0}
+.lc-dr{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.lc-dbw{width:50px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}
 .lc-db{height:100%;border-radius:2px}
-.lc-dp{font-size:.64rem;font-weight:700;width:26px;text-align:right;flex-shrink:0;color:var(--tx)}
-.lc-dn{flex:1;line-height:1.3;color:var(--tx)}
+.lc-dp{font-size:.66rem;font-weight:700;width:28px;text-align:right;flex-shrink:0;color:var(--tx)}
+.lc-dn{flex:1;line-height:1.4;color:var(--tx)}
 .lc-dn.zw{color:var(--re)}.lc-dn.st{color:var(--gr)}
+@media print{.lc-det{display:block!important}.lc .arr{display:none}}
 .gwp{padding:10px 16px}.wt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px}
 .wcs{display:flex;flex-wrap:wrap;gap:4px}.wc{font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--sf2);border:1px solid var(--bo);display:flex;align-items:center;gap:4px}
 .dd_{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -273,7 +276,13 @@ function renGr(list,wrap){
       });
     });
     return `<div class="lc-wrap">
-      <div class="lc" id="${uid}" onclick="togLC('${uid}')">${ll.n}<span class="ks">${ll.k}</span>${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆</span>':''}${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}${ll.nt?'<span title="'+ll.nt+'">📝</span>':''}▾</div>
+      <div class="lc" id="${uid}" onclick="togLC('${uid}')">
+        <strong>${ll.n}</strong><span class="ks">${ll.k} LJ${ll.l}</span>
+        ${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆FN</span>':''}
+        ${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}
+        ${ll.nt?'<span title="'+ll.nt+'" style="font-size:.7rem">📝</span>':''}
+        <span class="arr">▾</span>
+      </div>
       <div class="lc-det" id="${uid}_det">${detH}</div>
     </div>`;
   }).join('');
@@ -305,19 +314,18 @@ function togLC(uid){
   const btn=document.getElementById(uid);
   const det=document.getElementById(uid+'_det');
   if(!btn||!det)return;
+  const isOpen=det.classList.contains('open');
   // Sluit alle andere open chips
-  document.querySelectorAll('.lc.open').forEach(el=>{if(el.id!==uid){el.classList.remove('open');}});
-  document.querySelectorAll('.lc-det.open').forEach(el=>{if(el.id!==uid+'_det'){el.classList.remove('open');}});
-  btn.classList.toggle('open');
-  det.classList.toggle('open');
-}
-// Sluit chips bij klik buiten
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.lc-wrap')){
-    document.querySelectorAll('.lc.open').forEach(el=>el.classList.remove('open'));
-    document.querySelectorAll('.lc-det.open').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('.lc.open').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('.lc-det.open').forEach(el=>el.classList.remove('open'));
+  document.querySelectorAll('.lc .arr').forEach(el=>el.textContent='▾');
+  if(!isOpen){
+    btn.classList.add('open');
+    det.classList.add('open');
+    const arr=btn.querySelector('.arr');
+    if(arr)arr.textContent='▴';
   }
-});
+}
 function toast(msg){const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 </script>
 </body>
