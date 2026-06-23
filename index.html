@@ -66,8 +66,20 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .gh{padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
 .gkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}.gt{font-size:.88rem;font-weight:700}.gs{font-size:.72rem;color:var(--mu)}.gn{font-size:.72rem;color:var(--mu);margin-left:auto}
 .gll{padding:10px 16px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--bo)}
-.lc{padding:3px 9px;border-radius:10px;font-size:.72rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:4px}
+.lc-wrap{position:relative;display:inline-block}
+.lc{padding:3px 9px;border-radius:10px;font-size:.72rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;transition:background .12s}
+.lc:hover{background:var(--bo2)}
+.lc.open{border-radius:10px 10px 0 0;background:var(--bo2)}
 .lc .ks{font-size:.62rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.6rem;color:var(--re);font-weight:700}
+.lc-det{display:none;position:absolute;top:100%;left:0;z-index:100;background:var(--sf);border:1px solid var(--bo2);border-radius:0 8px 8px 8px;padding:8px 12px;min-width:260px;max-width:320px;box-shadow:0 4px 12px rgba(0,0,0,.12);font-size:.72rem}
+.lc-det.open{display:block}
+.lc-dh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:5px 0 2px;display:flex;align-items:center;gap:5px}
+.lc-dr{display:flex;align-items:center;gap:4px;margin-bottom:2px}
+.lc-dbw{width:36px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}
+.lc-db{height:100%;border-radius:2px}
+.lc-dp{font-size:.64rem;font-weight:700;width:26px;text-align:right;flex-shrink:0;color:var(--tx)}
+.lc-dn{flex:1;line-height:1.3;color:var(--tx)}
+.lc-dn.zw{color:var(--re)}.lc-dn.st{color:var(--gr)}
 .gwp{padding:10px 16px}.wt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px}
 .wcs{display:flex;flex-wrap:wrap;gap:4px}.wc{font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--sf2);border:1px solid var(--bo);display:flex;align-items:center;gap:4px}
 .dd_{width:6px;height:6px;border-radius:50%;flex-shrink:0}
@@ -246,7 +258,25 @@ function renGr(list,wrap){
   if(!sorte.length){wrap.innerHTML='<div class="em"><h3>Geen leerlingen ingedeeld</h3></div>';return;}
   sorte.forEach(([,g],gi)=>{
     const kl=g.fn?'#5E4B8B':KL[gi%KL.length];const wp=wpB(g.list);
-    const chips=g.list.map(ll=>`<div class="lc">${ll.n}<span class="ks">${ll.k}</span>${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆</span>':''}${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}${ll.nt?'<span title="'+ll.nt+'">📝</span>':''}</div>`).join('');
+    const chips=g.list.map(ll=>{
+    const uid='gc_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'_'+gi;
+    let detH='';
+    DVK.forEach(dk=>{
+      const d=ll.d[dk];if(!d)return;
+      const pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+      detH+=`<div class="lc-dh"><span>${DVL[dk]||dk}</span><span class="pc" style="margin-left:4px">${d.p}%</span></div>`;
+      getDoel(ll,dk).forEach(([naam,pct])=>{
+        const bc=pct>=75?'hg':pct>=55?'md':'lg',nc=pct>=75?'st':pct<55?'zw':'';
+        const icon=pct>=75?'✅':pct<55?'❌':'〰';
+        const kort=naam.length>55?naam.substring(0,53)+'…':naam;
+        detH+=`<div class="lc-dr"><span style="font-size:.75rem;width:16px;flex-shrink:0;text-align:center">${icon}</span><div class="lc-dbw"><div class="lc-db ${bc}" style="width:${pct}%"></div></div><span class="lc-dp">${pct}%</span><span class="lc-dn ${nc}" title="${naam}">${kort}</span></div>`;
+      });
+    });
+    return `<div class="lc-wrap">
+      <div class="lc" id="${uid}" onclick="togLC('${uid}')">${ll.n}<span class="ks">${ll.k}</span>${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆</span>':''}${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}${ll.nt?'<span title="'+ll.nt+'">📝</span>':''}▾</div>
+      <div class="lc-det" id="${uid}_det">${detH}</div>
+    </div>`;
+  }).join('');
     const wpC=wp.slice(0,8).map(w=>`<div class="wc"><span class="dd_ d${w.dom}"></span>${w.doel}</div>`).join('')||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
     const card=document.createElement('div');card.className='gc';
     card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
@@ -271,6 +301,23 @@ function genAu(){
 
 function expJS(){const data=LL.map(ll=>({i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt}));const blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Opgeslagen');}
 function impJS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);(d.data||d.leerlingen||[]).forEach(imp=>{const b=LL.find(l=>l.i===imp.i||l.i===imp.id);if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}});renderLL();updS();toast('Geladen: '+f.name);}catch(err){toast('Fout: '+err.message);}};r.readAsText(f);e.target.value='';}
+function togLC(uid){
+  const btn=document.getElementById(uid);
+  const det=document.getElementById(uid+'_det');
+  if(!btn||!det)return;
+  // Sluit alle andere open chips
+  document.querySelectorAll('.lc.open').forEach(el=>{if(el.id!==uid){el.classList.remove('open');}});
+  document.querySelectorAll('.lc-det.open').forEach(el=>{if(el.id!==uid+'_det'){el.classList.remove('open');}});
+  btn.classList.toggle('open');
+  det.classList.toggle('open');
+}
+// Sluit chips bij klik buiten
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.lc-wrap')){
+    document.querySelectorAll('.lc.open').forEach(el=>el.classList.remove('open'));
+    document.querySelectorAll('.lc-det.open').forEach(el=>el.classList.remove('open'));
+  }
+});
 function toast(msg){const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 </script>
 </body>
