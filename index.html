@@ -393,7 +393,7 @@ function renGr(list,wrap){
     const card=document.createElement('div');card.className='gc';
     const cardId='gc_'+gi+'_'+wrapId;
     card.id=cardId;
-    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span><button class="btn bgy bs groep-afdruk-btn" onclick="printEenGroep('${cardId}','${g.label.replace(/'/g,\'\\'\'\')}')" style="margin-left:12px">🖨 Afdrukken</button></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
+    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span><button class="btn bgy bs groep-afdruk-btn" data-cardid="${cardId}" data-label="${g.label}" onclick="printEenGroep(this.dataset.cardid,this.dataset.label)" style="margin-left:12px">🖨 Afdrukken</button></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
     wrap.appendChild(card);
   });
 }
