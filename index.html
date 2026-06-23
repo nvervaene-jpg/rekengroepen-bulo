@@ -537,6 +537,9 @@ function genGr(){
   renGr(beslist.map(function(ll){
     var copy=Object.assign({},ll);
     copy._lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
+    // Voeg zwakke domeinen toe voor visuele indicatie
+    var adv=calcAdv(ll,75);
+    copy._zw=adv?adv.zw:[];
     return copy;
   }),wrap);
   var ob=LL.filter(function(l){return !l.b;});
