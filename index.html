@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rekengroepen — BuLO Sint-Franciscus</title>
+<style>
+:root{--bg:#F2F1EE;--sf:#FFF;--sf2:#F8F7F5;--bo:#E0DCD4;--bo2:#C8C4BC;--tx:#18170F;--mu:#6B6760;--ac:#1A4D8C;--al:#D6E6F8;--gr:#2A6048;--gl:#D4EDE0;--or:#C05A20;--ol:#FAE4D4;--pu:#5E4B8B;--pl:#EDE8F8;--re:#9B2335;--ye:#7A5200;--yl:#FEF3D6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5}
+header{background:#18170F;color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{font-size:1rem;font-weight:700}.sub{font-size:.72rem;color:#999;margin-top:1px}
+.ha{display:flex;gap:6px;flex-wrap:wrap}
+.btn{padding:6px 12px;border-radius:4px;border:none;cursor:pointer;font-size:.76rem;font-weight:600;transition:opacity .15s;white-space:nowrap}.btn:hover{opacity:.82}
+.bp{background:var(--ac);color:#fff}.bg_{background:transparent;color:#ccc;border:1px solid #444}.bgy{background:var(--bo);color:var(--tx)}.bs{padding:4px 9px;font-size:.72rem}
+nav{background:var(--sf);border-bottom:2px solid var(--bo);display:flex;padding:0 28px}
+nav button{background:none;border:none;border-bottom:3px solid transparent;padding:11px 16px;font-size:.76rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;color:var(--mu);margin-bottom:-2px;transition:all .15s}
+nav button.active{color:var(--tx);border-bottom-color:var(--ac)}
+.pg{display:none}.pg.active{display:block}
+.sb{background:var(--sf);border-bottom:1px solid var(--bo);padding:9px 28px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.st{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--mu)}.st strong{font-size:.95rem;color:var(--tx);font-weight:700}
+.sdg{padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:700}
+.sds{background:var(--gl);color:var(--gr)}.sfn{background:var(--pl);color:var(--pu)}.sob{background:var(--bo);color:var(--mu)}
+.pw{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:140px}
+.po{flex:1;height:4px;background:var(--bo);border-radius:2px;overflow:hidden}.pi{height:100%;background:var(--gr);border-radius:2px;transition:width .3s}
+.pt{font-size:.72rem;color:var(--mu);white-space:nowrap}
+.fi{padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--sf2);border-bottom:1px solid var(--bo)}
+.fi label{font-size:.7rem;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radius:4px;font-size:.77rem;background:var(--sf);color:var(--tx)}
+.fc{margin-left:auto;font-size:.72rem;color:var(--mu)}
+.grid{padding:16px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.krt{background:var(--sf);border:1px solid var(--bo);border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:4px solid var(--bo2)}
+.krt.bd{border-left-color:var(--gr)}.krt.bh{border-left-color:var(--or)}.krt.bn{border-left-color:var(--bo2)}
+.kt{padding:10px 12px 8px}
+.knr{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+.kn{font-size:.92rem;font-weight:700}
+.bdg{font-size:.64rem;font-weight:700;padding:2px 6px;border-radius:3px}
+.bkl{background:var(--al);color:var(--ac)}.blj{background:var(--bo);color:var(--mu)}
+.ads{background:var(--gl);color:var(--gr)}.adm{background:var(--yl);color:var(--ye)}.adh{background:var(--ol);color:var(--or)}.bfn{background:var(--pl);color:var(--pu)}
+.ds2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.dsc{display:flex;align-items:center;gap:5px}.dl{font-size:.66rem;color:var(--mu);width:24px;flex-shrink:0;font-weight:700}
+.bw{flex:1;height:5px;background:var(--bo);border-radius:3px;overflow:hidden}.bar{height:100%;border-radius:3px}
+.hg{background:var(--gr)}.md{background:#E09000}.lg{background:var(--re)}
+.pc{font-size:.68rem;font-weight:700;width:30px;text-align:right;flex-shrink:0}
+.pc.hg{color:var(--gr)}.pc.md{color:var(--ye)}.pc.lg{color:var(--re)}
+.la{padding:8px 12px;background:var(--sf2);border-top:1px solid var(--bo)}
+.ar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.al_{color:var(--mu);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.at{font-size:.75rem;color:var(--tx);font-weight:500}
+.bwr{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.bkn{padding:4px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);font-size:.7rem;font-weight:600;cursor:pointer;color:var(--mu);transition:all .12s}
+.bkn:hover{border-color:var(--tx);color:var(--tx)}.bkn.akd{background:var(--gl);border-color:var(--gr);color:var(--gr)}.bkn.akh{background:var(--ol);border-color:var(--or);color:var(--or)}
+.ljr{display:flex;align-items:center;gap:7px;margin-bottom:5px}.ljr label{font-size:.7rem;color:var(--mu);white-space:nowrap}.ljr select{padding:3px 7px;font-size:.73rem}
+.fnb{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;padding:3px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);color:var(--mu);font-weight:600;cursor:pointer;margin-bottom:5px;transition:all .12s}
+.fnb.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
+.nt{width:100%;padding:4px 7px;border:1px solid var(--bo2);border-radius:3px;font-size:.72rem;color:var(--tx);background:var(--sf);resize:none;font-family:inherit}
+.nt::placeholder{color:#BBB}
+.dtt{width:100%;padding:5px 12px;font-size:.7rem;color:var(--ac);cursor:pointer;background:none;border:none;border-top:1px solid var(--bo);text-align:left}
+.dtp{display:none;padding:8px 12px;border-top:1px solid var(--bo);max-height:300px;overflow-y:auto}.dtp.open{display:block}
+.ddh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:6px 0 3px;display:flex;align-items:center;gap:6px}
+.dr{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:.72rem}
+.dbw{width:40px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}.db{height:100%;border-radius:2px}
+.dp{font-size:.65rem;font-weight:700;width:28px;text-align:right;flex-shrink:0}
+.dn{flex:1;line-height:1.3}.dn.zw{color:var(--re)}.dn.st{color:var(--gr)}
+.gw{padding:16px 28px}
+.gc{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.gh{padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
+.gkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}.gt{font-size:.88rem;font-weight:700}.gs{font-size:.72rem;color:var(--mu)}.gn{font-size:.72rem;color:var(--mu);margin-left:auto}
+.gll{padding:10px 16px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--bo)}
+.lc{padding:3px 9px;border-radius:10px;font-size:.72rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:4px}
+.lc .ks{font-size:.62rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.6rem;color:var(--re);font-weight:700}
+.gwp{padding:10px 16px}.wt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px}
+.wcs{display:flex;flex-wrap:wrap;gap:4px}.wc{font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--sf2);border:1px solid var(--bo);display:flex;align-items:center;gap:4px}
+.dd_{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dGK{background:var(--gr)}.dHR{background:var(--or)}.dMK{background:var(--pu)}.dMT{background:var(--ac)}.dCY{background:#888}
+.leg{padding:10px 28px;background:var(--sf);border-bottom:1px solid var(--bo);display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:.75rem}
+.lt{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu)}
+.li_{display:flex;align-items:center;gap:5px}.lkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+.ib{padding:8px 28px;background:var(--yl);border-bottom:1px solid #E8C96A;font-size:.76rem;color:var(--ye);display:flex;align-items:center;gap:8px}
+.as{padding:10px 28px;display:flex;gap:16px;flex-wrap:wrap;background:var(--sf);border-bottom:1px solid var(--bo)}
+.em{text-align:center;padding:48px 28px;color:var(--mu)}.em h3{color:var(--tx);margin-bottom:6px;font-size:.95rem}
+.loading{text-align:center;padding:60px 28px;color:var(--mu);font-size:.9rem}
+.tst{position:fixed;bottom:20px;right:20px;background:var(--tx);color:#fff;padding:9px 16px;border-radius:5px;font-size:.8rem;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:9999;transform:translateY(70px);opacity:0;transition:all .22s}
+.tst.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="sub">BuLO Sint-Franciscus · Rekengroepen Wiskunde</div><h1 id="htit">Laden…</h1></div>
+  <div class="ha">
+    <button class="btn bg_ bs" onclick="expJS()">💾 Opslaan</button>
+    <label class="btn bg_ bs" style="cursor:pointer">📂 Laden<input type="file" accept=".json" style="display:none" onchange="impJS(event)"></label>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('ll',this)">① Leerlingoverzicht</button>
+  <button onclick="showTab('gr',this)">② Groepsvoorstel</button>
+  <button onclick="showTab('au',this)">③ Automatisch voorstel</button>
+</nav>
+<div id="tab-ll" class="pg active">
+  <div class="sb">
+    <div class="st"><strong id="s1">–</strong>&nbsp;leerlingen</div>
+    <div class="st"><span class="sdg sds" id="s2">0</span>&nbsp;doorstroom</div>
+    <div class="st"><span class="sdg sfn" id="s3">0</span>&nbsp;functioneel</div>
+    <div class="st"><span class="sdg sob" id="s4">0</span>&nbsp;onbeslist</div>
+    <div class="pw"><div class="po"><div class="pi" id="pg_" style="width:0%"></div></div><span class="pt" id="pt_">0%</span></div>
+  </div>
+  <div class="fi">
+    <label>Filter:</label>
+    <select id="flj" onchange="renderLL()"><option value="">Alle LJ</option><option value="1">LJ1</option><option value="2">LJ2</option><option value="3">LJ3</option><option value="4">LJ4</option></select>
+    <select id="fkl" onchange="renderLL()"><option value="">Alle klassen</option></select>
+    <select id="fbe" onchange="renderLL()"><option value="">Alle beslissingen</option><option value="onbeslist">Onbeslist</option><option value="doorstroom">Doorstroom</option><option value="herhaling">Herhaling</option></select>
+    <input type="text" id="fnm" placeholder="Naam…" oninput="renderLL()" style="width:130px">
+    <button class="btn bgy bs" onclick="resetF()">✕</button>
+    <span class="fc" id="fc_"></span>
+  </div>
+  <div id="grid_" class="grid"><div class="loading">Gegevens laden…</div></div>
+</div>
+<div id="tab-gr" class="pg">
+  <div class="fi" style="justify-content:space-between">
+    <span style="font-size:.78rem;color:var(--mu)">Op basis van jouw beslissingen in tabblad ①</span>
+    <div style="display:flex;gap:6px">
+      <button class="btn bp bs" onclick="genGr()">⚙ Genereer</button>
+      <button class="btn bgy bs" onclick="window.print()">🖨 Afdrukken</button>
+    </div>
+  </div>
+  <div class="gw" id="grw"><div class="em"><h3>Nog geen groepen</h3><p>Vul beslissingen in bij ①, dan klik je op Genereer.</p></div></div>
+</div>
+<div id="tab-au" class="pg">
+  <div class="fi" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;gap:10px;align-items:center">
+      <label style="font-size:.76rem;color:var(--mu)">Drempel:</label>
+      <select id="adr" onchange="genAu()"><option value="65">65%</option><option value="70">70%</option><option value="75" selected>75%</option><option value="80">80%</option></select>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn bp bs" onclick="genAu()">↺ Herbereken</button>
+      <button class="btn bgy bs" onclick="window.print()">🖨 Afdrukken</button>
+    </div>
+  </div>
+  <div class="ib">💡 <span>Automatisch voorstel op basis van scores. Gebruik tabblad ② om bij te sturen.</span></div>
+  <div class="leg">
+    <span class="lt">Groepen:</span>
+    <div class="li_"><div class="lkl" style="background:#2A6048"></div>Doorstroom sterk</div>
+    <div class="li_"><div class="lkl" style="background:#1A4D8C"></div>Doorstroom + werkpunten</div>
+    <div class="li_"><div class="lkl" style="background:#C05A20"></div>Herhaling</div>
+    <div class="li_"><div class="lkl" style="background:#5E4B8B"></div>Functioneel</div>
+    <span class="lt" style="margin-left:8px">Domeinen:</span>
+    <div class="li_"><span class="dd_ dGK"></span>GK</div><div class="li_"><span class="dd_ dHR"></span>HR</div>
+    <div class="li_"><span class="dd_ dMK"></span>MK</div><div class="li_"><span class="dd_ dMT"></span>MT</div><div class="li_"><span class="dd_ dCY"></span>CY</div>
+    <span style="font-size:.72rem;color:var(--mu);margin-left:8px">Rode letters = domeinen onder drempel</span>
+  </div>
+  <div class="as" id="aus"></div>
+  <div class="gw" id="auw"><div class="em"><h3>Laden…</h3></div></div>
+</div>
+<div class="tst" id="tst"></div>
+<script>
+const DVK=['GK','HR','MK','MT','CY'];
+const DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cijferen'};
+const KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
+let DB={}, LL=[];
+
+fetch('data.json')
+  .then(r=>r.json())
+  .then(td=>{
+    DB=td.db;
+    LL=td.ll;
+    LL.forEach(ll=>{ll.id=ll.i;ll.naam=ll.n;ll.klas=ll.k;ll.leerjaar=ll.l;ll.domeinen=ll.d;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;ll.functioneel=ll.f;ll.notitie=ll.nt;ll.advies=calcAdv(ll,75);});
+    document.getElementById('htit').textContent='Kinderstappen LJ1–LJ4 · '+LL.length+' leerlingen';
+    vulKF();renderLL();updS();genAu();
+  })
+  .catch(e=>{document.getElementById('grid_').innerHTML='<div class="em"><h3>Fout bij laden</h3><p>'+e.message+'</p></div>';});
+
+function showTab(id,btn){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');(btn||event.target).classList.add('active');}
+function vulKF(){const s=document.getElementById('fkl');[...new Set(LL.map(l=>l.k))].sort().forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});}
+function calcAdv(ll,dr){const doms=Object.keys(ll.d||{});if(!doms.length)return null;const stk=[],zw=[];doms.forEach(d=>{const p=(ll.d[d]||{}).p||0;(p>=dr?stk:zw).push(d);});const type=zw.length===0?'doorstroom':stk.length>zw.length?'gemengd':'herhaling';return{type,lj:type==='herhaling'?ll.l:ll.l+1,stk,zw};}
+function getDoel(ll,dom){const d=ll.d[dom];if(!d||!DB[d.k])return[];return DB[d.k].map((naam,i)=>[naam,d.ps[i]||0]);}
+
+function renderLL(){
+  const fLJ=document.getElementById('flj').value,fKL=document.getElementById('fkl').value,fBE=document.getElementById('fbe').value,fNM=document.getElementById('fnm').value.toLowerCase();
+  let list=LL.filter(ll=>{
+    if(fLJ&&ll.l!=fLJ)return false;if(fKL&&ll.k!==fKL)return false;
+    if(fNM&&!ll.n.toLowerCase().includes(fNM))return false;
+    if(fBE){const b=ll.b||'onbeslist';if(b!==fBE)return false;}return true;
+  });
+  list.sort((a,b)=>a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n));
+  document.getElementById('fc_').textContent=list.length+' leerlingen';
+  const g=document.getElementById('grid_');g.innerHTML='';
+  list.forEach(ll=>g.appendChild(mkKrt(ll)));
+}
+
+function mkKrt(ll){
+  const besl=ll.b||'onbeslist';
+  const div=document.createElement('div');
+  div.className='krt '+(besl==='doorstroom'?'bd':besl==='herhaling'?'bh':'bn');
+  div.id='k_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+  let domH='';
+  DVK.forEach(dk=>{const d=ll.d[dk];if(!d)return;const c=d.p>=75?'hg':d.p>=55?'md':'lg';domH+=`<div class="dsc"><span class="dl">${dk}</span><div class="bw"><div class="bar ${c}" style="width:${d.p}%"></div></div><span class="pc ${c}">${d.p}%</span></div>`;});
+  const adv=ll.advies;
+  let advB='';if(adv){const ac=adv.type==='doorstroom'?'ads':adv.type==='gemengd'?'adm':'adh';advB=`<span class="bdg ${ac}">💡${adv.type==='doorstroom'?'↑ DS':adv.type==='gemengd'?'~ Mix':'↺ HH'} LJ${adv.lj}</span>`;}
+  let beslB='';if(ll.b){beslB=`<span class="sdg ${ll.b==='doorstroom'?'sds':'sob'}" style="font-size:.62rem">${ll.b==='doorstroom'?'↑ DS':'↺ HH'}${ll.dl?' LJ'+ll.dl:''}</span>`;}
+  const bkH=[{k:'doorstroom',l:'↑ Doorstroom'},{k:'herhaling',l:'↺ Zelfde LJ'}].map(b=>`<button class="bkn ${besl===b.k?'ak'+b.k[0]:''}" onclick="setBes('${ll.i}','${b.k}')">${b.l}</button>`).join('');
+  const ljO=[1,2,3,4,5].map(n=>`<option value="${n}" ${ll.dl==n?'selected':''}>${n}</option>`).join('');
+  let detH='';
+  DVK.forEach(dk=>{
+    const d=ll.d[dk];if(!d)return;
+    const pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+    const ljlbl=d.lj&&d.lj!==ll.l?` <span style="font-size:.6rem;color:var(--mu)">(LJ${d.lj})</span>`:'';
+    detH+=`<div class="ddh"><span>${DVL[dk]||dk}${ljlbl}</span><span class="pc ${pc}" style="font-size:.72rem;margin-left:6px">${d.p}%</span></div>`;
+    getDoel(ll,dk).forEach(([naam,pct])=>{
+      const bc=pct>=75?'hg':pct>=55?'md':'lg',nc=pct>=75?'st':pct<55?'zw':'';
+      const icon=pct>=75?'✅':pct<55?'❌':'〰';
+      const kort=naam.length>62?naam.substring(0,60)+'…':naam;
+      detH+=`<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center">${icon}</span><div class="dbw"><div class="db ${bc}" style="width:${pct}%"></div></div><span class="dp">${pct}%</span><span class="dn ${nc}" title="${naam}">${kort}</span></div>`;
+    });
+  });
+  div.innerHTML=`
+  <div class="kt"><div class="knr"><span class="kn">${ll.n}</span><span class="bdg bkl">${ll.k}</span><span class="bdg blj">LJ${ll.l}</span>${advB}${beslB}${ll.f?'<span class="bdg bfn">◆FN</span>':''}</div><div class="ds2">${domH}</div></div>
+  <div class="la">
+    ${adv?`<div class="ar"><span class="al_">Advies:</span><span class="at">${adv.type==='doorstroom'?'Doorstroom':adv.type==='gemengd'?'Gemengd':'Herhaling'} LJ${adv.lj}${adv.zw.length?' — aandacht '+adv.zw.join(', '):''}</span></div>`:''}
+    <div class="ar"><span class="al_">Beslissing:</span></div>
+    <div class="bwr">${bkH}</div>
+    <div class="ljr" id="ljr_${ll.i.replace(/[^a-z0-9]/gi,'_')}" style="${ll.b?'':'display:none'}"><label>Leerjaar:</label><select onchange="setLJ('${ll.i}',this.value)">${ljO}</select></div>
+    <div class="fnb ${ll.f?'on':''}" onclick="togFN('${ll.i}')">◆ Functioneel traject</div>
+    <textarea class="nt" rows="1" placeholder="Notitie…" onchange="setNt('${ll.i}',this.value)">${ll.nt||''}</textarea>
+  </div>
+  <button class="dtt" onclick="togDet(this)">▾ Doelen per domein</button>
+  <div class="dtp">${detH}</div>`;
+  if(ll.b&&!ll.dl){const s=div.querySelector('.ljr select');if(s){const dfl=ll.b==='herhaling'?ll.l:ll.l+1;s.value=dfl;ll.dl=dfl;}}
+  return div;
+}
+
+function togDet(btn){const p=btn.nextElementSibling;p.classList.toggle('open');btn.textContent=p.classList.contains('open')?'▴ Doelen verbergen':'▾ Doelen per domein';}
+function setBes(id,b){const ll=LL.find(l=>l.i===id);if(!ll)return;ll.b=ll.b===b?null:b;if(ll.b&&!ll.dl)ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;if(!ll.b)ll.dl=null;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;updS();hl(ll);}
+function setLJ(id,v){const ll=LL.find(l=>l.i===id);if(ll){ll.dl=parseInt(v);ll.doelleerjaar=ll.dl;hl(ll);}}
+function togFN(id){const ll=LL.find(l=>l.i===id);if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
+function setNt(id,v){const ll=LL.find(l=>l.i===id);if(ll){ll.nt=v;ll.notitie=v;}}
+function hl(ll){const o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));if(o){const n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}}
+function updS(){const t=LL.length,ds=LL.filter(l=>l.b==='doorstroom').length,fn=LL.filter(l=>l.f).length,ob=LL.filter(l=>!l.b).length;document.getElementById('s1').textContent=t;document.getElementById('s2').textContent=ds;document.getElementById('s3').textContent=fn;document.getElementById('s4').textContent=ob;const p=t>0?Math.round((t-ob)/t*100):0;document.getElementById('pg_').style.width=p+'%';document.getElementById('pt_').textContent=p+'% beslist';}
+function resetF(){['flj','fkl','fbe'].forEach(id=>document.getElementById(id).value='');document.getElementById('fnm').value='';renderLL();}
+
+function wpB(list){if(!list.length)return[];const c={};list.forEach(ll=>{DVK.forEach(dk=>{if(!ll.d[dk])return;getDoel(ll,dk).forEach(([naam,pct])=>{if(pct<60){const k=dk+'|'+naam;if(!c[k])c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'…':naam,n:0};c[k].n++;}});});});const min=Math.ceil(list.length*.5);return Object.values(c).filter(x=>x.n>=min).sort((a,b)=>b.n-a.n);}
+
+function renGr(list,wrap){
+  const gm={};
+  list.forEach(ll=>{const lj=ll._lj||(ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1));const sk='lj'+lj+(ll.f?'_fn':'')+(ll._sub||'');if(!gm[sk])gm[sk]={lj,fn:ll.f,label:(ll.f?'Functioneel — ':'')+'Leerjaar '+lj,sub:ll._subL||null,list:[]};gm[sk].list.push(ll);});
+  const sorte=Object.entries(gm).sort(([a],[b])=>a.localeCompare(b));wrap.innerHTML='';
+  if(!sorte.length){wrap.innerHTML='<div class="em"><h3>Geen leerlingen ingedeeld</h3></div>';return;}
+  sorte.forEach(([,g],gi)=>{
+    const kl=g.fn?'#5E4B8B':KL[gi%KL.length];const wp=wpB(g.list);
+    const chips=g.list.map(ll=>`<div class="lc">${ll.n}<span class="ks">${ll.k}</span>${ll.f?'<span style="color:var(--pu);font-size:.65rem">◆</span>':''}${(ll._zw||[]).map(d=>`<span class="zd">${d}</span>`).join('')}${ll.nt?'<span title="'+ll.nt+'">📝</span>':''}</div>`).join('');
+    const wpC=wp.slice(0,8).map(w=>`<div class="wc"><span class="dd_ d${w.dom}"></span>${w.doel}</div>`).join('')||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
+    const card=document.createElement('div');card.className='gc';
+    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
+    wrap.appendChild(card);
+  });
+}
+
+function genGr(){const beslist=LL.filter(l=>l.b);if(!beslist.length){toast('Geen beslissingen ingevuld');return;}const wrap=document.getElementById('grw');renGr(beslist.map(ll=>({...ll,_lj:ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1)})),wrap);const ob=LL.filter(l=>!l.b);if(ob.length){const card=document.createElement('div');card.className='gc';card.innerHTML=`<div class="gh"><div class="gkl" style="background:var(--bo2)"></div><div class="gt" style="color:var(--mu)">Nog geen beslissing</div><span class="gn">${ob.length}</span></div><div class="gll">${ob.map(ll=>`<div class="lc" style="color:var(--mu)">${ll.n}<span class="ks">${ll.k}</span></div>`).join('')}</div>`;wrap.appendChild(card);}toast('Groepen gegenereerd');}
+
+function genAu(){
+  if(!LL.length)return;const dr=parseInt(document.getElementById('adr').value)||75;
+  LL.forEach(ll=>{ll.advies=calcAdv(ll,dr);});
+  const nDs=LL.filter(l=>l.advies&&l.advies.type!=='herhaling').length,nHh=LL.filter(l=>l.advies&&l.advies.type==='herhaling').length;
+  document.getElementById('aus').innerHTML=`<div class="st"><strong>${LL.length}</strong>&nbsp;leerlingen</div><div class="st"><span class="sdg sds">${nDs}</span>&nbsp;doorstroom</div><div class="st"><span class="sdg" style="background:var(--ol);color:var(--or)">${nHh}</span>&nbsp;herhaling</div><div class="st" style="margin-left:auto;font-size:.72rem;color:var(--mu)">Drempel: ${dr}%</div>`;
+  const gm={};
+  LL.forEach(ll=>{if(!ll.advies)return;const lj=ll.advies.lj,type=ll.advies.type,zk=(ll.advies.zw||[]).sort().join('+'),sk='lj'+lj+'_'+type+'_'+zk;if(!gm[sk])gm[sk]={lj,type,zw:ll.advies.zw||[],list:[]};gm[sk].list.push({...ll,_lj:lj,_zw:ll.advies.zw||[]});});
+  const groot=[],klein=[];Object.values(gm).forEach(g=>g.list.length>=2?groot.push(g):klein.push(...g.list.map(l=>({...l,_lj:g.lj,_zw:g.zw,_type:g.type}))));
+  klein.forEach(ll=>{const matches=groot.filter(g=>g.lj===ll._lj&&g.type===(ll.advies?.type||'doorstroom'));if(matches.length){let b=matches[0],bs=-1;matches.forEach(g=>{const ov=(ll._zw||[]).filter(d=>g.zw.includes(d)).length;if(ov>bs){bs=ov;b=g;}});b.list.push(ll);}else groot.push({lj:ll._lj,type:ll._type||'doorstroom',zw:ll._zw||[],list:[ll]});});
+  const allLL=groot.map((g,i)=>{const zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';return g.list.map(ll=>({...ll,_lj:g.lj,_zw:g.zw,_sub:'_'+i,_subL:g.type==='herhaling'?null:zl}));}).flat();
+  renGr(allLL,document.getElementById('auw'));
+}
+
+function expJS(){const data=LL.map(ll=>({i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt}));const blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();toast('Opgeslagen');}
+function impJS(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);(d.data||d.leerlingen||[]).forEach(imp=>{const b=LL.find(l=>l.i===imp.i||l.i===imp.id);if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}});renderLL();updS();toast('Geladen: '+f.name);}catch(err){toast('Fout: '+err.message);}};r.readAsText(f);e.target.value='';}
+function toast(msg){const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+</script>
+</body>
+</html>
