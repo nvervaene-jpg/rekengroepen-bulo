@@ -99,6 +99,35 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 
 @media print {
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #login-screen, nav, .fi, .sb, .ha, .tst, .pg, .print-toolbar, .groep-afdruk-btn { display: none !important; }
+  header { padding: 10px 16px; }
+  body { font-size: 12px; background: #fff !important; }
+
+  /* Enkel afdrukblok tonen */
+  #print-block { display: block !important; }
+  #print-block .gc { break-inside: avoid; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 6px; }
+  #print-block .gh { padding: 10px 14px; background: #f0f0f0 !important; display: flex; align-items: center; gap: 10px; }
+  #print-block .gt { font-size: 1rem; font-weight: 700; }
+  #print-block .gn { margin-left: auto; font-size: .8rem; color: #666; }
+  #print-block .gll { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 6px; padding: 10px 14px; border-bottom: 1px solid #eee; }
+  #print-block .lc-wrap { display: block !important; break-inside: avoid; }
+  #print-block .lc { border-radius: 6px 6px 0 0 !important; background: #f5f5f5 !important; font-size: .75rem; padding: 5px 8px; }
+  #print-block .lc .arr { display: none; }
+  #print-block .lc-det { display: block !important; border: 1px solid #ddd; border-top: none; border-radius: 0 0 6px 6px; padding: 6px 10px; background: #fff; }
+  #print-block .lc-dh { font-size: .65rem; margin: 5px 0 2px; color: #555; }
+  #print-block .lc-dr { margin-bottom: 2px; }
+  #print-block .lc-dbw { width: 32px; }
+  #print-block .lc-dn { font-size: .7rem; }
+  #print-block .lc-dp { font-size: .64rem; }
+  #print-block .gwp { padding: 8px 14px; }
+  #print-block .wt { font-size: .65rem; color: #666; }
+  #print-block .wcs { display: flex; flex-wrap: wrap; gap: 4px; }
+  #print-block .wc { font-size: .68rem; padding: 2px 6px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 3px; }
+  #print-block .print-header { display: block !important; padding: 0 0 12px; border-bottom: 2px solid #333; margin-bottom: 16px; }
+  #print-block .print-header h2 { font-size: 1.1rem; font-weight: 700; }
+  #print-block .print-header p { font-size: .78rem; color: #666; margin-top: 2px; }
+}
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #login-screen, nav, .fi, .sb, .ha, .tst { display: none !important; }
   header { padding: 10px 16px; }
   body { font-size: 12px; }
@@ -240,6 +269,7 @@ function checkPW(){
   <div class="gw" id="auw"><div class="em"><h3>Laden…</h3></div></div>
 </div>
 <div class="tst" id="tst"></div>
+<div id="print-block" style="display:none"></div>
 <script>
 const DVK=['GK','HR','MK','MT','CY'];
 const DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cijferen'};
@@ -361,7 +391,9 @@ function renGr(list,wrap){
   }).join('');
     const wpC=wp.slice(0,8).map(w=>`<div class="wc"><span class="dd_ d${w.dom}"></span>${w.doel}</div>`).join('')||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
     const card=document.createElement('div');card.className='gc';
-    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
+    const cardId='gc_'+gi+'_'+wrapId;
+    card.id=cardId;
+    card.innerHTML=`<div class="gh"><div class="gkl" style="background:${kl}"></div><div><div class="gt">${g.label}</div>${g.sub?`<div class="gs">${g.sub}</div>`:''}</div><span class="gn">${g.list.length} leerlingen</span><button class="btn bgy bs groep-afdruk-btn" onclick="printEenGroep('${cardId}','${g.label.replace(/'/g,\'\\'\'\')}')" style="margin-left:12px">🖨 Afdrukken</button></div><div class="gll">${chips}</div><div class="gwp"><div class="wt">Gedeelde werkpunten (≥50% onder 60%)</div><div class="wcs">${wpC}</div></div>`;
     wrap.appendChild(card);
   });
 }
@@ -399,6 +431,36 @@ function togLC(uid){
     if(arr)arr.textContent='▴';
   }
 }
+function printEenGroep(cardId, label) {
+  const card = document.getElementById(cardId);
+  if (!card) return;
+
+  // Kloon kaart en zet alle details open
+  const clone = card.cloneNode(true);
+  clone.querySelectorAll('.lc-det').forEach(el => el.classList.add('open'));
+  clone.querySelectorAll('.lc').forEach(el => el.classList.add('open'));
+  clone.querySelectorAll('.arr').forEach(el => el.remove());
+  clone.querySelectorAll('.groep-afdruk-btn').forEach(el => el.remove());
+
+  // Bouw print block
+  const pb = document.getElementById('print-block');
+  pb.innerHTML = `
+    <div class="print-header">
+      <h2>${label}</h2>
+      <p>BuLO Sint-Franciscus · Rekengroepen Wiskunde · ${new Date().toLocaleDateString('nl-BE')}</p>
+    </div>
+  `;
+  pb.appendChild(clone);
+  pb.style.display = 'block';
+
+  window.print();
+
+  setTimeout(() => {
+    pb.style.display = 'none';
+    pb.innerHTML = '';
+  }, 1000);
+}
+
 function printGroep(wrapId) {
   // Zorg dat alle lc-det open zijn voor afdrukken
   const wrap = document.getElementById(wrapId);
