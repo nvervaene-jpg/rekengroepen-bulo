@@ -449,13 +449,6 @@ function togDet(btn){
 function setBes(id,b){
   var ll=LL.find(function(l){return l.i===id;});if(!ll)return;
   ll.b=ll.b===b?null:b;
-  // Voeg verwijderknop toe via DOM zodat onclick correct werkt
-  var vBtn=document.createElement('button');
-  vBtn.className='verwijder-btn';
-  vBtn.innerHTML='&#128465; Verwijderen als schoolverlater';
-  vBtn.onclick=function(){ verwijderLLdirect(ll.i, ll.n); };
-  div.querySelector('.la').appendChild(vBtn);
-
   if(ll.b&&!ll.dl) ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;
   if(!ll.b) ll.dl=null;
   ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
