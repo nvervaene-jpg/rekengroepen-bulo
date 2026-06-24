@@ -314,22 +314,49 @@ function getDoel(ll,dom){
   return DB[d.k].map(function(naam,i){return [naam,d.ps[i]||0];});
 }
 
+var _gefilterdeLijst=[];
+var _geladen=0;
+var _BATCH=15;
+
 function renderLL(){
   var fLJ=document.getElementById('flj').value;
   var fKL=document.getElementById('fkl').value;
   var fBE=document.getElementById('fbe').value;
   var fNM=document.getElementById('fnm').value.toLowerCase();
-  var list=LL.filter(function(ll){
+  _gefilterdeLijst=LL.filter(function(ll){
     if(fLJ&&ll.l!=fLJ) return false;
     if(fKL&&ll.k!==fKL) return false;
     if(fNM&&!ll.n.toLowerCase().includes(fNM)) return false;
     if(fBE){var b=ll.b||'onbeslist';if(b!==fBE) return false;}
     return true;
   });
-  list.sort(function(a,b){return a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n);});
-  document.getElementById('fc_').textContent=list.length+' leerlingen';
-  var g=document.getElementById('grid_');g.innerHTML='';
-  list.forEach(function(ll){g.appendChild(mkKrt(ll));});
+  _gefilterdeLijst.sort(function(a,b){return a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n);});
+  document.getElementById('fc_').textContent=_gefilterdeLijst.length+' leerlingen';
+  var g=document.getElementById('grid_');
+  g.innerHTML='';
+  _geladen=0;
+  laadMeer();
+}
+
+function laadMeer(){
+  var g=document.getElementById('grid_');
+  var tot=Math.min(_geladen+_BATCH, _gefilterdeLijst.length);
+  for(var i=_geladen;i<tot;i++){
+    g.appendChild(mkKrt(_gefilterdeLijst[i]));
+  }
+  _geladen=tot;
+  // Toon laad-meer knop als er nog meer zijn
+  var bestaand=document.getElementById('laad-meer-btn');
+  if(bestaand) bestaand.remove();
+  if(_geladen<_gefilterdeLijst.length){
+    var btn=document.createElement('button');
+    btn.id='laad-meer-btn';
+    btn.className='btn bgy';
+    btn.style.cssText='margin:0 28px 20px;width:calc(100% - 56px)';
+    btn.textContent='Laad meer ('+(_gefilterdeLijst.length-_geladen)+' resterend)';
+    btn.onclick=laadMeer;
+    g.parentElement.appendChild(btn);
+  }
 }
 
 function mkKrt(ll){
