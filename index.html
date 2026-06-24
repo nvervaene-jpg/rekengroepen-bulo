@@ -394,22 +394,6 @@ function mkKrt(ll){
   var ljO='';
   [1,2,3,4,5].forEach(function(n){ljO+='<option value="'+n+'"'+(ll.dl==n?' selected':'')+'>'+n+'</option>';});
 
-  var detH='';
-  DVK.forEach(function(dk){
-    var d=ll.d[dk];if(!d)return;
-    var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
-    var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
-    detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
-    getDoel(ll,dk).forEach(function(item){
-      var naam=item[0],pct=item[1];
-      var bc=pct>=75?'hg':pct>=55?'md':'lg';
-      var nc=pct>=75?'st':pct<55?'zw':'';
-      var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
-      var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
-      var kort=naam.length>62?naam.substring(0,60)+'...':naam;
-      detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
-    });
-  });
 
   div.innerHTML=
     '<div class="kt"><div class="knr"><span class="kn">'+ll.n+'</span><span class="bdg bkl">'+ll.k+'</span><span class="bdg blj">LJ'+ll.l+'</span>'+advB+beslB+(ll.f?'<span class="bdg bfn">&#9670;FN</span>':'')+'</div><div class="ds2">'+domH+'</div></div>'
@@ -422,7 +406,7 @@ function mkKrt(ll){
     +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
     +'</div>'
     +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
-    +'<div class="dtp">'+detH+'</div>';
+    +'<div class="dtp"></div>';
 
   if(ll.b&&!ll.dl){
     var s=div.querySelector('.ljr select');
@@ -433,6 +417,31 @@ function mkKrt(ll){
 
 function togDet(btn){
   var p=btn.nextElementSibling;
+  // Lazy load: bouw doelen pas als eerste keer geopend
+  if(!p.dataset.geladen){
+    var llid=btn.closest('.krt').dataset.llid;
+    var ll=LL.find(function(l){return l.i===llid;});
+    if(ll){
+      var detH='';
+      DVK.forEach(function(dk){
+        var d=ll.d[dk];if(!d)return;
+        var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+        var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
+        detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
+        getDoel(ll,dk).forEach(function(item){
+          var naam=item[0],pct=item[1];
+          var bc=pct>=75?'hg':pct>=55?'md':'lg';
+          var nc=pct>=75?'st':pct<55?'zw':'';
+          var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+          var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+          var kort=naam.length>62?naam.substring(0,60)+'...':naam;
+          detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+        });
+      });
+      p.innerHTML=detH;
+      p.dataset.geladen='1';
+    }
+  }
   p.classList.toggle('open');
   btn.textContent=p.classList.contains('open')?'&#9650; Doelen verbergen':'&#9660; Doelen per domein';
 }
@@ -456,45 +465,8 @@ function setLJ(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.dl=
 function togFN(id){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
 function setNt(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.nt=v;ll.notitie=v;}}
 function hl(ll){
-  var kaart=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
-  if(!kaart) return;
-
-  // Update border kleur
-  kaart.className='krt '+(ll.b==='doorstroom'?'bd':ll.b==='herhaling'?'bh':'bn');
-
-  // Update beslissing knoppen
-  kaart.querySelectorAll('.bkn').forEach(function(btn){
-    var bk=btn.textContent.trim().toLowerCase().includes('door')?'doorstroom':'herhaling';
-    btn.className='bkn '+(ll.b===bk?'ak'+bk[0]:'');
-  });
-
-  // Update leerjaar row zichtbaarheid
-  var ljr=kaart.querySelector('.ljr');
-  if(ljr) ljr.style.display=ll.b?'':'none';
-
-  // Update leerjaar select waarde
-  var ljsel=kaart.querySelector('.ljr select');
-  if(ljsel&&ll.dl) ljsel.value=ll.dl;
-
-  // Update functioneel knop
-  var fnb=kaart.querySelector('.fnb');
-  if(fnb) fnb.className='fnb '+(ll.f?'on':'');
-
-  // Update badges in naam rij
-  var knr=kaart.querySelector('.knr');
-  if(knr){
-    // Verwijder bestaande beslissing badge
-    knr.querySelectorAll('.sdg').forEach(function(el){el.remove();});
-    if(ll.b){
-      var bm=ll.b==='doorstroom'?'sds':'sob';
-      var bt=ll.b==='doorstroom'?'&#8593; DS':'&#8635; HH';
-      var badge=document.createElement('span');
-      badge.className='sdg '+bm;
-      badge.style.fontSize='.62rem';
-      badge.innerHTML=bt+(ll.dl?' LJ'+ll.dl:'');
-      knr.appendChild(badge);
-    }
-  }
+  var o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
+  if(o){var n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}
 }
 
 function updS(){
