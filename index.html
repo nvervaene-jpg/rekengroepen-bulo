@@ -358,7 +358,6 @@ function mkKrt(ll){
     +'<div class="ljr" id="ljr_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'" style="'+(ll.b?'':'display:none')+'"><label>Leerjaar:</label><select onchange="setLJ(\''+ll.i+'\',this.value)">'+ljO+'</select></div>'
     +'<div class="fnb '+(ll.f?'on':'')+'" onclick="togFN(\''+ll.i+'\')">&#9670; Functioneel traject</div>'
     +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
-    +'<button class="verwijder-btn" onclick="verwijderLLbyKaart(this)">&#128465; Verwijderen als schoolverlater</button>'
     +'</div>'
     +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
     +'<div class="dtp">'+detH+'</div>';
@@ -379,6 +378,13 @@ function togDet(btn){
 function setBes(id,b){
   var ll=LL.find(function(l){return l.i===id;});if(!ll)return;
   ll.b=ll.b===b?null:b;
+  // Voeg verwijderknop toe via DOM zodat onclick correct werkt
+  var vBtn=document.createElement('button');
+  vBtn.className='verwijder-btn';
+  vBtn.innerHTML='&#128465; Verwijderen als schoolverlater';
+  vBtn.onclick=function(){ verwijderLLdirect(ll.i, ll.n); };
+  div.querySelector('.la').appendChild(vBtn);
+
   if(ll.b&&!ll.dl) ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;
   if(!ll.b) ll.dl=null;
   ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
@@ -631,6 +637,17 @@ function impJS(e){
     }catch(err){toast('Fout: '+err.message);}
   };
   r.readAsText(f);e.target.value='';
+}
+
+function verwijderLLdirect(id, naam){
+  if(!confirm(naam+' verwijderen? Deze leerling wordt niet meer opgenomen in de rekengroepen.')){return;}
+  LL=LL.filter(function(l){return l.i!==id;});
+  _verwijderd.push(id);
+  var el=document.getElementById('k_'+id.replace(/[^a-z0-9]/gi,'_'));
+  if(el) el.remove();
+  updS();
+  document.getElementById('fc_').textContent=LL.length+' leerlingen';
+  toast(naam+' verwijderd');
 }
 
 function verwijderLLbyKaart(btn){
