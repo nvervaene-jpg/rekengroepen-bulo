@@ -96,6 +96,27 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .tst{position:fixed;bottom:20px;right:20px;background:var(--tx);color:#fff;padding:9px 16px;border-radius:5px;font-size:.8rem;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:9999;transform:translateY(70px);opacity:0;transition:all .22s}
 .tst.show{transform:translateY(0);opacity:1}
 #print-block{display:none}
+.def-groep{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.def-groep-hdr{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
+.def-groep-naam{font-size:.9rem;font-weight:700;border:none;background:none;color:var(--tx);font-family:inherit;padding:2px 6px;border-radius:3px;min-width:120px;outline:none}
+.def-groep-naam:hover,.def-groep-naam:focus{background:var(--bo);outline:none}
+.def-groep-kleur{width:14px;height:14px;border-radius:3px;flex-shrink:0;cursor:pointer}
+.def-groep-n{font-size:.72rem;color:var(--mu);margin-left:auto}
+.def-groep-del{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:3px}
+.def-groep-del:hover{background:var(--rl);color:var(--re)}
+.def-ll-list{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:1px solid var(--bo)}
+.def-ll-list.drag-over{background:var(--accent-l, #D6E6F8);border-color:var(--ac)}
+.def-chip{padding:4px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:var(--bo);color:var(--tx);cursor:grab;display:flex;align-items:center;gap:5px;user-select:none}
+.def-chip:active{cursor:grabbing;opacity:.7}
+.def-chip .ks{font-size:.63rem;color:var(--mu);font-weight:400}
+.def-chip .zd{font-size:.61rem;color:var(--re);font-weight:700}
+.def-chip-remove{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.75rem;padding:0 2px;line-height:1}
+.def-chip-remove:hover{color:var(--re)}
+.def-nieuw-btn{padding:6px 14px;border-radius:4px;border:1.5px dashed var(--bo2);background:none;color:var(--mu);font-size:.78rem;cursor:pointer;transition:all .15s}
+.def-nieuw-btn:hover{border-color:var(--ac);color:var(--ac)}
+.def-import-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.def-onverdeeld{background:var(--sf);border:2px dashed var(--bo2);border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.def-onverdeeld h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin-bottom:6px}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   #login-screen,nav,.fi,.sb,.ha,.tst,.pg,.groep-afdruk-btn{display:none!important}
@@ -149,6 +170,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   <button class="active" onclick="showTab('ll',this)">&#9312; Leerlingoverzicht</button>
   <button onclick="showTab('gr',this)">&#9313; Groepsvoorstel</button>
   <button onclick="showTab('au',this)">&#9314; Automatisch voorstel</button>
+  <button onclick="showTab('def',this)">&#9315; Definitieve groepen</button>
 </nav>
 
 <div id="tab-ll" class="pg active">
@@ -206,6 +228,19 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   </div>
   <div class="as" id="aus"></div>
   <div class="gw" id="auw"><div class="em"><h3>Laden&hellip;</h3></div></div>
+</div>
+
+<div id="tab-def" class="pg">
+  <div class="def-import-bar">
+    <span style="font-size:.78rem;color:var(--mu)">Importeer vanuit tabblad ② of ③ als startpunt, of bouw zelf op</span>
+    <button class="btn bp bs" onclick="importeerNaarDef('grw')">&#8595; Importeer uit ② Groepsvoorstel</button>
+    <button class="btn bp bs" onclick="importeerNaarDef('auw')">&#8595; Importeer uit ③ Automatisch</button>
+    <button class="def-nieuw-btn" onclick="nieuweDefGroep()">+ Nieuwe lege groep</button>
+    <button class="btn bgy bs" style="margin-left:auto" onclick="printDefGroepen()">&#128438; Afdrukken</button>
+  </div>
+  <div style="padding:16px 28px" id="def-wrap">
+    <div class="em"><h3>Nog geen definitieve groepen</h3><p>Importeer vanuit tabblad ② of ③, of maak een nieuwe lege groep aan.</p></div>
+  </div>
 </div>
 
 <div class="tst" id="tst"></div>
@@ -728,6 +763,243 @@ function verwijderLL(id){
   updS();
   document.getElementById('fc_').textContent=LL.length+' leerlingen';
   toast(ll.n+' verwijderd');
+}
+
+// ============================================================
+// DEFINITIEVE GROEPEN
+// ============================================================
+var defGroepen = []; // [{id, naam, kleur, leerlingen:[ll.i,...]}]
+var defKleuren = ['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E','#6B3A2A','#C05A20','#1A7A6A'];
+
+function importeerNaarDef(wrapId){
+  var wrap=document.getElementById(wrapId);
+  if(!wrap||!wrap.querySelector('.gc')){
+    toast('Genereer eerst groepen in tabblad '+(wrapId==='grw'?'②':'③'));return;
+  }
+  if(defGroepen.length>0&&!confirm('Huidige definitieve groepen overschrijven?')) return;
+  defGroepen=[];
+  var cards=wrap.querySelectorAll('.gc');
+  cards.forEach(function(card,i){
+    var titelEl=card.querySelector('.gt');
+    if(!titelEl) return;
+    var titel=titelEl.textContent.trim();
+    var chips=card.querySelectorAll('.lc-wrap .lc');
+    var llIds=[];
+    chips.forEach(function(chip){
+      var uid=chip.id; // lc_xxx_gi
+      // Zoek leerling via naam+klas in chip
+      var naamEl=chip.querySelector('strong');
+      var klasEl=chip.querySelector('.ks');
+      if(!naamEl||!klasEl) return;
+      var naam=naamEl.textContent.trim();
+      var klasTxt=klasEl.textContent.trim().replace(/LJ\d+/,'').trim();
+      var ll=LL.find(function(l){return l.n===naam;});
+      if(ll) llIds.push(ll.i);
+    });
+    if(llIds.length>0){
+      defGroepen.push({
+        id:'dg_'+Date.now()+'_'+i,
+        naam:titel,
+        kleur:defKleuren[i%defKleuren.length],
+        leerlingen:llIds
+      });
+    }
+  });
+  renderDefGroepen();
+  toast(defGroepen.length+' groepen geïmporteerd');
+  showTab('def', document.querySelector('nav button:nth-child(4)'));
+}
+
+function nieuweDefGroep(){
+  defGroepen.push({
+    id:'dg_'+Date.now(),
+    naam:'Nieuwe groep',
+    kleur:defKleuren[defGroepen.length%defKleuren.length],
+    leerlingen:[]
+  });
+  renderDefGroepen();
+}
+
+function renderDefGroepen(){
+  var wrap=document.getElementById('def-wrap');
+  wrap.innerHTML='';
+
+  // Onverdeelde leerlingen
+  var verdeeld=defGroepen.reduce(function(acc,g){return acc.concat(g.leerlingen);},[ ]);
+  var onverdeeld=LL.filter(function(ll){return verdeeld.indexOf(ll.i)===-1;});
+  if(onverdeeld.length>0){
+    var ov=document.createElement('div');
+    ov.className='def-onverdeeld';
+    ov.innerHTML='<h4>Niet ingedeeld ('+onverdeeld.length+')</h4>';
+    var chips=document.createElement('div');
+    chips.style.cssText='display:flex;flex-wrap:wrap;gap:5px';
+    onverdeeld.forEach(function(ll){
+      var adv=calcAdv(ll,75);
+      var zw=adv?adv.zw:[];
+      var chip=maakDefChip(ll,zw,null);
+      chips.appendChild(chip);
+    });
+    ov.appendChild(chips);
+    wrap.appendChild(ov);
+  }
+
+  // Groepen
+  defGroepen.forEach(function(g){
+    var card=maakDefGroepCard(g);
+    wrap.appendChild(card);
+  });
+
+  // Nieuwe groep knop
+  var addBtn=document.createElement('button');
+  addBtn.className='def-nieuw-btn';
+  addBtn.textContent='+ Nieuwe lege groep';
+  addBtn.onclick=nieuweDefGroep;
+  wrap.appendChild(addBtn);
+}
+
+function maakDefGroepCard(g){
+  var card=document.createElement('div');
+  card.className='def-groep';
+  card.id='defg_'+g.id;
+
+  // Header
+  var hdr=document.createElement('div');
+  hdr.className='def-groep-hdr';
+
+  var kleurEl=document.createElement('div');
+  kleurEl.className='def-groep-kleur';
+  kleurEl.style.background=g.kleur;
+  kleurEl.title='Klik om kleur te wijzigen';
+  kleurEl.onclick=function(){ wisselKleur(g.id); };
+
+  var naamEl=document.createElement('input');
+  naamEl.type='text';
+  naamEl.className='def-groep-naam';
+  naamEl.value=g.naam;
+  naamEl.onchange=function(){ g.naam=this.value; };
+  naamEl.onblur=function(){ g.naam=this.value; };
+
+  var nEl=document.createElement('span');
+  nEl.className='def-groep-n';
+  nEl.textContent=g.leerlingen.length+' leerlingen';
+
+  var delBtn=document.createElement('button');
+  delBtn.className='def-groep-del';
+  delBtn.innerHTML='&#128465; Groep verwijderen';
+  delBtn.onclick=function(){
+    if(confirm('"'+g.naam+'" verwijderen? Leerlingen komen terug bij Niet ingedeeld.'))
+    { defGroepen=defGroepen.filter(function(x){return x.id!==g.id;}); renderDefGroepen(); }
+  };
+
+  hdr.appendChild(kleurEl);
+  hdr.appendChild(naamEl);
+  hdr.appendChild(nEl);
+  hdr.appendChild(delBtn);
+  card.appendChild(hdr);
+
+  // Leerlingen
+  var llList=document.createElement('div');
+  llList.className='def-ll-list';
+  llList.dataset.gid=g.id;
+
+  // Drag-drop ontvanger
+  llList.ondragover=function(e){e.preventDefault();this.classList.add('drag-over');};
+  llList.ondragleave=function(){this.classList.remove('drag-over');};
+  llList.ondrop=function(e){
+    e.preventDefault();this.classList.remove('drag-over');
+    var llId=e.dataTransfer.getData('llid');
+    var vanGid=e.dataTransfer.getData('gid');
+    if(!llId) return;
+    // Verwijder uit oude groep
+    if(vanGid){
+      var vanG=defGroepen.find(function(x){return x.id===vanGid;});
+      if(vanG) vanG.leerlingen=vanG.leerlingen.filter(function(x){return x!==llId;});
+    }
+    // Voeg toe aan nieuwe groep
+    if(g.leerlingen.indexOf(llId)===-1) g.leerlingen.push(llId);
+    renderDefGroepen();
+  };
+
+  g.leerlingen.forEach(function(llId){
+    var ll=LL.find(function(l){return l.i===llId;});
+    if(!ll) return;
+    var adv=calcAdv(ll,75);
+    var zw=adv?adv.zw:[];
+    var chip=maakDefChip(ll,zw,g.id);
+    llList.appendChild(chip);
+  });
+  card.appendChild(llList);
+
+  // Werkpunten
+  var llObjs=g.leerlingen.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  var wp=wpB(llObjs);
+  if(wp.length){
+    var wpDiv=document.createElement('div');
+    wpDiv.className='gwp';
+    wpDiv.innerHTML='<div class="wt">Gedeelde werkpunten</div><div class="wcs">'
+      +wp.slice(0,8).map(function(w){return '<div class="wc"><span class="dd_ d'+w.dom+'"></span>'+w.doel+'</div>';}).join('')
+      +'</div>';
+    card.appendChild(wpDiv);
+  }
+
+  return card;
+}
+
+function maakDefChip(ll,zw,gid){
+  var chip=document.createElement('div');
+  chip.className='def-chip';
+  chip.draggable=true;
+  chip.dataset.llid=ll.i;
+
+  chip.ondragstart=function(e){
+    e.dataTransfer.setData('llid',ll.i);
+    e.dataTransfer.setData('gid',gid||'');
+  };
+
+  var zds=(zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
+  chip.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span>'+zds;
+
+  var removeBtn=document.createElement('button');
+  removeBtn.className='def-chip-remove';
+  removeBtn.innerHTML='&#10005;';
+  removeBtn.title='Uit groep verwijderen';
+  removeBtn.onclick=function(e){
+    e.stopPropagation();
+    if(gid){
+      var g=defGroepen.find(function(x){return x.id===gid;});
+      if(g) g.leerlingen=g.leerlingen.filter(function(x){return x!==ll.i;});
+    }
+    renderDefGroepen();
+  };
+  chip.appendChild(removeBtn);
+  return chip;
+}
+
+function wisselKleur(gid){
+  var g=defGroepen.find(function(x){return x.id===gid;});
+  if(!g) return;
+  var idx=defKleuren.indexOf(g.kleur);
+  g.kleur=defKleuren[(idx+1)%defKleuren.length];
+  renderDefGroepen();
+}
+
+function printDefGroepen(){
+  var wrap=document.getElementById('def-wrap');
+  var pb=document.getElementById('print-block');
+  var datum=new Date().toLocaleDateString('nl-BE');
+  pb.innerHTML='<div class="print-hdr"><h2>Definitieve Rekengroepen</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
+  defGroepen.forEach(function(g){
+    var card=document.getElementById('defg_'+g.id);
+    if(!card) return;
+    var clone=card.cloneNode(true);
+    clone.querySelectorAll('.def-chip-remove,.def-groep-del').forEach(function(el){el.remove();});
+    // Vervang input door span
+    var inp=clone.querySelector('.def-groep-naam');
+    if(inp){var sp=document.createElement('span');sp.className='gt';sp.textContent=inp.value;inp.replaceWith(sp);}
+    pb.appendChild(clone);
+  });
+  window.print();
+  setTimeout(function(){pb.innerHTML='';},1000);
 }
 
 function toast(msg){
