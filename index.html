@@ -303,6 +303,7 @@ function mkKrt(ll){
   var bc=besl==='doorstroom'?'bd':besl==='herhaling'?'bh':'bn';
   div.className='krt '+bc;
   div.id='k_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+  div.dataset.llid=ll.i;
 
   var domH='';
   DVK.forEach(function(dk){
@@ -357,7 +358,7 @@ function mkKrt(ll){
     +'<div class="ljr" id="ljr_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'" style="'+(ll.b?'':'display:none')+'"><label>Leerjaar:</label><select onchange="setLJ(\''+ll.i+'\',this.value)">'+ljO+'</select></div>'
     +'<div class="fnb '+(ll.f?'on':'')+'" onclick="togFN(\''+ll.i+'\')">&#9670; Functioneel traject</div>'
     +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
-    +'<button class="verwijder-btn" onclick="verwijderLL(this.closest(\".krt\").id.replace(\"k_\",\"\"))">&#128465; Verwijderen als schoolverlater</button>'
+    +'<button class="verwijder-btn" onclick="verwijderLL(this.closest(\".krt\").dataset.llid)">&#128465; Verwijderen als schoolverlater</button>'
     +'</div>'
     +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
     +'<div class="dtp">'+detH+'</div>';
