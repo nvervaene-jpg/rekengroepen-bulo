@@ -541,15 +541,65 @@ function genGr(){
   var beslist=LL.filter(function(l){return l.b;});
   if(!beslist.length){toast('Geen beslissingen ingevuld');return;}
   var wrap=document.getElementById('grw');
-  renGr(beslist.map(function(ll){
-    var copy=Object.assign({},ll);
-    copy._lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
-    // Voeg zwakke domeinen toe voor visuele indicatie
-    var dr2=parseInt((document.getElementById('adr')||{value:'75'}).value)||75;
+  var dr2=parseInt((document.getElementById('adr')||{value:'75'}).value)||75;
+
+  // Groepeer eerst op doelleerjaar, dan splits op zwakke domeinen
+  var ljMap={};
+  beslist.forEach(function(ll){
+    var lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
     var adv=calcAdv(ll,dr2);
-    copy._zw=adv?adv.zw:[];
-    return copy;
-  }),wrap);
+    var zw=adv?adv.zw:[];
+    var copy=Object.assign({},ll);
+    copy._lj=lj;
+    copy._zw=zw;
+    if(!ljMap[lj]) ljMap[lj]=[];
+    ljMap[lj].push(copy);
+  });
+
+  // Splits per leerjaar op gedeelde zwakke domeinen
+  var allLL=[];
+  Object.keys(ljMap).sort().forEach(function(lj){
+    var lijst=ljMap[lj];
+    // Groepeer op zwakke domeinen combinatie
+    var subMap={};
+    lijst.forEach(function(ll){
+      var zk=(ll._zw||[]).slice().sort().join('+');
+      if(!subMap[zk]) subMap[zk]={zw:ll._zw||[],list:[]};
+      subMap[zk].list.push(ll);
+    });
+    // Merge kleine subgroepen (1 leerling) in meest gelijkaardige
+    var groot=[],klein=[];
+    Object.values(subMap).forEach(function(g){
+      if(g.list.length>=2) groot.push(g);
+      else klein=klein.concat(g.list);
+    });
+    klein.forEach(function(ll){
+      if(groot.length){
+        var b=groot[0],bs=-1;
+        groot.forEach(function(g){
+          var ov=(ll._zw||[]).filter(function(d){return g.zw.includes(d);}).length;
+          if(ov>bs){bs=ov;b=g;}
+        });
+        b.list.push(ll);
+      } else {
+        groot.push({zw:ll._zw||[],list:[ll]});
+      }
+    });
+    // Voeg subgroepen toe met label
+    groot.forEach(function(g,i){
+      var zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';
+      g.list.forEach(function(ll){
+        var c=Object.assign({},ll);
+        c._lj=parseInt(lj);
+        c._sub='_'+lj+'_'+i;
+        c._subL=zl;
+        allLL.push(c);
+      });
+    });
+  });
+
+  renGr(allLL,wrap);
+
   var ob=LL.filter(function(l){return !l.b;});
   if(ob.length){
     var card=document.createElement('div');card.className='gc';
