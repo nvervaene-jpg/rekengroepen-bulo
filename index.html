@@ -429,8 +429,45 @@ function setLJ(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.dl=
 function togFN(id){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
 function setNt(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.nt=v;ll.notitie=v;}}
 function hl(ll){
-  var o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
-  if(o){var n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}
+  var kaart=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
+  if(!kaart) return;
+
+  // Update border kleur
+  kaart.className='krt '+(ll.b==='doorstroom'?'bd':ll.b==='herhaling'?'bh':'bn');
+
+  // Update beslissing knoppen
+  kaart.querySelectorAll('.bkn').forEach(function(btn){
+    var bk=btn.textContent.trim().toLowerCase().includes('door')?'doorstroom':'herhaling';
+    btn.className='bkn '+(ll.b===bk?'ak'+bk[0]:'');
+  });
+
+  // Update leerjaar row zichtbaarheid
+  var ljr=kaart.querySelector('.ljr');
+  if(ljr) ljr.style.display=ll.b?'':'none';
+
+  // Update leerjaar select waarde
+  var ljsel=kaart.querySelector('.ljr select');
+  if(ljsel&&ll.dl) ljsel.value=ll.dl;
+
+  // Update functioneel knop
+  var fnb=kaart.querySelector('.fnb');
+  if(fnb) fnb.className='fnb '+(ll.f?'on':'');
+
+  // Update badges in naam rij
+  var knr=kaart.querySelector('.knr');
+  if(knr){
+    // Verwijder bestaande beslissing badge
+    knr.querySelectorAll('.sdg').forEach(function(el){el.remove();});
+    if(ll.b){
+      var bm=ll.b==='doorstroom'?'sds':'sob';
+      var bt=ll.b==='doorstroom'?'&#8593; DS':'&#8635; HH';
+      var badge=document.createElement('span');
+      badge.className='sdg '+bm;
+      badge.style.fontSize='.62rem';
+      badge.innerHTML=bt+(ll.dl?' LJ'+ll.dl:'');
+      knr.appendChild(badge);
+    }
+  }
 }
 
 function updS(){
