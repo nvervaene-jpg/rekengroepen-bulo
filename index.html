@@ -749,7 +749,10 @@ function impJS(e){
         LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
       }
       if(d.defGroepen&&d.defGroepen.length){defGroepen=d.defGroepen;renderDefGroepen();}
-      renderLL();updS();toast('Geladen: '+f.name);
+      renderLL();updS();
+      // Auto-genereer groepsvoorstel als er beslissingen zijn
+      if(LL.some(function(l){return l.b;})){try{genGr();}catch(e){}}
+      toast('Geladen: '+f.name);
     }catch(err){toast('Fout: '+err.message);}
   };
   r.readAsText(f);e.target.value='';
