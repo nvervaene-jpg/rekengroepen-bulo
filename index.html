@@ -106,12 +106,15 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .def-groep-del:hover{background:var(--rl);color:var(--re)}
 .def-ll-list{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:1px solid var(--bo)}
 .def-ll-list.drag-over{background:var(--accent-l, #D6E6F8);border-color:var(--ac)}
-.def-chip{padding:4px 10px;border-radius:12px;font-size:.74rem;font-weight:600;background:var(--bo);color:var(--tx);cursor:grab;display:flex;align-items:center;gap:5px;user-select:none}
+.def-chip{padding:6px 10px 4px;border-radius:10px;font-size:.74rem;font-weight:600;background:var(--bo);color:var(--tx);cursor:grab;display:flex;flex-direction:column;gap:2px;user-select:none;width:230px;max-width:100%}
 .def-chip:active{cursor:grabbing;opacity:.7}
+.def-chip-top{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
 .def-chip .ks{font-size:.63rem;color:var(--mu);font-weight:400}
 .def-chip .zd{font-size:.61rem;color:var(--re);font-weight:700}
-.def-chip-remove{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.75rem;padding:0 2px;line-height:1}
+.def-chip-remove{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.75rem;padding:0 2px;line-height:1;margin-left:auto}
 .def-chip-remove:hover{color:var(--re)}
+.def-chip .dtt{padding:4px 0;font-size:.62rem;border-top:1px solid var(--bo);margin-top:2px;cursor:pointer}
+.def-chip .dtp{padding:4px 0 0;max-height:240px;cursor:default}
 .def-nieuw-btn{padding:6px 14px;border-radius:4px;border:1.5px dashed var(--bo2);background:none;color:var(--mu);font-size:.78rem;cursor:pointer;transition:all .15s}
 .def-nieuw-btn:hover{border-color:var(--ac);color:var(--ac)}
 .def-import-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -420,7 +423,7 @@ function togDet(btn){
   var p=btn.nextElementSibling;
   // Lazy load: bouw doelen pas als eerste keer geopend
   if(!p.dataset.geladen){
-    var llid=btn.closest('.krt').dataset.llid;
+    var llid=btn.closest('[data-llid]').dataset.llid;
     var ll=LL.find(function(l){return l.i===llid;});
     if(ll){
       var detH='';
@@ -444,7 +447,7 @@ function togDet(btn){
     }
   }
   p.classList.toggle('open');
-  btn.textContent=p.classList.contains('open')?'&#9650; Doelen verbergen':'&#9660; Doelen per domein';
+  btn.textContent=p.classList.contains('open')?'▲ Doelen verbergen':'▼ Doelen per domein';
 }
 
 function setBes(id,b){
@@ -986,12 +989,15 @@ function maakDefChip(ll,zw,gid){
   chip.dataset.llid=ll.i;
 
   chip.ondragstart=function(e){
+    if(e.target.closest('.dtt')||e.target.closest('.dtp')){e.preventDefault();return;}
     e.dataTransfer.setData('llid',ll.i);
     e.dataTransfer.setData('gid',gid||'');
   };
 
+  var top=document.createElement('div');
+  top.className='def-chip-top';
   var zds=(zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
-  chip.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span>'+zds;
+  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span>'+zds;
 
   var removeBtn=document.createElement('button');
   removeBtn.className='def-chip-remove';
@@ -1005,7 +1011,19 @@ function maakDefChip(ll,zw,gid){
     }
     renderDefGroepen();
   };
-  chip.appendChild(removeBtn);
+  top.appendChild(removeBtn);
+  chip.appendChild(top);
+
+  var dttBtn=document.createElement('button');
+  dttBtn.className='dtt';
+  dttBtn.textContent='▼ Doelen per domein';
+  dttBtn.onclick=function(e){e.stopPropagation();togDet(dttBtn);};
+  chip.appendChild(dttBtn);
+
+  var dtp=document.createElement('div');
+  dtp.className='dtp';
+  chip.appendChild(dtp);
+
   return chip;
 }
 
