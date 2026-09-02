@@ -244,7 +244,8 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
     <button class="btn bp bs" onclick="importeerNaarDef('grw')">&#8595; Importeer uit ② Groepsvoorstel</button>
     <button class="btn bp bs" onclick="importeerNaarDef('auw')">&#8595; Importeer uit ③ Automatisch</button>
     <button class="def-nieuw-btn" onclick="nieuweDefGroep()">+ Nieuwe lege groep</button>
-    <button class="btn bgy bs" style="margin-left:auto" onclick="printDefGroepen()">&#128438; Afdrukken</button>
+    <button class="btn bgy bs" style="margin-left:auto" onclick="printDefGroepen(false)">&#128438; Afdrukken (overzicht)</button>
+    <button class="btn bgy bs" onclick="printDefGroepen(true)">&#128438; Afdrukken (met doelen)</button>
   </div>
   <div style="padding:16px 28px" id="def-wrap">
     <div class="em"><h3>Nog geen definitieve groepen</h3><p>Importeer vanuit tabblad ② of ③, of maak een nieuwe lege groep aan.</p></div>
@@ -1044,23 +1045,30 @@ function wisselKleur(gid){
   renderDefGroepen();
 }
 
-function printDefGroepen(){
+function printDefGroepen(metDoelen){
   var wrap=document.getElementById('def-wrap');
   var pb=document.getElementById('print-block');
   var datum=new Date().toLocaleDateString('nl-BE');
-  pb.innerHTML='<div class="print-hdr"><h2>Definitieve Rekengroepen</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
+  var titel=metDoelen?'Definitieve Rekengroepen &mdash; met doelen per domein':'Definitieve Rekengroepen';
+  pb.innerHTML='<div class="print-hdr"><h2>'+titel+'</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
   defGroepen.forEach(function(g){
     var card=document.getElementById('defg_'+g.id);
     if(!card) return;
     var clone=card.cloneNode(true);
     clone.querySelectorAll('.def-chip-remove,.def-groep-del').forEach(function(el){el.remove();});
-    // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
     clone.querySelectorAll('.def-chip').forEach(function(chipEl){
-      var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
       var dtp=chipEl.querySelector('.dtp');
       var dtt=chipEl.querySelector('.dtt');
-      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
-      if(dtt) dtt.remove();
+      if(metDoelen){
+        // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
+        var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
+        if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
+        if(dtt) dtt.remove();
+      } else {
+        // Kort overzicht: geen doelen-knop of -paneel, enkel naam/klas/badges + gedeelde werkpunten
+        if(dtt) dtt.remove();
+        if(dtp) dtp.remove();
+      }
     });
     // Vervang input door span
     var inp=clone.querySelector('.def-groep-naam');
