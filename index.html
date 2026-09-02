@@ -145,6 +145,11 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   #print-block .gwp{padding:6px 12px}
   #print-block .wt{font-size:.63rem}
   #print-block .wc{font-size:.66rem;padding:2px 5px}
+  #print-block .def-groep{break-inside:avoid;margin-bottom:16px;border:1px solid #ccc;border-radius:6px}
+  #print-block .def-groep-hdr{background:#f0f0f0!important}
+  #print-block .def-ll-list{display:flex;flex-wrap:wrap}
+  #print-block .def-chip{break-inside:avoid;background:#f5f5f5!important;border:1px solid #ddd}
+  #print-block .dtp{display:block!important;max-height:none!important;overflow:visible!important}
 }
 </style>
 </head>
@@ -419,6 +424,26 @@ function mkKrt(ll){
   return div;
 }
 
+function bouwDoelenHTML(ll){
+  var detH='';
+  DVK.forEach(function(dk){
+    var d=ll.d[dk];if(!d)return;
+    var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+    var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
+    detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
+    getDoel(ll,dk).forEach(function(item){
+      var naam=item[0],pct=item[1];
+      var bc=pct>=75?'hg':pct>=55?'md':'lg';
+      var nc=pct>=75?'st':pct<55?'zw':'';
+      var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+      var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+      var kort=naam.length>62?naam.substring(0,60)+'...':naam;
+      detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+    });
+  });
+  return detH;
+}
+
 function togDet(btn){
   var p=btn.nextElementSibling;
   // Lazy load: bouw doelen pas als eerste keer geopend
@@ -426,23 +451,7 @@ function togDet(btn){
     var llid=btn.closest('[data-llid]').dataset.llid;
     var ll=LL.find(function(l){return l.i===llid;});
     if(ll){
-      var detH='';
-      DVK.forEach(function(dk){
-        var d=ll.d[dk];if(!d)return;
-        var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
-        var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
-        detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
-        getDoel(ll,dk).forEach(function(item){
-          var naam=item[0],pct=item[1];
-          var bc=pct>=75?'hg':pct>=55?'md':'lg';
-          var nc=pct>=75?'st':pct<55?'zw':'';
-          var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
-          var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
-          var kort=naam.length>62?naam.substring(0,60)+'...':naam;
-          detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
-        });
-      });
-      p.innerHTML=detH;
+      p.innerHTML=bouwDoelenHTML(ll);
       p.dataset.geladen='1';
     }
   }
@@ -1045,6 +1054,14 @@ function printDefGroepen(){
     if(!card) return;
     var clone=card.cloneNode(true);
     clone.querySelectorAll('.def-chip-remove,.def-groep-del').forEach(function(el){el.remove();});
+    // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
+    clone.querySelectorAll('.def-chip').forEach(function(chipEl){
+      var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
+      var dtp=chipEl.querySelector('.dtp');
+      var dtt=chipEl.querySelector('.dtt');
+      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
+      if(dtt) dtt.remove();
+    });
     // Vervang input door span
     var inp=clone.querySelector('.def-groep-naam');
     if(inp){var sp=document.createElement('span');sp.className='gt';sp.textContent=inp.value;inp.replaceWith(sp);}
