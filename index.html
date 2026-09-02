@@ -496,6 +496,10 @@ function resetF(){
   renderLL();
 }
 
+function escAttr(s){
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function wpB(list){
   if(!list.length) return [];
   var c={};
@@ -506,7 +510,7 @@ function wpB(list){
         var naam=item[0],pct=item[1];
         if(pct<60){
           var k=dk+'|'+naam;
-          if(!c[k]) c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'...':naam,n:0};
+          if(!c[k]) c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'...':naam,doelVol:naam,n:0};
           c[k].n++;
         }
       });
@@ -984,7 +988,7 @@ function maakDefGroepCard(g){
     var wpDiv=document.createElement('div');
     wpDiv.className='gwp';
     wpDiv.innerHTML='<div class="wt">Gedeelde werkpunten</div><div class="wcs">'
-      +wp.slice(0,8).map(function(w){return '<div class="wc"><span class="dd_ d'+w.dom+'"></span>'+w.doel+'</div>';}).join('')
+      +wp.slice(0,8).map(function(w){return '<div class="wc" data-vol="'+escAttr(w.doelVol)+'"><span class="dd_ d'+w.dom+'"></span><span class="wc-txt">'+w.doel+'</span></div>';}).join('')
       +'</div>';
     card.appendChild(wpDiv);
   }
@@ -1069,6 +1073,12 @@ function printDefGroepen(metDoelen){
         if(dtt) dtt.remove();
         if(dtp) dtp.remove();
       }
+    });
+    // Werkpunten voluit tonen ipv ingekort met '...'
+    clone.querySelectorAll('.wc').forEach(function(el){
+      var vol=el.dataset.vol;
+      var txt=el.querySelector('.wc-txt');
+      if(vol&&txt) txt.textContent=vol;
     });
     // Vervang input door span
     var inp=clone.querySelector('.def-groep-naam');
