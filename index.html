@@ -727,7 +727,7 @@ function genAu(){
 
 function expJS(){
   var data=LL.map(function(ll){return {i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt};});
-  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data,verwijderd:_verwijderd},null,2)],{type:'application/json'});
+  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data,verwijderd:_verwijderd,defGroepen:defGroepen},null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);
   a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();
   toast('Opgeslagen');
@@ -748,6 +748,7 @@ function impJS(e){
         _verwijderd=d.verwijderd;
         LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
       }
+      if(d.defGroepen&&d.defGroepen.length){defGroepen=d.defGroepen;renderDefGroepen();}
       renderLL();updS();toast('Geladen: '+f.name);
     }catch(err){toast('Fout: '+err.message);}
   };
