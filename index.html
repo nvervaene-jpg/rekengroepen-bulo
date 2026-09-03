@@ -458,7 +458,7 @@ function mkKrt(ll){
   return div;
 }
 
-function bouwDoelenHTML(ll){
+function bouwDoelenHTML(ll,voluit){
   var detH='';
   DVK.forEach(function(dk){
     var d=ll.d[dk];if(!d)return;
@@ -471,7 +471,7 @@ function bouwDoelenHTML(ll){
       var nc=pct>=75?'st':pct<55?'zw':'';
       var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
       var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
-      var kort=naam.length>62?naam.substring(0,60)+'...':naam;
+      var kort=(!voluit&&naam.length>62)?naam.substring(0,60)+'...':naam;
       detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
     });
   });
@@ -1329,7 +1329,7 @@ function bouwGroepPrintClone(g,metDoelen){
     if(metDoelen){
       // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
       var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
-      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
+      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll,true);
       if(dtt) dtt.remove();
     } else {
       // Kort overzicht: geen doelen-knop of -paneel, enkel naam/klas/badges + gedeelde werkpunten
