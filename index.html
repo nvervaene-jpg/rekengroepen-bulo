@@ -168,17 +168,22 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   #print-block .dtp{display:block!important;max-height:none!important;overflow:visible!important}
 
   /* 'Met doelen'-modus: volle breedte per leerling i.p.v. de smalle 230px-kaart, doelen compact in 3 kolommen */
-  #print-block.pb-doelen .def-groep{break-inside:auto}
-  #print-block.pb-doelen .def-ll-list{display:block}
-  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:4px;margin-bottom:6px}
-  #print-block.pb-doelen .def-chip-top{font-size:.8rem}
-  #print-block.pb-doelen .dtp{column-count:3;column-gap:14px;margin-top:2px}
-  #print-block.pb-doelen .ddh{break-after:avoid;break-inside:avoid;font-size:.6rem;margin:3px 0 1px}
-  #print-block.pb-doelen .dr{break-inside:avoid;font-size:.6rem;gap:3px;margin-bottom:0;line-height:1.15}
-  #print-block.pb-doelen .dr>span:first-child{width:11px!important;font-size:.65rem!important}
+  #print-block.pb-doelen .print-hdr{padding-bottom:5px;margin-bottom:8px}
+  #print-block.pb-doelen .print-hdr h2{font-size:.85rem}
+  #print-block.pb-doelen .print-hdr p{font-size:.66rem}
+  #print-block.pb-doelen .def-groep{break-inside:auto;margin-bottom:8px}
+  #print-block.pb-doelen .def-groep-hdr{padding:5px 10px}
+  #print-block.pb-doelen .def-ll-list{display:block;padding:6px 10px}
+  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:2px;margin-bottom:4px;gap:0}
+  #print-block.pb-doelen .def-chip-top{font-size:.76rem}
+  #print-block.pb-doelen .dtp{display:grid!important;grid-template-columns:repeat(3,1fr);column-gap:12px;row-gap:1px;margin-top:1px;align-items:start}
+  #print-block.pb-doelen .ddom{break-inside:avoid}
+  #print-block.pb-doelen .ddh{break-after:avoid;break-inside:avoid;font-size:.58rem;margin:2px 0 0}
+  #print-block.pb-doelen .dr{break-inside:avoid;font-size:.56rem;gap:2px;margin-bottom:0;line-height:1.05}
+  #print-block.pb-doelen .dr>span:first-child{width:9px!important;font-size:.6rem!important}
   #print-block.pb-doelen .dbw{display:none}
-  #print-block.pb-doelen .dp{font-size:.58rem;width:22px}
-  #print-block.pb-doelen .dn{line-height:1.15}
+  #print-block.pb-doelen .dp{font-size:.54rem;width:20px}
+  #print-block.pb-doelen .dn{line-height:1.05}
 }
 </style>
 </head>
@@ -464,7 +469,7 @@ function bouwDoelenHTML(ll,voluit){
     var d=ll.d[dk];if(!d)return;
     var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
     var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
-    detH+='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
+    var domH='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
     getDoel(ll,dk).forEach(function(item){
       var naam=item[0],pct=item[1];
       var bc=pct>=75?'hg':pct>=55?'md':'lg';
@@ -472,8 +477,9 @@ function bouwDoelenHTML(ll,voluit){
       var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
       var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
       var kort=(!voluit&&naam.length>62)?naam.substring(0,60)+'...':naam;
-      detH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+      domH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
     });
+    detH+='<div class="ddom">'+domH+'</div>';
   });
   return detH;
 }
