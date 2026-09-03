@@ -107,6 +107,8 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .def-groep-n{font-size:.72rem;color:var(--mu);margin-left:auto}
 .def-groep-del{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:3px}
 .def-groep-del:hover{background:var(--rl);color:var(--re)}
+.def-groep-fn{display:inline-flex;align-items:center;gap:3px;font-size:.66rem;padding:3px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);color:var(--mu);font-weight:600;cursor:pointer;flex-shrink:0}
+.def-groep-fn.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
 .def-ll-list{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:1px solid var(--bo)}
 .def-ll-list.drag-over{background:var(--accent-l, #D6E6F8);border-color:var(--ac)}
 .def-chip{padding:6px 10px 4px;border-radius:10px;font-size:.74rem;font-weight:600;background:var(--bo);color:var(--tx);cursor:grab;display:flex;flex-direction:column;gap:2px;user-select:none;width:230px;max-width:100%}
@@ -963,6 +965,7 @@ function herverdeelGroepen(){
         id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
         naam:(meta.functioneel?'Functioneel LJ':'LJ')+meta.lj+' — groep '+(ci+1),
         kleur:defKleuren[nieuweGroepen.length%defKleuren.length],
+        functioneel:meta.functioneel,
         leerlingen:chunk.map(function(ll){return ll.i;})
       });
     });
@@ -1067,6 +1070,12 @@ function maakDefGroepCard(g){
   nEl.className='def-groep-n';
   nEl.textContent=g.leerlingen.length+' leerlingen';
 
+  var fnBtn=document.createElement('button');
+  fnBtn.className='def-groep-fn'+(g.functioneel?' on':'');
+  fnBtn.title='Markeer deze groep als functioneel traject';
+  fnBtn.innerHTML='&#9670; Functioneel';
+  fnBtn.onclick=function(){ g.functioneel=!g.functioneel; renderDefGroepen(); };
+
   var delBtn=document.createElement('button');
   delBtn.className='def-groep-del';
   delBtn.innerHTML='&#128465; Groep verwijderen';
@@ -1078,6 +1087,7 @@ function maakDefGroepCard(g){
   hdr.appendChild(kleurEl);
   hdr.appendChild(naamEl);
   hdr.appendChild(nEl);
+  hdr.appendChild(fnBtn);
   hdr.appendChild(delBtn);
   card.appendChild(hdr);
 
@@ -1184,6 +1194,13 @@ function maakDefChip(ll,zw,gid){
   return chip;
 }
 
+function groepIsFunctioneel(g){
+  // Expliciet ingesteld label heeft voorrang; anders afgeleid uit de leden (backwards compatible)
+  if(typeof g.functioneel==='boolean') return g.functioneel;
+  var leden=g.leerlingen.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  return leden.length>0&&leden.every(function(l){return !!l.f;});
+}
+
 function bestePassendeGroepen(ll,top){
   top=top||3;
   var ljKey=ll.dl||ll.l;
@@ -1198,7 +1215,8 @@ function bestePassendeGroepen(ll,top){
     return {groep:g,leden:leden};
   }).filter(function(x){
     if(!x.leden.length) return false;
-    return x.leden.every(function(lid){return (lid.dl||lid.l)===ljKey&&!!lid.f===fnKey;});
+    if(groepIsFunctioneel(x.groep)!==fnKey) return false;
+    return x.leden.every(function(lid){return (lid.dl||lid.l)===ljKey;});
   });
 
   var gescoord=kandidaten.map(function(x){
@@ -1280,7 +1298,7 @@ function printDefGroepen(metDoelen){
     var card=document.getElementById('defg_'+g.id);
     if(!card) return;
     var clone=card.cloneNode(true);
-    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.bgt,.bgp').forEach(function(el){el.remove();});
+    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.def-groep-fn,.bgt,.bgp').forEach(function(el){el.remove();});
     clone.querySelectorAll('.def-chip').forEach(function(chipEl){
       var dtp=chipEl.querySelector('.dtp');
       var dtt=chipEl.querySelector('.dtt');
