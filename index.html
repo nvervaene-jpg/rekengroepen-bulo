@@ -108,6 +108,8 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .def-groep-n{font-size:.72rem;color:var(--mu);margin-left:auto}
 .def-groep-del{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:3px}
 .def-groep-del:hover{background:var(--rl);color:var(--re)}
+.def-groep-print{background:none;border:1.5px solid var(--bo2);color:var(--mu);cursor:pointer;font-size:.66rem;padding:3px 8px;border-radius:3px;flex-shrink:0}
+.def-groep-print:hover{border-color:var(--ac);color:var(--ac)}
 .def-groep-fn{display:inline-flex;align-items:center;gap:3px;font-size:.66rem;padding:3px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);color:var(--mu);font-weight:600;cursor:pointer;flex-shrink:0}
 .def-groep-fn.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
 .def-ll-list{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:1px solid var(--bo)}
@@ -267,8 +269,6 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
     <button class="btn bp bs" onclick="importeerNaarDef('grw')">&#8595; Importeer uit ② Groepsvoorstel</button>
     <button class="btn bp bs" onclick="importeerNaarDef('auw')">&#8595; Importeer uit ③ Automatisch</button>
     <button class="def-nieuw-btn" onclick="nieuweDefGroep()">+ Nieuwe lege groep</button>
-    <button class="btn bgy bs" style="margin-left:auto" onclick="printDefGroepen(false)">&#128438; Afdrukken (overzicht)</button>
-    <button class="btn bgy bs" onclick="printDefGroepen(true)">&#128438; Afdrukken (met doelen)</button>
   </div>
   <div class="def-herverdeel-bar">
     <span style="font-size:.78rem;color:var(--mu)">Herverdeel de al ingedeelde leerlingen in</span>
@@ -1086,6 +1086,18 @@ function maakDefGroepCard(g){
   fnBtn.innerHTML='&#9670; Functioneel';
   fnBtn.onclick=function(){ g.functioneel=!g.functioneel; renderDefGroepen(); };
 
+  var printOvBtn=document.createElement('button');
+  printOvBtn.className='def-groep-print';
+  printOvBtn.title='Print enkel deze groep — kort overzicht';
+  printOvBtn.innerHTML='&#128438; Overzicht';
+  printOvBtn.onclick=function(){ printEenDefGroep(g.id,false); };
+
+  var printDoBtn=document.createElement('button');
+  printDoBtn.className='def-groep-print';
+  printDoBtn.title='Print enkel deze groep — met doelen per domein';
+  printDoBtn.innerHTML='&#128438; Met doelen';
+  printDoBtn.onclick=function(){ printEenDefGroep(g.id,true); };
+
   var delBtn=document.createElement('button');
   delBtn.className='def-groep-del';
   delBtn.innerHTML='&#128465; Groep verwijderen';
@@ -1098,6 +1110,8 @@ function maakDefGroepCard(g){
   hdr.appendChild(naamEl);
   hdr.appendChild(nEl);
   hdr.appendChild(fnBtn);
+  hdr.appendChild(printOvBtn);
+  hdr.appendChild(printDoBtn);
   hdr.appendChild(delBtn);
   card.appendChild(hdr);
 
@@ -1300,43 +1314,47 @@ function wisselKleur(gid){
   renderDefGroepen();
 }
 
-function printDefGroepen(metDoelen){
-  var wrap=document.getElementById('def-wrap');
+function bouwGroepPrintClone(g,metDoelen){
+  var card=document.getElementById('defg_'+g.id);
+  if(!card) return null;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.def-groep-fn,.def-groep-print,.bgt,.bgp').forEach(function(el){el.remove();});
+  clone.querySelectorAll('.def-chip').forEach(function(chipEl){
+    var dtp=chipEl.querySelector('.dtp');
+    var dtt=chipEl.querySelector('.dtt');
+    if(metDoelen){
+      // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
+      var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
+      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
+      if(dtt) dtt.remove();
+    } else {
+      // Kort overzicht: geen doelen-knop of -paneel, enkel naam/klas/badges + gedeelde werkpunten
+      if(dtt) dtt.remove();
+      if(dtp) dtp.remove();
+    }
+  });
+  // Werkpunten voluit tonen ipv ingekort met '...'
+  clone.querySelectorAll('.wc').forEach(function(el){
+    var vol=el.dataset.vol;
+    var txt=el.querySelector('.wc-txt');
+    if(vol&&txt) txt.textContent=vol;
+  });
+  // Vervang input door span
+  var inp=clone.querySelector('.def-groep-naam');
+  if(inp){var sp=document.createElement('span');sp.className='gt';sp.textContent=inp.value;inp.replaceWith(sp);}
+  return clone;
+}
+
+function printEenDefGroep(gid,metDoelen){
+  var g=defGroepen.find(function(x){return x.id===gid;});
+  if(!g) return;
   var pb=document.getElementById('print-block');
   var datum=new Date().toLocaleDateString('nl-BE');
-  var titel=metDoelen?'Definitieve Rekengroepen &mdash; met doelen per domein':'Definitieve Rekengroepen';
+  var titel=g.naam+(metDoelen?' &mdash; met doelen per domein':'');
   pb.className=metDoelen?'pb-doelen':'';
   pb.innerHTML='<div class="print-hdr"><h2>'+titel+'</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
-  defGroepen.forEach(function(g){
-    var card=document.getElementById('defg_'+g.id);
-    if(!card) return;
-    var clone=card.cloneNode(true);
-    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.def-groep-fn,.bgt,.bgp').forEach(function(el){el.remove();});
-    clone.querySelectorAll('.def-chip').forEach(function(chipEl){
-      var dtp=chipEl.querySelector('.dtp');
-      var dtt=chipEl.querySelector('.dtt');
-      if(metDoelen){
-        // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
-        var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
-        if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll);
-        if(dtt) dtt.remove();
-      } else {
-        // Kort overzicht: geen doelen-knop of -paneel, enkel naam/klas/badges + gedeelde werkpunten
-        if(dtt) dtt.remove();
-        if(dtp) dtp.remove();
-      }
-    });
-    // Werkpunten voluit tonen ipv ingekort met '...'
-    clone.querySelectorAll('.wc').forEach(function(el){
-      var vol=el.dataset.vol;
-      var txt=el.querySelector('.wc-txt');
-      if(vol&&txt) txt.textContent=vol;
-    });
-    // Vervang input door span
-    var inp=clone.querySelector('.def-groep-naam');
-    if(inp){var sp=document.createElement('span');sp.className='gt';sp.textContent=inp.value;inp.replaceWith(sp);}
-    pb.appendChild(clone);
-  });
+  var clone=bouwGroepPrintClone(g,metDoelen);
+  if(clone) pb.appendChild(clone);
   window.print();
   setTimeout(function(){pb.innerHTML='';},1000);
 }
