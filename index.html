@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rekengroepen — BuLO Sint-Franciscus</title>
 <style>
-:root{--bg:#F2F1EE;--sf:#FFF;--sf2:#F8F7F5;--bo:#E0DCD4;--bo2:#C8C4BC;--tx:#18170F;--mu:#6B6760;--ac:#1A4D8C;--al:#D6E6F8;--gr:#2A6048;--gl:#D4EDE0;--or:#C05A20;--ol:#FAE4D4;--pu:#5E4B8B;--pl:#EDE8F8;--re:#9B2335;--ye:#7A5200;--yl:#FEF3D6}
+:root{--bg:#F2F1EE;--sf:#FFF;--sf2:#F8F7F5;--bo:#E0DCD4;--bo2:#C8C4BC;--tx:#18170F;--mu:#6B6760;--ac:#1A4D8C;--al:#D6E6F8;--gr:#2A6048;--gl:#D4EDE0;--or:#C05A20;--ol:#FAE4D4;--pu:#5E4B8B;--pl:#EDE8F8;--re:#9B2335;--rl:#F8D7DA;--ye:#7A5200;--yl:#FEF3D6}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--tx);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5}
 header{background:#18170F;color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -36,6 +36,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .kn{font-size:.92rem;font-weight:700}
 .bdg{font-size:.64rem;font-weight:700;padding:2px 6px;border-radius:3px}
 .bkl{background:var(--al);color:var(--ac)}.blj{background:var(--bo);color:var(--mu)}
+.ljds{background:var(--gl);color:var(--gr)}.ljhh{background:var(--rl);color:var(--re)}
 .ads{background:var(--gl);color:var(--gr)}.adm{background:var(--yl);color:var(--ye)}.adh{background:var(--ol);color:var(--or)}.bfn{background:var(--pl);color:var(--pu)}
 .ds2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
 .dsc{display:flex;align-items:center;gap:5px}.dl{font-size:.66rem;color:var(--mu);width:24px;flex-shrink:0;font-weight:700}
@@ -1154,7 +1155,9 @@ function maakDefChip(ll,zw,gid){
   var top=document.createElement('div');
   top.className='def-chip-top';
   var zds=(zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
-  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span><span class="bdg blj">LJ'+ll.l+'</span>'+zds;
+  var doelLj=ll.dl||ll.l;
+  var ljCls=ll.b==='doorstroom'?'ljds':(ll.b==='herhaling'?'ljhh':'blj');
+  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span><span class="bdg '+ljCls+'">LJ'+doelLj+'</span>'+zds;
 
   var removeBtn=document.createElement('button');
   removeBtn.className='def-chip-remove';
