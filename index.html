@@ -164,6 +164,15 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   #print-block .def-ll-list{display:flex;flex-wrap:wrap}
   #print-block .def-chip{break-inside:avoid;background:#f5f5f5!important;border:1px solid #ddd}
   #print-block .dtp{display:block!important;max-height:none!important;overflow:visible!important}
+
+  /* 'Met doelen'-modus: volle breedte per leerling i.p.v. de smalle 230px-kaart, doelen in 2 kolommen */
+  #print-block.pb-doelen .def-groep{break-inside:auto}
+  #print-block.pb-doelen .def-ll-list{display:block}
+  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:6px;margin-bottom:10px}
+  #print-block.pb-doelen .def-chip-top{font-size:.85rem}
+  #print-block.pb-doelen .dtp{column-count:2;column-gap:24px;margin-top:4px}
+  #print-block.pb-doelen .ddh{break-after:avoid;break-inside:avoid}
+  #print-block.pb-doelen .dr{break-inside:avoid}
 }
 </style>
 </head>
@@ -1296,6 +1305,7 @@ function printDefGroepen(metDoelen){
   var pb=document.getElementById('print-block');
   var datum=new Date().toLocaleDateString('nl-BE');
   var titel=metDoelen?'Definitieve Rekengroepen &mdash; met doelen per domein':'Definitieve Rekengroepen';
+  pb.className=metDoelen?'pb-doelen':'';
   pb.innerHTML='<div class="print-hdr"><h2>'+titel+'</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
   defGroepen.forEach(function(g){
     var card=document.getElementById('defg_'+g.id);
