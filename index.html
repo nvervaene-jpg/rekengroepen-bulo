@@ -912,17 +912,22 @@ function herverdeelGroepen(){
   var leerlingen=alleIds.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
   if(!leerlingen.length){ toast('Geen ingedeelde leerlingen om te herverdelen'); return; }
 
-  // Groepeer per doelleerjaar (of leerjaar als er geen beslissing is) — leerjaren nooit mengen
-  var buckets={};
+  // Groepeer per doelleerjaar (of leerjaar als er geen beslissing is) én per traject
+  // — leerjaren nooit mengen, functioneel traject nooit mengen met regulier
+  var buckets={},bucketMeta={};
   leerlingen.forEach(function(ll){
-    var key=ll.dl||ll.l;
-    if(!buckets[key]) buckets[key]=[];
+    var lj=ll.dl||ll.l;
+    var key=(ll.f?'FN_':'REG_')+lj;
+    if(!buckets[key]){ buckets[key]=[]; bucketMeta[key]={lj:lj,functioneel:!!ll.f}; }
     buckets[key].push(ll);
   });
-  var bucketKeys=Object.keys(buckets).sort(function(a,b){return a-b;});
+  var bucketKeys=Object.keys(buckets).sort(function(a,b){
+    var ma=bucketMeta[a],mb=bucketMeta[b];
+    return ma.lj-mb.lj||(ma.functioneel===mb.functioneel?0:(ma.functioneel?1:-1));
+  });
 
   if(target<bucketKeys.length){
-    toast('Minstens '+bucketKeys.length+' groepen nodig (1 per leerjaar) — aangepast');
+    toast('Minstens '+bucketKeys.length+' groepen nodig (1 per leerjaar/traject) — aangepast');
     target=bucketKeys.length;
   }
 
@@ -941,9 +946,10 @@ function herverdeelGroepen(){
     var groep=buckets[key].slice().sort(function(a,b){return gemScoreLL(a)-gemScoreLL(b);});
     var chunks=verdeelInChunks(groep,vloer[bi]);
     chunks.forEach(function(chunk,ci){
+      var meta=bucketMeta[key];
       nieuweGroepen.push({
         id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
-        naam:'LJ'+key+' — groep '+(ci+1),
+        naam:(meta.functioneel?'Functioneel LJ':'LJ')+meta.lj+' — groep '+(ci+1),
         kleur:defKleuren[nieuweGroepen.length%defKleuren.length],
         leerlingen:chunk.map(function(ll){return ll.i;})
       });
