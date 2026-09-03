@@ -1144,7 +1144,7 @@ function maakDefChip(ll,zw,gid){
   var top=document.createElement('div');
   top.className='def-chip-top';
   var zds=(zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
-  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span>'+zds;
+  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span><span class="bdg blj">LJ'+ll.l+'</span>'+zds;
 
   var removeBtn=document.createElement('button');
   removeBtn.className='def-chip-remove';
