@@ -97,7 +97,10 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .tst.show{transform:translateY(0);opacity:1}
 #print-block{display:none}
 .def-groep{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.def-groep.drag-over-groep{outline:2px dashed var(--ac);outline-offset:-2px}
 .def-groep-hdr{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
+.def-groep-handle{cursor:grab;color:var(--mu);font-size:.95rem;flex-shrink:0;line-height:1;user-select:none}
+.def-groep-handle:active{cursor:grabbing}
 .def-groep-naam{font-size:.9rem;font-weight:700;border:none;background:none;color:var(--tx);font-family:inherit;padding:2px 6px;border-radius:3px;min-width:120px;outline:none}
 .def-groep-naam:hover,.def-groep-naam:focus{background:var(--bo);outline:none}
 .def-groep-kleur{width:14px;height:14px;border-radius:3px;flex-shrink:0;cursor:pointer}
@@ -867,7 +870,7 @@ function importeerNaarDef(wrapId){
 
 function nieuweDefGroep(){
   defGroepen.push({
-    id:'dg_'+Date.now(),
+    id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
     naam:'Nieuwe groep',
     kleur:defKleuren[defGroepen.length%defKleuren.length],
     leerlingen:[]
@@ -917,9 +920,40 @@ function maakDefGroepCard(g){
   card.className='def-groep';
   card.id='defg_'+g.id;
 
+  // Groep verslepen om de volgorde te wijzigen
+  card.ondragover=function(e){
+    if(e.dataTransfer.types.indexOf('groupid')===-1) return;
+    e.preventDefault();
+    card.classList.add('drag-over-groep');
+  };
+  card.ondragleave=function(){ card.classList.remove('drag-over-groep'); };
+  card.ondrop=function(e){
+    var vanId=e.dataTransfer.getData('groupid');
+    if(!vanId) return;
+    e.preventDefault();
+    card.classList.remove('drag-over-groep');
+    var vanIdx=defGroepen.findIndex(function(x){return x.id===vanId;});
+    var naarIdx=defGroepen.findIndex(function(x){return x.id===g.id;});
+    if(vanIdx===-1||naarIdx===-1||vanIdx===naarIdx) return;
+    var verplaatst=defGroepen.splice(vanIdx,1)[0];
+    defGroepen.splice(naarIdx,0,verplaatst);
+    renderDefGroepen();
+  };
+
   // Header
   var hdr=document.createElement('div');
   hdr.className='def-groep-hdr';
+
+  var handle=document.createElement('span');
+  handle.className='def-groep-handle';
+  handle.draggable=true;
+  handle.title='Versleep om de volgorde van groepen te wijzigen';
+  handle.innerHTML='&#9776;';
+  handle.ondragstart=function(e){
+    e.dataTransfer.setData('groupid',g.id);
+    e.dataTransfer.effectAllowed='move';
+  };
+  hdr.appendChild(handle);
 
   var kleurEl=document.createElement('div');
   kleurEl.className='def-groep-kleur';
@@ -1063,7 +1097,7 @@ function printDefGroepen(metDoelen){
     var card=document.getElementById('defg_'+g.id);
     if(!card) return;
     var clone=card.cloneNode(true);
-    clone.querySelectorAll('.def-chip-remove,.def-groep-del').forEach(function(el){el.remove();});
+    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle').forEach(function(el){el.remove();});
     clone.querySelectorAll('.def-chip').forEach(function(chipEl){
       var dtp=chipEl.querySelector('.dtp');
       var dtt=chipEl.querySelector('.dtt');
