@@ -121,6 +121,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .def-nieuw-btn{padding:6px 14px;border-radius:4px;border:1.5px dashed var(--bo2);background:none;color:var(--mu);font-size:.78rem;cursor:pointer;transition:all .15s}
 .def-nieuw-btn:hover{border-color:var(--ac);color:var(--ac)}
 .def-import-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.def-herverdeel-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .def-onverdeeld{background:var(--sf);border:2px dashed var(--bo2);border-radius:6px;padding:10px 14px;margin-bottom:14px}
 .def-onverdeeld h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin-bottom:6px}
 @media print{
@@ -249,6 +250,12 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
     <button class="def-nieuw-btn" onclick="nieuweDefGroep()">+ Nieuwe lege groep</button>
     <button class="btn bgy bs" style="margin-left:auto" onclick="printDefGroepen(false)">&#128438; Afdrukken (overzicht)</button>
     <button class="btn bgy bs" onclick="printDefGroepen(true)">&#128438; Afdrukken (met doelen)</button>
+  </div>
+  <div class="def-herverdeel-bar">
+    <span style="font-size:.78rem;color:var(--mu)">Herverdeel de al ingedeelde leerlingen in</span>
+    <input type="number" id="herverdeel-aantal" min="1" value="15" style="width:52px;padding:5px 6px;border-radius:4px;border:1px solid var(--bo);background:var(--sf);color:var(--tx);font-family:inherit;font-size:.78rem">
+    <span style="font-size:.78rem;color:var(--mu)">gebalanceerde groepen (bv. aantal leerkrachten)</span>
+    <button class="btn bp bs" onclick="herverdeelGroepen()">Herverdeel automatisch</button>
   </div>
   <div style="padding:16px 28px" id="def-wrap">
     <div class="em"><h3>Nog geen definitieve groepen</h3><p>Importeer vanuit tabblad ② of ③, of maak een nieuwe lege groep aan.</p></div>
@@ -876,6 +883,76 @@ function nieuweDefGroep(){
     leerlingen:[]
   });
   renderDefGroepen();
+}
+
+function gemScoreLL(ll){
+  var doms=Object.keys(ll.d||{});
+  if(!doms.length) return 50;
+  var som=doms.reduce(function(s,d){return s+(ll.d[d].p||0);},0);
+  return som/doms.length;
+}
+
+function verdeelInChunks(lijst,n){
+  n=Math.max(1,Math.min(n,lijst.length));
+  var chunks=[],basis=Math.floor(lijst.length/n),rest=lijst.length%n,idx=0;
+  for(var i=0;i<n;i++){
+    var grootte=basis+(i<rest?1:0);
+    chunks.push(lijst.slice(idx,idx+grootte));
+    idx+=grootte;
+  }
+  return chunks;
+}
+
+function herverdeelGroepen(){
+  var input=document.getElementById('herverdeel-aantal');
+  var target=parseInt(input.value,10);
+  if(!target||target<1){ toast('Geef een geldig aantal groepen op'); return; }
+
+  var alleIds=defGroepen.reduce(function(acc,g){return acc.concat(g.leerlingen);},[]);
+  var leerlingen=alleIds.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  if(!leerlingen.length){ toast('Geen ingedeelde leerlingen om te herverdelen'); return; }
+
+  // Groepeer per doelleerjaar (of leerjaar als er geen beslissing is) — leerjaren nooit mengen
+  var buckets={};
+  leerlingen.forEach(function(ll){
+    var key=ll.dl||ll.l;
+    if(!buckets[key]) buckets[key]=[];
+    buckets[key].push(ll);
+  });
+  var bucketKeys=Object.keys(buckets).sort(function(a,b){return a-b;});
+
+  if(target<bucketKeys.length){
+    toast('Minstens '+bucketKeys.length+' groepen nodig (1 per leerjaar) — aangepast');
+    target=bucketKeys.length;
+  }
+
+  if(!confirm('Dit vervangt de huidige '+defGroepen.length+' groep(en) door '+target+' nieuwe, gebalanceerde groepen. Ingedeelde leerlingen blijven behouden; groepsnamen en -kleuren gaan verloren. Doorgaan?')) return;
+
+  // Proportionele toewijzing van groepen per leerjaar-bucket (largest remainder method)
+  var totaalLL=leerlingen.length;
+  var ruw=bucketKeys.map(function(k){return Math.max(1,target*buckets[k].length/totaalLL);});
+  var vloer=ruw.map(function(n){return Math.max(1,Math.floor(n));});
+  var restCapaciteit=target-vloer.reduce(function(a,b){return a+b;},0);
+  var fracties=ruw.map(function(r,i){return {i:i,frac:r-Math.floor(r)};}).sort(function(a,b){return b.frac-a.frac;});
+  for(var fi=0;fi<fracties.length&&restCapaciteit>0;fi++){ vloer[fracties[fi].i]++; restCapaciteit--; }
+
+  var nieuweGroepen=[];
+  bucketKeys.forEach(function(key,bi){
+    var groep=buckets[key].slice().sort(function(a,b){return gemScoreLL(a)-gemScoreLL(b);});
+    var chunks=verdeelInChunks(groep,vloer[bi]);
+    chunks.forEach(function(chunk,ci){
+      nieuweGroepen.push({
+        id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+        naam:'LJ'+key+' — groep '+(ci+1),
+        kleur:defKleuren[nieuweGroepen.length%defKleuren.length],
+        leerlingen:chunk.map(function(ll){return ll.i;})
+      });
+    });
+  });
+
+  defGroepen=nieuweGroepen;
+  renderDefGroepen();
+  toast('Herverdeeld in '+nieuweGroepen.length+' groepen');
 }
 
 function renderDefGroepen(){
