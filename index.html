@@ -511,9 +511,14 @@ function escAttr(s){
 }
 
 function wpB(list){
-  if(!list.length) return [];
+  // Leerlingen zonder gekoppelde doeldata (bv. nieuwe leerlingen zonder testresultaten)
+  // kunnen nooit meetellen voor een werkpunt — ze mogen de 50%-drempel dus niet mee optellen
+  var metData=list.filter(function(ll){
+    return DVK.some(function(dk){var d=ll.d[dk];return d&&DB[d.k]&&DB[d.k].length;});
+  });
+  if(!metData.length) return [];
   var c={};
-  list.forEach(function(ll){
+  metData.forEach(function(ll){
     DVK.forEach(function(dk){
       if(!ll.d[dk]) return;
       getDoel(ll,dk).forEach(function(item){
@@ -526,7 +531,7 @@ function wpB(list){
       });
     });
   });
-  var min=Math.ceil(list.length*.5);
+  var min=Math.ceil(metData.length*.5);
   return Object.values(c).filter(function(x){return x.n>=min;}).sort(function(a,b){return b.n-a.n;});
 }
 
