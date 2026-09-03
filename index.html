@@ -59,6 +59,9 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .verwijder-btn:hover{background:var(--rl);border-color:var(--re);color:var(--re)}
 .dtt{width:100%;padding:5px 12px;font-size:.7rem;color:var(--ac);cursor:pointer;background:none;border:none;border-top:1px solid var(--bo);text-align:left}
 .dtp{display:none;padding:8px 12px;border-top:1px solid var(--bo);max-height:300px;overflow-y:auto}.dtp.open{display:block}
+.dtot{display:flex;align-items:center;justify-content:space-between;font-size:.76rem;font-weight:700;padding:5px 8px;border-radius:4px;margin-bottom:4px}
+.dtot-hg{background:var(--gl);color:var(--gr)}.dtot-md{background:var(--ol);color:var(--or)}.dtot-lg{background:var(--rl);color:var(--re)}
+.dtot-pc{font-size:.85rem}
 .ddh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:6px 0 3px;display:flex;align-items:center;gap:6px}
 .dr{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:.72rem}
 .dbw{width:40px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}.db{height:100%;border-radius:2px}
@@ -177,6 +180,7 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:2px;margin-bottom:4px;gap:0}
   #print-block.pb-doelen .def-chip-top{font-size:.76rem}
   #print-block.pb-doelen .dtp{display:grid!important;grid-template-columns:repeat(3,1fr);column-gap:12px;row-gap:1px;margin-top:1px;align-items:start}
+  #print-block.pb-doelen .dtot{grid-column:1/-1;font-size:.7rem;padding:3px 8px;margin-bottom:3px;break-after:avoid}
   #print-block.pb-doelen .ddom{break-inside:avoid}
   #print-block.pb-doelen .ddh{break-after:avoid;break-inside:avoid;font-size:.58rem;margin:2px 0 0}
   #print-block.pb-doelen .dr{break-inside:avoid;font-size:.56rem;gap:2px;margin-bottom:0;line-height:1.05}
@@ -465,6 +469,12 @@ function mkKrt(ll){
 
 function bouwDoelenHTML(ll,voluit){
   var detH='';
+  var domeinen=DVK.filter(function(dk){return ll.d[dk];});
+  if(domeinen.length){
+    var totGem=gemScoreLL(ll);
+    var totCls=totGem>=75?'hg':totGem>=55?'md':'lg';
+    detH+='<div class="dtot dtot-'+totCls+'"><span>Totaal alle doelen</span><span class="dtot-pc">'+Math.round(totGem)+'%</span></div>';
+  }
   DVK.forEach(function(dk){
     var d=ll.d[dk];if(!d)return;
     var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
