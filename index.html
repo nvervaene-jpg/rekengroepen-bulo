@@ -278,7 +278,7 @@ var DVL={GK:'Getallenkennis',HR:'Hoofdrekenen',MK:'Meetkunde',MT:'Meten',CY:'Cij
 var KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
 var DB={}, LL=[], _verwijderd=[];
 
-fetch('data.json')
+var dataGeladen=fetch('data.json')
   .then(function(r){return r.json();})
   .then(function(td){
     DB=td.db;
@@ -754,23 +754,27 @@ function impJS(e){
   var f=e.target.files[0];if(!f)return;
   var r=new FileReader();
   r.onload=function(ev){
-    try{
-      var d=JSON.parse(ev.target.result);
-      (d.data||d.leerlingen||[]).forEach(function(imp){
-        var b=LL.find(function(l){return l.i===imp.i||l.i===imp.id;});
-        if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}
-      });
-      // Herstel verwijderde leerlingen markering
-      if(d.verwijderd){
-        _verwijderd=d.verwijderd;
-        LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
-      }
-      if(d.defGroepen&&d.defGroepen.length){defGroepen=d.defGroepen;renderDefGroepen();}
-      renderLL();updS();
-      // Auto-genereer groepsvoorstel als er beslissingen zijn
-      if(LL.some(function(l){return l.b;})){try{genGr();}catch(e){}}
-      toast('Geladen: '+f.name);
-    }catch(err){toast('Fout: '+err.message);}
+    var raw=ev.target.result;
+    // Wacht tot data.json volledig is ingeladen, anders vindt de import geen leerlingen om aan te koppelen
+    dataGeladen.then(function(){
+      try{
+        var d=JSON.parse(raw);
+        (d.data||d.leerlingen||[]).forEach(function(imp){
+          var b=LL.find(function(l){return l.i===imp.i||l.i===imp.id;});
+          if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}
+        });
+        // Herstel verwijderde leerlingen markering
+        if(d.verwijderd){
+          _verwijderd=d.verwijderd;
+          LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
+        }
+        if(d.defGroepen&&d.defGroepen.length){defGroepen=d.defGroepen;renderDefGroepen();}
+        renderLL();updS();
+        // Auto-genereer groepsvoorstel als er beslissingen zijn
+        if(LL.some(function(l){return l.b;})){try{genGr();}catch(e){}}
+        toast('Geladen: '+f.name);
+      }catch(err){toast('Fout: '+err.message);}
+    });
   };
   r.readAsText(f);e.target.value='';
 }
