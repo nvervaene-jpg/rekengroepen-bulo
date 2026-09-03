@@ -118,6 +118,13 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
 .def-chip-remove:hover{color:var(--re)}
 .def-chip .dtt{padding:4px 0;font-size:.62rem;border-top:1px solid var(--bo);margin-top:2px;cursor:pointer}
 .def-chip .dtp{padding:4px 0 0;max-height:240px;cursor:default}
+.bpr{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:4px 0;font-size:.68rem;border-bottom:1px dashed var(--bo)}
+.bpr:last-child{border-bottom:none}
+.bpl{font-weight:700;color:var(--ac);flex-shrink:0;min-width:58px}
+.bpn{font-weight:600;flex:1;min-width:80px}
+.bpi{color:var(--mu);font-size:.63rem}
+.bpb{background:var(--ac);color:#fff;border:none;border-radius:3px;padding:3px 8px;font-size:.63rem;cursor:pointer;flex-shrink:0}
+.bpb:hover{opacity:.85}
 .def-nieuw-btn{padding:6px 14px;border-radius:4px;border:1.5px dashed var(--bo2);background:none;color:var(--mu);font-size:.78rem;cursor:pointer;transition:all .15s}
 .def-nieuw-btn:hover{border-color:var(--ac);color:var(--ac)}
 .def-import-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -1164,7 +1171,95 @@ function maakDefChip(ll,zw,gid){
   dtp.className='dtp';
   chip.appendChild(dtp);
 
+  var bpBtn=document.createElement('button');
+  bpBtn.className='dtt bgt';
+  bpBtn.textContent='▼ Beste groep';
+  bpBtn.onclick=function(e){e.stopPropagation();togBestePassend(bpBtn,ll,gid);};
+  chip.appendChild(bpBtn);
+
+  var bpp=document.createElement('div');
+  bpp.className='dtp bgp';
+  chip.appendChild(bpp);
+
   return chip;
+}
+
+function bestePassendeGroepen(ll,top){
+  top=top||3;
+  var ljKey=ll.dl||ll.l;
+  var fnKey=!!ll.f;
+  var studentAdv=calcAdv(ll,75);
+  var studentZw=studentAdv?studentAdv.zw:[];
+  var studentGem=gemScoreLL(ll);
+  var heeftData=Object.keys(ll.d||{}).length>0;
+
+  var kandidaten=defGroepen.map(function(g){
+    var leden=g.leerlingen.filter(function(id){return id!==ll.i;}).map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+    return {groep:g,leden:leden};
+  }).filter(function(x){
+    if(!x.leden.length) return false;
+    return x.leden.every(function(lid){return (lid.dl||lid.l)===ljKey&&!!lid.f===fnKey;});
+  });
+
+  var gescoord=kandidaten.map(function(x){
+    var gemGroep=x.leden.reduce(function(s,l){return s+gemScoreLL(l);},0)/x.leden.length;
+    var zwGroep={};
+    x.leden.forEach(function(l){
+      var adv=calcAdv(l,75);
+      (adv?adv.zw:[]).forEach(function(d){zwGroep[d]=(zwGroep[d]||0)+1;});
+    });
+    var overlap=studentZw.filter(function(d){return zwGroep[d];}).length;
+    return {groep:x.groep,overlap:overlap,scoreDiff:Math.abs(gemGroep-studentGem),aantal:x.leden.length};
+  });
+
+  if(heeftData){
+    gescoord.sort(function(a,b){return b.overlap-a.overlap||a.scoreDiff-b.scoreDiff;});
+  }else{
+    // Geen testdata beschikbaar: sorteer op groepsgrootte voor een evenwichtige verdeling
+    gescoord.sort(function(a,b){return a.aantal-b.aantal;});
+  }
+  return {resultaten:gescoord.slice(0,top),heeftData:heeftData};
+}
+
+function plaatsInGroep(llId,huidigeGid,nieuweGid){
+  if(huidigeGid){
+    var vanG=defGroepen.find(function(x){return x.id===huidigeGid;});
+    if(vanG) vanG.leerlingen=vanG.leerlingen.filter(function(x){return x!==llId;});
+  }
+  var naarG=defGroepen.find(function(x){return x.id===nieuweGid;});
+  if(naarG&&naarG.leerlingen.indexOf(llId)===-1) naarG.leerlingen.push(llId);
+  renderDefGroepen();
+  toast('Geplaatst in "'+(naarG?naarG.naam:'')+'"');
+}
+
+function togBestePassend(btn,ll,gid){
+  var p=btn.nextElementSibling;
+  var open=p.classList.contains('open');
+  if(open){ p.classList.remove('open'); btn.textContent='▼ Beste groep'; return; }
+
+  var r=bestePassendeGroepen(ll,3);
+  var labels=['1ste keuze','2de keuze','3de keuze'];
+  var html='';
+  if(!r.resultaten.length){
+    html='<div style="font-size:.72rem;color:var(--mu);padding:2px 0">Geen andere groepen binnen hetzelfde leerjaar'+(ll.f?'/traject':'')+' gevonden.</div>';
+  }else{
+    if(!r.heeftData) html+='<div style="font-size:.65rem;color:var(--mu);margin-bottom:4px">Geen testdata — gesorteerd op groepsgrootte voor evenwicht</div>';
+    html+=r.resultaten.map(function(x,i){
+      var uid='bp_'+x.groep.id+'_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+      return '<div class="bpr"><span class="bpl">'+(labels[i]||(i+1)+'de keuze')+'</span>'
+        +'<span class="bpn">'+x.groep.naam+'</span>'
+        +'<span class="bpi">'+x.aantal+' ll.'+(r.heeftData?', '+x.overlap+' gedeelde zwakke domeinen':'')+'</span>'
+        +'<button class="bpb" id="'+uid+'">Plaats hier</button></div>';
+    }).join('');
+  }
+  p.innerHTML=html;
+  p.classList.add('open');
+  btn.textContent='▲ Beste groep verbergen';
+  r.resultaten.forEach(function(x){
+    var uid='bp_'+x.groep.id+'_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+    var b=document.getElementById(uid);
+    if(b) b.onclick=function(e){e.stopPropagation();plaatsInGroep(ll.i,gid,x.groep.id);};
+  });
 }
 
 function wisselKleur(gid){
@@ -1185,7 +1280,7 @@ function printDefGroepen(metDoelen){
     var card=document.getElementById('defg_'+g.id);
     if(!card) return;
     var clone=card.cloneNode(true);
-    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle').forEach(function(el){el.remove();});
+    clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.bgt,.bgp').forEach(function(el){el.remove();});
     clone.querySelectorAll('.def-chip').forEach(function(chipEl){
       var dtp=chipEl.querySelector('.dtp');
       var dtt=chipEl.querySelector('.dtt');
