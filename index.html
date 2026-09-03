@@ -177,7 +177,8 @@ select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radiu
   #print-block.pb-doelen .def-groep{break-inside:auto;margin-bottom:8px}
   #print-block.pb-doelen .def-groep-hdr{padding:5px 10px}
   #print-block.pb-doelen .def-ll-list{display:block;padding:6px 10px}
-  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:2px;margin-bottom:4px;gap:0}
+  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;page-break-before:always;break-before:page;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:2px;margin-bottom:4px;gap:0}
+  #print-block.pb-doelen .def-chip:first-child{page-break-before:avoid;break-before:avoid}
   #print-block.pb-doelen .def-chip-top{font-size:.76rem}
   #print-block.pb-doelen .dtp{display:grid!important;grid-template-columns:repeat(3,1fr);column-gap:12px;row-gap:1px;margin-top:1px;align-items:start}
   #print-block.pb-doelen .dtot{grid-column:1/-1;font-size:.7rem;padding:3px 8px;margin-bottom:3px;break-after:avoid}
