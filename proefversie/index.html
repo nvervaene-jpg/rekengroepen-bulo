@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROEFVERSIE — Rekengroepen — BuLO Sint-Franciscus</title>
+<style>
+:root{--bg:#F2F1EE;--sf:#FFF;--sf2:#F8F7F5;--bo:#E0DCD4;--bo2:#C8C4BC;--tx:#18170F;--mu:#6B6760;--ac:#1A4D8C;--al:#D6E6F8;--gr:#2A6048;--gl:#D4EDE0;--or:#C05A20;--ol:#FAE4D4;--pu:#5E4B8B;--pl:#EDE8F8;--re:#9B2335;--rl:#F8D7DA;--ye:#7A5200;--yl:#FEF3D6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.5}
+header{background:#18170F;color:#fff;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{font-size:1rem;font-weight:700}.sub{font-size:.72rem;color:#999;margin-top:1px}
+.ha{display:flex;gap:6px;flex-wrap:wrap}
+.btn{padding:6px 12px;border-radius:4px;border:none;cursor:pointer;font-size:.76rem;font-weight:600;transition:opacity .15s;white-space:nowrap}.btn:hover{opacity:.82}
+.bp{background:var(--ac);color:#fff}.bg_{background:transparent;color:#ccc;border:1px solid #444}.bgy{background:var(--bo);color:var(--tx)}.bs{padding:4px 9px;font-size:.72rem}
+nav{background:var(--sf);border-bottom:2px solid var(--bo);display:flex;padding:0 28px}
+nav button{background:none;border:none;border-bottom:3px solid transparent;padding:11px 16px;font-size:.76rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;color:var(--mu);margin-bottom:-2px;transition:all .15s}
+nav button.active{color:var(--tx);border-bottom-color:var(--ac)}
+.pg{display:none}.pg.active{display:block}
+.sb{background:var(--sf);border-bottom:1px solid var(--bo);padding:9px 28px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.st{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--mu)}.st strong{font-size:.95rem;color:var(--tx);font-weight:700}
+.sdg{padding:2px 7px;border-radius:10px;font-size:.68rem;font-weight:700}
+.sds{background:var(--gl);color:var(--gr)}.sfn{background:var(--pl);color:var(--pu)}.sob{background:var(--bo);color:var(--mu)}
+.pw{margin-left:auto;display:flex;align-items:center;gap:8px;min-width:140px}
+.po{flex:1;height:4px;background:var(--bo);border-radius:2px;overflow:hidden}.pi{height:100%;background:var(--gr);border-radius:2px;transition:width .3s}
+.pt{font-size:.72rem;color:var(--mu);white-space:nowrap}
+.fi{padding:10px 28px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--sf2);border-bottom:1px solid var(--bo)}
+.fi label{font-size:.7rem;color:var(--mu);font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+select,input[type=text]{padding:5px 9px;border:1px solid var(--bo2);border-radius:4px;font-size:.77rem;background:var(--sf);color:var(--tx)}
+.fc{margin-left:auto;font-size:.72rem;color:var(--mu)}
+.grid{padding:16px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.krt{background:var(--sf);border:1px solid var(--bo);border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08);border-left:4px solid var(--bo2)}
+.krt.bd{border-left-color:var(--gr)}.krt.bh{border-left-color:var(--or)}.krt.bn{border-left-color:var(--bo2)}
+.kt{padding:10px 12px 8px}
+.knr{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+.kn{font-size:.92rem;font-weight:700}
+.bdg{font-size:.64rem;font-weight:700;padding:2px 6px;border-radius:3px}
+.bkl{background:var(--al);color:var(--ac)}.blj{background:var(--bo);color:var(--mu)}
+.ljds{background:var(--gl);color:var(--gr)}.ljhh{background:var(--rl);color:var(--re)}
+.ads{background:var(--gl);color:var(--gr)}.adm{background:var(--yl);color:var(--ye)}.adh{background:var(--ol);color:var(--or)}.bfn{background:var(--pl);color:var(--pu)}
+.ds2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.dsc{display:flex;align-items:center;gap:5px}.dl{font-size:.66rem;color:var(--mu);width:24px;flex-shrink:0;font-weight:700}
+.bw{flex:1;height:5px;background:var(--bo);border-radius:3px;overflow:hidden}.bar{height:100%;border-radius:3px}
+.hg{background:var(--gr)}.md{background:#E09000}.lg{background:var(--re)}
+.pc{font-size:.68rem;font-weight:700;width:30px;text-align:right;flex-shrink:0;color:var(--tx)}
+.la{padding:8px 12px;background:var(--sf2);border-top:1px solid var(--bo)}
+.ar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:5px}
+.al_{color:var(--mu);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.at{font-size:.75rem;color:var(--tx);font-weight:500}
+.bwr{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px}
+.bkn{padding:4px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);font-size:.7rem;font-weight:600;cursor:pointer;color:var(--mu);transition:all .12s}
+.bkn:hover{border-color:var(--tx);color:var(--tx)}.bkn.akd{background:var(--gl);border-color:var(--gr);color:var(--gr)}.bkn.akh{background:var(--ol);border-color:var(--or);color:var(--or)}
+.ljr{display:flex;align-items:center;gap:7px;margin-bottom:5px}.ljr label{font-size:.7rem;color:var(--mu);white-space:nowrap}.ljr select{padding:3px 7px;font-size:.73rem}
+.fnb{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;padding:3px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);color:var(--mu);font-weight:600;cursor:pointer;margin-bottom:5px;transition:all .12s}
+.fnb.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
+.nt{width:100%;padding:4px 7px;border:1px solid var(--bo2);border-radius:3px;font-size:.72rem;color:var(--tx);background:var(--sf);resize:none;font-family:inherit}
+.nt::placeholder{color:#BBB}
+.verwijder-btn{width:100%;margin-top:5px;padding:4px 8px;border-radius:3px;border:1px solid #ddd;background:none;color:var(--mu);font-size:.7rem;cursor:pointer;text-align:left;transition:all .12s}
+.verwijder-btn:hover{background:var(--rl);border-color:var(--re);color:var(--re)}
+.dtt{width:100%;padding:5px 12px;font-size:.7rem;color:var(--ac);cursor:pointer;background:none;border:none;border-top:1px solid var(--bo);text-align:left}
+.dtp{display:none;padding:8px 12px;border-top:1px solid var(--bo);max-height:300px;overflow-y:auto}.dtp.open{display:block}
+.dtot{display:flex;align-items:center;justify-content:space-between;font-size:.76rem;font-weight:700;padding:5px 8px;border-radius:4px;margin-bottom:4px}
+.dtot-hg{background:var(--gl);color:var(--gr)}.dtot-md{background:var(--ol);color:var(--or)}.dtot-lg{background:var(--rl);color:var(--re)}
+.dtot-pc{font-size:.85rem}
+.ddh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin:6px 0 3px;display:flex;align-items:center;gap:6px}
+.dr{display:flex;align-items:center;gap:5px;margin-bottom:2px;font-size:.72rem}
+.dbw{width:40px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}.db{height:100%;border-radius:2px}
+.dp{font-size:.65rem;font-weight:700;width:28px;text-align:right;flex-shrink:0;color:var(--tx)}
+.dn{flex:1;line-height:1.3}.dn.zw{color:var(--re)}.dn.st{color:var(--gr)}
+.gw{padding:16px 28px}
+.gc{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.gh{padding:11px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
+.gkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}.gt{font-size:.88rem;font-weight:700}.gs{font-size:.72rem;color:var(--mu)}.gn{font-size:.72rem;color:var(--mu);margin-left:auto}
+.gll{padding:10px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px;border-bottom:1px solid var(--bo)}
+.lc-wrap{display:block;width:100%}
+.lc{padding:6px 10px;border-radius:6px;font-size:.76rem;font-weight:600;background:var(--bo);color:var(--tx);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none;transition:background .12s;width:100%}
+.lc:hover,.lc.open{background:var(--bo2)}.lc.open{border-radius:6px 6px 0 0}
+.lc .ks{font-size:.66rem;color:var(--mu);font-weight:400}.lc .zd{font-size:.62rem;color:var(--re);font-weight:700}
+.lc .arr{margin-left:auto;font-size:.65rem;color:var(--mu)}
+.lc-det{display:none;background:var(--sf);border:1px solid var(--bo2);border-top:none;border-radius:0 0 6px 6px;padding:10px 14px;font-size:.72rem}
+.lc-det.open{display:block}
+.lc-dh{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin:8px 0 3px;display:flex;align-items:center;gap:6px}
+.lc-dh:first-child{margin-top:0}
+.lc-dr{display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.lc-dbw{width:50px;height:4px;background:var(--bo);border-radius:2px;flex-shrink:0;overflow:hidden}
+.lc-db{height:100%;border-radius:2px}
+.lc-dp{font-size:.66rem;font-weight:700;width:28px;text-align:right;flex-shrink:0;color:var(--tx)}
+.lc-dn{flex:1;line-height:1.4;color:var(--tx)}.lc-dn.zw{color:var(--re)}.lc-dn.st{color:var(--gr)}
+.gwp{padding:10px 16px}.wt{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mu);margin-bottom:5px}
+.wcs{display:flex;flex-wrap:wrap;gap:4px}.wc{font-size:.7rem;padding:3px 8px;border-radius:3px;background:var(--sf2);border:1px solid var(--bo);display:flex;align-items:center;gap:4px}
+.dd_{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dGK{background:var(--gr)}.dBW{background:var(--or)}.dMK{background:var(--pu)}.dMT{background:var(--ac)}.dVP{background:#888}.dKS{background:var(--re)}
+.leg{padding:10px 28px;background:var(--sf);border-bottom:1px solid var(--bo);display:flex;gap:16px;flex-wrap:wrap;align-items:center;font-size:.75rem}
+.lt{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu)}
+.li_{display:flex;align-items:center;gap:5px}.lkl{width:12px;height:12px;border-radius:2px;flex-shrink:0}
+.ib{padding:8px 28px;background:var(--yl);border-bottom:1px solid #E8C96A;font-size:.76rem;color:var(--ye);display:flex;align-items:center;gap:8px}
+.as{padding:10px 28px;display:flex;gap:16px;flex-wrap:wrap;background:var(--sf);border-bottom:1px solid var(--bo)}
+.em{text-align:center;padding:48px 28px;color:var(--mu)}.em h3{color:var(--tx);margin-bottom:6px;font-size:.95rem}
+.loading{text-align:center;padding:60px 28px;color:var(--mu);font-size:.9rem}
+.tst{position:fixed;bottom:20px;right:20px;background:var(--tx);color:#fff;padding:9px 16px;border-radius:5px;font-size:.8rem;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:9999;transform:translateY(70px);opacity:0;transition:all .22s}
+.tst.show{transform:translateY(0);opacity:1}
+#print-block{display:none}
+.def-groep{background:var(--sf);border:1px solid var(--bo);border-radius:6px;margin-bottom:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.def-groep.drag-over-groep{outline:2px dashed var(--ac);outline-offset:-2px}
+.def-groep-hdr{padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--bo);background:var(--sf2)}
+.def-groep-handle{cursor:grab;color:var(--mu);font-size:.95rem;flex-shrink:0;line-height:1;user-select:none}
+.def-groep-handle:active{cursor:grabbing}
+.def-groep-naam{font-size:.9rem;font-weight:700;border:none;background:none;color:var(--tx);font-family:inherit;padding:2px 6px;border-radius:3px;min-width:120px;outline:none}
+.def-groep-naam:hover,.def-groep-naam:focus{background:var(--bo);outline:none}
+.def-groep-kleur{width:14px;height:14px;border-radius:3px;flex-shrink:0;cursor:pointer}
+.def-groep-n{font-size:.72rem;color:var(--mu);margin-left:auto}
+.def-groep-del{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.8rem;padding:2px 6px;border-radius:3px}
+.def-groep-del:hover{background:var(--rl);color:var(--re)}
+.def-groep-print{background:none;border:1.5px solid var(--bo2);color:var(--mu);cursor:pointer;font-size:.66rem;padding:3px 8px;border-radius:3px;flex-shrink:0}
+.def-groep-print:hover{border-color:var(--ac);color:var(--ac)}
+.def-groep-fn{display:inline-flex;align-items:center;gap:3px;font-size:.66rem;padding:3px 8px;border-radius:3px;border:1.5px solid var(--bo2);background:var(--sf);color:var(--mu);font-weight:600;cursor:pointer;flex-shrink:0}
+.def-groep-fn.on{background:var(--pl);border-color:var(--pu);color:var(--pu)}
+.def-ll-list{padding:10px 14px;display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:1px solid var(--bo)}
+.def-ll-list.drag-over{background:var(--accent-l, #D6E6F8);border-color:var(--ac)}
+.def-chip{padding:6px 10px 4px;border-radius:10px;font-size:.74rem;font-weight:600;background:var(--bo);color:var(--tx);cursor:grab;display:flex;flex-direction:column;gap:2px;user-select:none;width:230px;max-width:100%}
+.def-chip:active{cursor:grabbing;opacity:.7}
+.def-chip-top{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
+.def-chip .ks{font-size:.63rem;color:var(--mu);font-weight:400}
+.def-chip .zd{font-size:.61rem;color:var(--re);font-weight:700}
+.def-chip-remove{background:none;border:none;color:var(--mu);cursor:pointer;font-size:.75rem;padding:0 2px;line-height:1;margin-left:auto}
+.def-chip-remove:hover{color:var(--re)}
+.def-chip .dtt{padding:4px 0;font-size:.62rem;border-top:1px solid var(--bo);margin-top:2px;cursor:pointer}
+.def-chip .dtp{padding:4px 0 0;max-height:240px;cursor:default}
+.bpr{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:4px 0;font-size:.68rem;border-bottom:1px dashed var(--bo)}
+.bpr:last-child{border-bottom:none}
+.bpl{font-weight:700;color:var(--ac);flex-shrink:0;min-width:58px}
+.bpn{font-weight:600;flex:1;min-width:80px}
+.bpi{color:var(--mu);font-size:.63rem}
+.bpb{background:var(--ac);color:#fff;border:none;border-radius:3px;padding:3px 8px;font-size:.63rem;cursor:pointer;flex-shrink:0}
+.bpb:hover{opacity:.85}
+.def-nieuw-btn{padding:6px 14px;border-radius:4px;border:1.5px dashed var(--bo2);background:none;color:var(--mu);font-size:.78rem;cursor:pointer;transition:all .15s}
+.def-nieuw-btn:hover{border-color:var(--ac);color:var(--ac)}
+.def-import-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.def-herverdeel-bar{padding:10px 28px;background:var(--sf2);border-bottom:1px solid var(--bo);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.def-onverdeeld{background:var(--sf);border:2px dashed var(--bo2);border-radius:6px;padding:10px 14px;margin-bottom:14px}
+.def-onverdeeld h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--mu);margin-bottom:6px}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #login-screen,nav,.fi,.sb,.ha,.tst,.pg,.groep-afdruk-btn{display:none!important}
+  header{padding:10px 16px}
+  body{font-size:12px;background:#fff!important}
+  #print-block{display:block!important}
+  #print-block .print-hdr{padding-bottom:10px;border-bottom:2px solid #333;margin-bottom:14px}
+  #print-block .print-hdr h2{font-size:1rem;font-weight:700}
+  #print-block .print-hdr p{font-size:.76rem;color:#666;margin-top:2px}
+  #print-block .gc{break-inside:avoid;margin-bottom:16px;border:1px solid #ccc;border-radius:6px}
+  #print-block .gh{padding:8px 12px;background:#f0f0f0!important}
+  #print-block .gt{font-size:.9rem;font-weight:700}
+  #print-block .gll{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:6px;padding:8px 12px}
+  #print-block .lc-wrap{display:block!important;break-inside:avoid}
+  #print-block .lc{border-radius:6px 6px 0 0!important;background:#f5f5f5!important;font-size:.73rem;padding:5px 8px}
+  #print-block .lc .arr{display:none}
+  #print-block .lc-det{display:block!important;border:1px solid #ddd;border-top:none;border-radius:0 0 6px 6px;padding:6px 10px;background:#fff}
+  #print-block .lc-dh{font-size:.64rem;margin:4px 0 2px}
+  #print-block .lc-dr{margin-bottom:2px}
+  #print-block .lc-dbw{width:32px}
+  #print-block .lc-dn{font-size:.68rem}
+  #print-block .lc-dp{font-size:.62rem}
+  #print-block .gwp{padding:6px 12px}
+  #print-block .wt{font-size:.63rem}
+  #print-block .wc{font-size:.66rem;padding:2px 5px}
+  #print-block .def-groep{break-inside:avoid;margin-bottom:16px;border:1px solid #ccc;border-radius:6px}
+  #print-block .def-groep-hdr{background:#f0f0f0!important}
+  #print-block .def-ll-list{display:flex;flex-wrap:wrap}
+  #print-block .def-chip{break-inside:avoid;background:#f5f5f5!important;border:1px solid #ddd}
+  #print-block .dtp{display:block!important;max-height:none!important;overflow:visible!important}
+
+  /* 'Met doelen'-modus: volle breedte per leerling i.p.v. de smalle 230px-kaart, doelen compact in 3 kolommen */
+  #print-block.pb-doelen .print-hdr{padding-bottom:5px;margin-bottom:8px}
+  #print-block.pb-doelen .print-hdr h2{font-size:.85rem}
+  #print-block.pb-doelen .print-hdr p{font-size:.66rem}
+  #print-block.pb-doelen .def-groep{break-inside:auto;margin-bottom:8px}
+  #print-block.pb-doelen .def-groep-hdr{padding:5px 10px}
+  #print-block.pb-doelen .def-ll-list{display:block;padding:6px 10px}
+  #print-block.pb-doelen .def-chip{width:100%;max-width:100%;break-inside:auto;page-break-before:always;break-before:page;border:none;border-bottom:2px solid #ccc;border-radius:0;padding-bottom:2px;margin-bottom:4px;gap:0}
+  #print-block.pb-doelen .def-chip:first-child{page-break-before:avoid;break-before:avoid}
+  #print-block.pb-doelen .def-chip-top{font-size:.76rem}
+  #print-block.pb-doelen .dtp{display:grid!important;grid-template-columns:repeat(3,1fr);column-gap:12px;row-gap:1px;margin-top:1px;align-items:start}
+  #print-block.pb-doelen .dtot{grid-column:1/-1;font-size:.7rem;padding:3px 8px;margin-bottom:3px;break-after:avoid}
+  #print-block.pb-doelen .ddom{break-inside:avoid}
+  #print-block.pb-doelen .ddh{break-after:avoid;break-inside:avoid;font-size:.58rem;margin:2px 0 0}
+  #print-block.pb-doelen .dr{break-inside:avoid;font-size:.56rem;gap:2px;margin-bottom:0;line-height:1.05}
+  #print-block.pb-doelen .dr>span:first-child{width:9px!important;font-size:.6rem!important}
+  #print-block.pb-doelen .dbw{display:none}
+  #print-block.pb-doelen .dp{font-size:.54rem;width:20px}
+  #print-block.pb-doelen .dn{line-height:1.05}
+}
+</style>
+</head>
+<body>
+
+<div id="login-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#18170F;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#2A2925;border-radius:10px;padding:40px 48px;text-align:center;max-width:340px;width:90%">
+    <div style="font-size:1.4rem;margin-bottom:6px;">&#128274;</div>
+    <div style="background:#7A5200;color:#FEF3D6;font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:4px 10px;display:inline-block;margin-bottom:10px;">Proefversie &mdash; nieuw leerplan</div>
+    <div style="color:#fff;font-size:1rem;font-weight:700;margin-bottom:4px;">Rekengroepen</div>
+    <div style="color:#999;font-size:.78rem;margin-bottom:24px;">BuLO Sint-Franciscus</div>
+    <input type="password" id="pw-input" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')checkPW()"
+      style="width:100%;padding:10px 14px;border-radius:6px;border:1px solid #444;background:#18170F;color:#fff;font-size:.9rem;margin-bottom:10px;outline:none;font-family:inherit">
+    <button onclick="checkPW()" style="width:100%;padding:10px;border-radius:6px;border:none;background:#1A4D8C;color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;">Aanmelden</button>
+    <div id="pw-error" style="color:#E05050;font-size:.76rem;margin-top:8px;display:none;">Fout wachtwoord. Probeer opnieuw.</div>
+  </div>
+</div>
+
+<header>
+  <div><div class="sub">BuLO Sint-Franciscus &middot; Rekengroepen Wiskunde &middot; <strong style="color:#FEF3D6">PROEFVERSIE nieuw leerplan</strong></div><h1 id="htit">Laden&hellip;</h1></div>
+  <div class="ha">
+    <button class="btn bg_ bs" onclick="expJS()">&#128190; Opslaan</button>
+    <label class="btn bg_ bs" style="cursor:pointer">&#128194; Laden<input type="file" accept=".json" style="display:none" onchange="impJS(event)"></label>
+  </div>
+</header>
+<nav>
+  <button class="active" onclick="showTab('ll',this)">&#9312; Leerlingoverzicht</button>
+  <button onclick="showTab('gr',this)">&#9313; Groepsvoorstel</button>
+  <button onclick="showTab('au',this)">&#9314; Automatisch voorstel</button>
+  <button onclick="showTab('def',this)">&#9315; Definitieve groepen</button>
+</nav>
+
+<div id="tab-ll" class="pg active">
+  <div class="sb">
+    <div class="st"><strong id="s1">-</strong>&nbsp;leerlingen</div>
+    <div class="st"><span class="sdg sds" id="s2">0</span>&nbsp;doorstroom</div>
+    <div class="st"><span class="sdg sfn" id="s3">0</span>&nbsp;functioneel</div>
+    <div class="st"><span class="sdg sob" id="s4">0</span>&nbsp;onbeslist</div>
+    <div class="pw"><div class="po"><div class="pi" id="pg_" style="width:0%"></div></div><span class="pt" id="pt_">0%</span></div>
+  </div>
+  <div class="fi">
+    <label>Filter:</label>
+    <select id="flj" onchange="renderLL()"><option value="">Alle LJ</option><option value="1">LJ1</option><option value="2">LJ2</option><option value="3">LJ3</option><option value="4">LJ4</option></select>
+    <select id="fkl" onchange="renderLL()"><option value="">Alle klassen</option></select>
+    <select id="fbe" onchange="renderLL()"><option value="">Alle beslissingen</option><option value="onbeslist">Onbeslist</option><option value="doorstroom">Doorstroom</option><option value="herhaling">Herhaling</option></select>
+    <input type="text" id="fnm" placeholder="Naam&hellip;" oninput="renderLL()" style="width:130px">
+    <button class="btn bgy bs" onclick="resetF()">&#10005;</button>
+    <span class="fc" id="fc_"></span>
+  </div>
+  <div id="grid_" class="grid"><div class="loading">Gegevens laden&hellip;</div></div>
+</div>
+
+<div id="tab-gr" class="pg">
+  <div class="fi" style="justify-content:space-between">
+    <span style="font-size:.78rem;color:var(--mu)">Op basis van jouw beslissingen in tabblad &#9312;</span>
+    <button class="btn bp bs" onclick="genGr()">&#9881; Genereer</button>
+  </div>
+  <div class="gw" id="grw"><div class="em"><h3>Nog geen groepen</h3><p>Vul beslissingen in bij &#9312;, dan klik je op Genereer.</p></div></div>
+</div>
+
+<div id="tab-au" class="pg">
+  <div class="fi" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
+    <div style="display:flex;gap:10px;align-items:center">
+      <label style="font-size:.76rem;color:var(--mu)">Drempel:</label>
+      <select id="adr" onchange="genAu()"><option value="65">65%</option><option value="70">70%</option><option value="75" selected>75%</option><option value="80">80%</option></select>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn bp bs" onclick="genAu()">&#8635; Herbereken</button>
+    </div>
+  </div>
+  <div class="ib">&#128161; <span>Automatisch voorstel op basis van scores. Gebruik tabblad &#9313; om bij te sturen.</span></div>
+  <div class="leg">
+    <span class="lt">Groepen:</span>
+    <div class="li_"><div class="lkl" style="background:#2A6048"></div>Doorstroom sterk</div>
+    <div class="li_"><div class="lkl" style="background:#1A4D8C"></div>Doorstroom + werkpunten</div>
+    <div class="li_"><div class="lkl" style="background:#C05A20"></div>Herhaling</div>
+    <div class="li_"><div class="lkl" style="background:#5E4B8B"></div>Functioneel</div>
+    <span class="lt" style="margin-left:8px">Domeinen:</span>
+    <div class="li_"><span class="dd_ dGK"></span>GK</div>
+    <div class="li_"><span class="dd_ dHR"></span>HR</div>
+    <div class="li_"><span class="dd_ dMK"></span>MK</div>
+    <div class="li_"><span class="dd_ dMT"></span>MT</div>
+    <div class="li_"><span class="dd_ dCY"></span>CY</div>
+    <span style="font-size:.72rem;color:var(--mu);margin-left:8px">Rode letters = domeinen onder drempel</span>
+  </div>
+  <div class="as" id="aus"></div>
+  <div class="gw" id="auw"><div class="em"><h3>Laden&hellip;</h3></div></div>
+</div>
+
+<div id="tab-def" class="pg">
+  <div class="def-import-bar">
+    <span style="font-size:.78rem;color:var(--mu)">Importeer vanuit tabblad ② of ③ als startpunt, of bouw zelf op</span>
+    <button class="btn bp bs" onclick="importeerNaarDef('grw')">&#8595; Importeer uit ② Groepsvoorstel</button>
+    <button class="btn bp bs" onclick="importeerNaarDef('auw')">&#8595; Importeer uit ③ Automatisch</button>
+    <button class="def-nieuw-btn" onclick="nieuweDefGroep()">+ Nieuwe lege groep</button>
+  </div>
+  <div class="def-herverdeel-bar">
+    <span style="font-size:.78rem;color:var(--mu)">Herverdeel de al ingedeelde leerlingen in</span>
+    <input type="number" id="herverdeel-aantal" min="1" value="15" style="width:52px;padding:5px 6px;border-radius:4px;border:1px solid var(--bo);background:var(--sf);color:var(--tx);font-family:inherit;font-size:.78rem">
+    <span style="font-size:.78rem;color:var(--mu)">gebalanceerde groepen (bv. aantal leerkrachten)</span>
+    <button class="btn bp bs" onclick="herverdeelGroepen()">Herverdeel automatisch</button>
+  </div>
+  <div style="padding:16px 28px" id="def-wrap">
+    <div class="em"><h3>Nog geen definitieve groepen</h3><p>Importeer vanuit tabblad ② of ③, of maak een nieuwe lege groep aan.</p></div>
+  </div>
+</div>
+
+<div class="tst" id="tst"></div>
+<div id="print-block"></div>
+
+<script>
+(function(){
+  var ok=sessionStorage.getItem('rg_auth');
+  if(ok==='1') document.getElementById('login-screen').style.display='none';
+})();
+function checkPW(){
+  var v=document.getElementById('pw-input').value;
+  if(v==='MeesterNils'){
+    sessionStorage.setItem('rg_auth','1');
+    document.getElementById('login-screen').style.display='none';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+</script>
+<script>
+var DVK=['GK','BW','MK','MT','VP','KS'];
+var DVL={GK:'Getallenkennis',BW:'Bewerkingen',MK:'Meetkunde',MT:'Meten en metend rekenen',VP:'Vraagstukken en probleemoplossend denken',KS:'Kansrekenen en statistiek'};
+var KL=['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E'];
+var DB={}, LL=[], _verwijderd=[];
+
+var dataGeladen=fetch('data.json')
+  .then(function(r){return r.json();})
+  .then(function(td){
+    DB=td.db;
+    LL=td.ll;
+    LL.forEach(function(ll){
+      ll.id=ll.i;ll.naam=ll.n;ll.klas=ll.k;ll.leerjaar=ll.l;
+      ll.domeinen=ll.d;ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
+      ll.functioneel=ll.f;ll.notitie=ll.nt;ll.advies=calcAdv(ll,75);
+    });
+    document.getElementById('htit').textContent='Kinderstappen LJ1-LJ4 - '+LL.length+' leerlingen';
+    vulKF();renderLL();updS();genAu();
+  })
+  .catch(function(e){
+    document.getElementById('grid_').innerHTML='<div class="em"><h3>Fout bij laden</h3><p>'+e.message+'</p></div>';
+  });
+
+function showTab(id,btn){
+  document.querySelectorAll('.pg').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  (btn||event.target).classList.add('active');
+}
+
+function vulKF(){
+  var s=document.getElementById('fkl');
+  var klassen=[...new Set(LL.map(function(l){return l.k;}))].sort();
+  klassen.forEach(function(k){var o=document.createElement('option');o.value=k;o.textContent=k;s.appendChild(o);});
+}
+
+function calcAdv(ll,dr){
+  var doms=Object.keys(ll.d||{});
+  if(!doms.length) return null;
+  var stk=[],zw=[];
+  doms.forEach(function(d){var p=(ll.d[d]||{}).p||0;(p>=dr?stk:zw).push(d);});
+  var type=zw.length===0?'doorstroom':stk.length>zw.length?'gemengd':'herhaling';
+  return {type:type,lj:type==='herhaling'?ll.l:ll.l+1,stk:stk,zw:zw};
+}
+
+function getDoel(ll,dom){
+  var d=ll.d[dom];
+  if(!d||!DB[d.k]) return [];
+  return DB[d.k].map(function(naam,i){return [naam,d.ps[i]||0];});
+}
+
+var _gefilterdeLijst=[];
+var _geladen=0;
+var _BATCH=15;
+
+function renderLL(){
+  var fLJ=document.getElementById('flj').value;
+  var fKL=document.getElementById('fkl').value;
+  var fBE=document.getElementById('fbe').value;
+  var fNM=document.getElementById('fnm').value.toLowerCase();
+  _gefilterdeLijst=LL.filter(function(ll){
+    if(fLJ&&ll.l!=fLJ) return false;
+    if(fKL&&ll.k!==fKL) return false;
+    if(fNM&&!ll.n.toLowerCase().includes(fNM)) return false;
+    if(fBE){var b=ll.b||'onbeslist';if(b!==fBE) return false;}
+    return true;
+  });
+  _gefilterdeLijst.sort(function(a,b){return a.l-b.l||a.k.localeCompare(b.k)||a.n.localeCompare(b.n);});
+  document.getElementById('fc_').textContent=_gefilterdeLijst.length+' leerlingen';
+  var g=document.getElementById('grid_');
+  g.innerHTML='';
+  _geladen=0;
+  laadMeer();
+}
+
+function laadMeer(){
+  var g=document.getElementById('grid_');
+  var tot=Math.min(_geladen+_BATCH, _gefilterdeLijst.length);
+  for(var i=_geladen;i<tot;i++){
+    g.appendChild(mkKrt(_gefilterdeLijst[i]));
+  }
+  _geladen=tot;
+  // Toon laad-meer knop als er nog meer zijn
+  var bestaand=document.getElementById('laad-meer-btn');
+  if(bestaand) bestaand.remove();
+  if(_geladen<_gefilterdeLijst.length){
+    var btn=document.createElement('button');
+    btn.id='laad-meer-btn';
+    btn.className='btn bgy';
+    btn.style.cssText='margin:0 28px 20px;width:calc(100% - 56px)';
+    btn.textContent='Laad meer ('+(_gefilterdeLijst.length-_geladen)+' resterend)';
+    btn.onclick=laadMeer;
+    g.parentElement.appendChild(btn);
+  }
+}
+
+function mkKrt(ll){
+  var besl=ll.b||'onbeslist';
+  var div=document.createElement('div');
+  var bc=besl==='doorstroom'?'bd':besl==='herhaling'?'bh':'bn';
+  div.className='krt '+bc;
+  div.id='k_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+  div.dataset.llid=ll.i;
+
+  var domH='';
+  DVK.forEach(function(dk){
+    var d=ll.d[dk];if(!d)return;
+    var c=d.p>=75?'hg':d.p>=55?'md':'lg';
+    domH+='<div class="dsc"><span class="dl">'+dk+'</span><div class="bw"><div class="bar '+c+'" style="width:'+d.p+'%"></div></div><span class="pc">'+d.p+'%</span></div>';
+  });
+
+  var adv=ll.advies;
+  var advB='';
+  if(adv){
+    var ac=adv.type==='doorstroom'?'ads':adv.type==='gemengd'?'adm':'adh';
+    var at=adv.type==='doorstroom'?'&#8593; DS':adv.type==='gemengd'?'~ Mix':'&#8635; HH';
+    advB='<span class="bdg '+ac+'">'+at+' LJ'+adv.lj+'</span>';
+  }
+  var beslB='';
+  if(ll.b){
+    var bm=ll.b==='doorstroom'?'sds':'sob';
+    var bt=ll.b==='doorstroom'?'&#8593; DS':'&#8635; HH';
+    beslB='<span class="sdg '+bm+'" style="font-size:.62rem">'+bt+(ll.dl?' LJ'+ll.dl:'')+'</span>';
+  }
+
+  var bkH='<button class="bkn '+(besl==='doorstroom'?'akd':'')+'" onclick="setBes(\''+ll.i+'\',\'doorstroom\')">&#8593; Doorstroom</button>'
+         +'<button class="bkn '+(besl==='herhaling'?'akh':'')+'" onclick="setBes(\''+ll.i+'\',\'herhaling\')">&#8635; Zelfde LJ</button>';
+
+  var ljO='';
+  [1,2,3,4,5].forEach(function(n){ljO+='<option value="'+n+'"'+(ll.dl==n?' selected':'')+'>'+n+'</option>';});
+
+
+  div.innerHTML=
+    '<div class="kt"><div class="knr"><span class="kn">'+ll.n+'</span><span class="bdg bkl">'+ll.k+'</span><span class="bdg blj">LJ'+ll.l+'</span>'+advB+beslB+(ll.f?'<span class="bdg bfn">&#9670;FN</span>':'')+'</div><div class="ds2">'+domH+'</div></div>'
+    +'<div class="la">'
+    +(adv?'<div class="ar"><span class="al_">Advies:</span><span class="at">'+(adv.type==='doorstroom'?'Doorstroom':adv.type==='gemengd'?'Gemengd':'Herhaling')+' LJ'+adv.lj+(adv.zw.length?' &mdash; aandacht '+adv.zw.join(', '):'')+'</span></div>':'')
+    +'<div class="ar"><span class="al_">Beslissing:</span></div>'
+    +'<div class="bwr">'+bkH+'</div>'
+    +'<div class="ljr" id="ljr_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'" style="'+(ll.b?'':'display:none')+'"><label>Leerjaar:</label><select onchange="setLJ(\''+ll.i+'\',this.value)">'+ljO+'</select></div>'
+    +'<div class="fnb '+(ll.f?'on':'')+'" onclick="togFN(\''+ll.i+'\')">&#9670; Functioneel traject</div>'
+    +'<textarea class="nt" rows="1" placeholder="Notitie&hellip;" onchange="setNt(\''+ll.i+'\',this.value)">'+(ll.nt||'')+'</textarea>'
+    +'<button class="verwijder-btn" onclick="verwijderLLbyKaart(this)">&#128465; Verwijder leerling</button>'
+    +'</div>'
+    +'<button class="dtt" onclick="togDet(this)">&#9660; Doelen per domein</button>'
+    +'<div class="dtp"></div>';
+
+  if(ll.b&&!ll.dl){
+    var s=div.querySelector('.ljr select');
+    if(s){var dfl=ll.b==='herhaling'?ll.l:ll.l+1;s.value=dfl;ll.dl=dfl;}
+  }
+  return div;
+}
+
+function bouwDoelenHTML(ll,voluit){
+  var detH='';
+  var domeinen=DVK.filter(function(dk){return ll.d[dk];});
+  if(domeinen.length){
+    var totGem=gemScoreLL(ll);
+    var totCls=totGem>=75?'hg':totGem>=55?'md':'lg';
+    detH+='<div class="dtot dtot-'+totCls+'"><span>Totaal alle doelen</span><span class="dtot-pc">'+Math.round(totGem)+'%</span></div>';
+  }
+  DVK.forEach(function(dk){
+    var d=ll.d[dk];if(!d)return;
+    var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+    var ljlbl=d.lj&&d.lj!==ll.l?' <span style="font-size:.6rem;color:var(--mu)">(LJ'+d.lj+')</span>':'';
+    var domH='<div class="ddh"><span>'+(DVL[dk]||dk)+ljlbl+'</span><span class="pc" style="font-size:.72rem;margin-left:6px">'+d.p+'%</span></div>';
+    getDoel(ll,dk).forEach(function(item){
+      var naam=item[0],pct=item[1];
+      var bc=pct>=75?'hg':pct>=55?'md':'lg';
+      var nc=pct>=75?'st':pct<55?'zw':'';
+      var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+      var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+      var kort=(!voluit&&naam.length>62)?naam.substring(0,60)+'...':naam;
+      domH+='<div class="dr"><span style="font-size:.8rem;width:18px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="dbw"><div class="db '+bc+'" style="width:'+pct+'%"></div></div><span class="dp">'+pct+'%</span><span class="dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+    });
+    detH+='<div class="ddom">'+domH+'</div>';
+  });
+  return detH;
+}
+
+function togDet(btn){
+  var p=btn.nextElementSibling;
+  // Lazy load: bouw doelen pas als eerste keer geopend
+  if(!p.dataset.geladen){
+    var llid=btn.closest('[data-llid]').dataset.llid;
+    var ll=LL.find(function(l){return l.i===llid;});
+    if(ll){
+      p.innerHTML=bouwDoelenHTML(ll);
+      p.dataset.geladen='1';
+    }
+  }
+  p.classList.toggle('open');
+  btn.textContent=p.classList.contains('open')?'▲ Doelen verbergen':'▼ Doelen per domein';
+}
+
+function setBes(id,b){
+  var ll=LL.find(function(l){return l.i===id;});if(!ll)return;
+  ll.b=ll.b===b?null:b;
+  if(ll.b&&!ll.dl) ll.dl=ll.b==='herhaling'?ll.l:ll.l+1;
+  if(!ll.b) ll.dl=null;
+  ll.beslissing=ll.b;ll.doelleerjaar=ll.dl;
+  updS();hl(ll);
+}
+function setLJ(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.dl=parseInt(v);ll.doelleerjaar=ll.dl;hl(ll);}}
+function togFN(id){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.f=!ll.f;ll.functioneel=ll.f;updS();hl(ll);}}
+function setNt(id,v){var ll=LL.find(function(l){return l.i===id;});if(ll){ll.nt=v;ll.notitie=v;}}
+function hl(ll){
+  var o=document.getElementById('k_'+ll.i.replace(/[^a-z0-9]/gi,'_'));
+  if(o){var n=mkKrt(ll);n.id=o.id;o.replaceWith(n);}
+}
+
+function updS(){
+  var t=LL.length;
+  var ds=LL.filter(function(l){return l.b==='doorstroom';}).length;
+  var fn=LL.filter(function(l){return l.f;}).length;
+  var ob=LL.filter(function(l){return !l.b;}).length;
+  document.getElementById('s1').textContent=t;
+  document.getElementById('s2').textContent=ds;
+  document.getElementById('s3').textContent=fn;
+  document.getElementById('s4').textContent=ob;
+  var p=t>0?Math.round((t-ob)/t*100):0;
+  document.getElementById('pg_').style.width=p+'%';
+  document.getElementById('pt_').textContent=p+'% beslist';
+}
+
+function resetF(){
+  ['flj','fkl','fbe'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('fnm').value='';
+  renderLL();
+}
+
+function escAttr(s){
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function wpB(list){
+  // Leerlingen zonder gekoppelde doeldata (bv. nieuwe leerlingen zonder testresultaten)
+  // kunnen nooit meetellen voor een werkpunt — ze mogen de 50%-drempel dus niet mee optellen
+  var metData=list.filter(function(ll){
+    return DVK.some(function(dk){var d=ll.d[dk];return d&&DB[d.k]&&DB[d.k].length;});
+  });
+  if(!metData.length) return [];
+  var c={};
+  metData.forEach(function(ll){
+    DVK.forEach(function(dk){
+      if(!ll.d[dk]) return;
+      getDoel(ll,dk).forEach(function(item){
+        var naam=item[0],pct=item[1];
+        if(pct<60){
+          var k=dk+'|'+naam;
+          if(!c[k]) c[k]={dom:dk,doel:naam.length>50?naam.substring(0,48)+'...':naam,doelVol:naam,n:0};
+          c[k].n++;
+        }
+      });
+    });
+  });
+  var min=Math.ceil(metData.length*.5);
+  return Object.values(c).filter(function(x){return x.n>=min;}).sort(function(a,b){return b.n-a.n;});
+}
+
+function maakChips(list,gi){
+  return list.map(function(ll){
+    var uid='lc_'+ll.i.replace(/[^a-z0-9]/gi,'_')+'_'+gi;
+    var detH='';
+    DVK.forEach(function(dk){
+      var d=ll.d[dk];if(!d)return;
+      var pc=d.p>=75?'hg':d.p>=55?'md':'lg';
+      detH+='<div class="lc-dh"><span>'+(DVL[dk]||dk)+'</span><span class="pc" style="margin-left:4px">'+d.p+'%</span></div>';
+      getDoel(ll,dk).forEach(function(item){
+        var naam=item[0],pct=item[1];
+        var bc=pct>=75?'hg':pct>=55?'md':'lg';
+        var nc=pct>=75?'st':pct<55?'zw':'';
+        var icon=pct>=75?'&#10003;':pct<55?'&#10007;':'~';
+        var iconStyle=pct>=75?'color:var(--gr)':pct<55?'color:var(--re)':'color:var(--mu)';
+        var kort=naam.length>55?naam.substring(0,53)+'...':naam;
+        detH+='<div class="lc-dr"><span style="font-size:.75rem;width:16px;flex-shrink:0;text-align:center;'+iconStyle+'">'+icon+'</span><div class="lc-dbw"><div class="lc-db '+bc+'" style="width:'+pct+'%"></div></div><span class="lc-dp">'+pct+'%</span><span class="lc-dn '+nc+'" title="'+naam+'">'+kort+'</span></div>';
+      });
+    });
+    var zds=(ll._zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
+    return '<div class="lc-wrap">'
+      +'<div class="lc" id="'+uid+'" onclick="togLC(\''+uid+'\')">'
+      +'<strong>'+ll.n+'</strong> <span class="ks">'+ll.k+' LJ'+ll.l+'</span>'
+      +(ll.f?'<span style="color:var(--pu);font-size:.65rem">&#9670;FN</span>':'')
+      +zds
+      +(ll.nt?'<span title="'+ll.nt+'" style="font-size:.7rem">&#128221;</span>':'')
+      +'<span class="arr">&#9660;</span>'
+      +'</div>'
+      +'<div class="lc-det" id="'+uid+'_det">'+detH+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renGr(list,wrap){
+  var gm={};
+  list.forEach(function(ll){
+    var lj=ll._lj||(ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1));
+    var sk='lj'+lj+(ll.f?'_fn':'')+(ll._sub||'');
+    if(!gm[sk]) gm[sk]={lj:lj,fn:ll.f,label:(ll.f?'Functioneel - ':'')+'Leerjaar '+lj,sub:ll._subL||null,list:[]};
+    gm[sk].list.push(ll);
+  });
+  var sorte=Object.entries(gm).sort(function(a,b){return a[0].localeCompare(b[0]);});
+  wrap.innerHTML='';
+  if(!sorte.length){wrap.innerHTML='<div class="em"><h3>Geen leerlingen ingedeeld</h3></div>';return;}
+  sorte.forEach(function(entry,gi){
+    var g=entry[1];
+    var kl=g.fn?'#5E4B8B':KL[gi%KL.length];
+    var wp=wpB(g.list);
+    var chips=maakChips(g.list,gi);
+    var wpC=wp.slice(0,8).map(function(w){return '<div class="wc"><span class="dd_ d'+w.dom+'"></span>'+w.doel+'</div>';}).join('')
+      ||'<span style="color:var(--mu);font-size:.72rem">Geen gedeelde werkpunten</span>';
+    var card=document.createElement('div');card.className='gc';
+    var cardId='gc_card_'+gi+'_'+wrap.id;
+    card.id=cardId;
+    var subHtml=g.sub?'<div class="gs">'+g.sub+'</div>':'';
+    card.innerHTML=
+      '<div class="gh">'
+      +'<div class="gkl" style="background:'+kl+'"></div>'
+      +'<div><div class="gt">'+g.label+'</div>'+subHtml+'</div>'
+      +'<span class="gn">'+g.list.length+' leerlingen</span>'
+      +'<button class="btn bgy bs groep-afdruk-btn" data-cardid="'+cardId+'" data-label="'+g.label+'" onclick="printEenGroep(this.dataset.cardid,this.dataset.label)" style="margin-left:12px">&#128438; Afdrukken</button>'
+      +'</div>'
+      +'<div class="gll">'+chips+'</div>'
+      +'<div class="gwp"><div class="wt">Gedeelde werkpunten (min. 50% van groep onder 60%)</div><div class="wcs">'+wpC+'</div></div>';
+    wrap.appendChild(card);
+  });
+}
+
+function togLC(uid){
+  var btn=document.getElementById(uid);
+  var det=document.getElementById(uid+'_det');
+  if(!btn||!det) return;
+  var isOpen=det.classList.contains('open');
+  document.querySelectorAll('.lc.open').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.lc-det.open').forEach(function(el){el.classList.remove('open');});
+  document.querySelectorAll('.lc .arr').forEach(function(el){el.innerHTML='&#9660;';});
+  if(!isOpen){
+    btn.classList.add('open');
+    det.classList.add('open');
+    var arr=btn.querySelector('.arr');
+    if(arr) arr.innerHTML='&#9650;';
+  }
+}
+
+function printEenGroep(cardId,label){
+  var card=document.getElementById(cardId);
+  if(!card) return;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.lc-det').forEach(function(el){el.classList.add('open');});
+  clone.querySelectorAll('.lc').forEach(function(el){el.classList.add('open');});
+  clone.querySelectorAll('.arr').forEach(function(el){el.remove();});
+  clone.querySelectorAll('.groep-afdruk-btn').forEach(function(el){el.remove();});
+  var pb=document.getElementById('print-block');
+  var datum=new Date().toLocaleDateString('nl-BE');
+  pb.innerHTML='<div class="print-hdr"><h2>'+label+'</h2><p>BuLO Sint-Franciscus &middot; Rekengroepen Wiskunde &middot; '+datum+'</p></div>';
+  pb.appendChild(clone);
+  window.print();
+  setTimeout(function(){pb.innerHTML='';},1000);
+}
+
+function genGr(){
+  var beslist=LL.filter(function(l){return l.b;});
+  if(!beslist.length){toast('Geen beslissingen ingevuld');return;}
+  var wrap=document.getElementById('grw');
+  var dr2=parseInt((document.getElementById('adr')||{value:'75'}).value)||75;
+
+  // Groepeer eerst op doelleerjaar, dan splits op zwakke domeinen
+  var ljMap={};
+  beslist.forEach(function(ll){
+    var lj=ll.dl||(ll.b==='herhaling'?ll.l:ll.l+1);
+    var adv=calcAdv(ll,dr2);
+    var zw=adv?adv.zw:[];
+    var copy=Object.assign({},ll);
+    copy._lj=lj;
+    copy._zw=zw;
+    if(!ljMap[lj]) ljMap[lj]=[];
+    ljMap[lj].push(copy);
+  });
+
+  // Splits per leerjaar op gedeelde zwakke domeinen
+  var allLL=[];
+  Object.keys(ljMap).sort().forEach(function(lj){
+    var lijst=ljMap[lj];
+    // Groepeer op zwakke domeinen combinatie
+    var subMap={};
+    lijst.forEach(function(ll){
+      var zk=(ll._zw||[]).slice().sort().join('+');
+      if(!subMap[zk]) subMap[zk]={zw:ll._zw||[],list:[]};
+      subMap[zk].list.push(ll);
+    });
+    // Merge kleine subgroepen (1 leerling) in meest gelijkaardige
+    var groot=[],klein=[];
+    Object.values(subMap).forEach(function(g){
+      if(g.list.length>=2) groot.push(g);
+      else klein=klein.concat(g.list);
+    });
+    klein.forEach(function(ll){
+      if(groot.length){
+        var b=groot[0],bs=-1;
+        groot.forEach(function(g){
+          var ov=(ll._zw||[]).filter(function(d){return g.zw.includes(d);}).length;
+          if(ov>bs){bs=ov;b=g;}
+        });
+        b.list.push(ll);
+      } else {
+        groot.push({zw:ll._zw||[],list:[ll]});
+      }
+    });
+    // Voeg subgroepen toe met label
+    groot.forEach(function(g,i){
+      var zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';
+      g.list.forEach(function(ll){
+        var c=Object.assign({},ll);
+        c._lj=parseInt(lj);
+        c._sub='_'+lj+'_'+i;
+        c._subL=zl;
+        allLL.push(c);
+      });
+    });
+  });
+
+  renGr(allLL,wrap);
+
+  var ob=LL.filter(function(l){return !l.b;});
+  if(ob.length){
+    var card=document.createElement('div');card.className='gc';
+    card.innerHTML='<div class="gh"><div class="gkl" style="background:var(--bo2)"></div><div class="gt" style="color:var(--mu)">Nog geen beslissing</div><span class="gn">'+ob.length+'</span></div>'
+      +'<div class="gll">'+ob.map(function(ll){return '<div class="lc-wrap"><div class="lc" style="cursor:default">'+ll.n+' <span class="ks">'+ll.k+'</span></div></div>';}).join('')+'</div>';
+    wrap.appendChild(card);
+  }
+  toast('Groepen gegenereerd');
+}
+
+function genAu(){
+  if(!LL.length) return;
+  var dr=parseInt(document.getElementById('adr').value)||75;
+  LL.forEach(function(ll){ll.advies=calcAdv(ll,dr);});
+  var nDs=LL.filter(function(l){return l.advies&&l.advies.type!=='herhaling';}).length;
+  var nHh=LL.filter(function(l){return l.advies&&l.advies.type==='herhaling';}).length;
+  document.getElementById('aus').innerHTML=
+    '<div class="st"><strong>'+LL.length+'</strong>&nbsp;leerlingen</div>'
+    +'<div class="st"><span class="sdg sds">'+nDs+'</span>&nbsp;doorstroom</div>'
+    +'<div class="st"><span class="sdg" style="background:var(--ol);color:var(--or)">'+nHh+'</span>&nbsp;herhaling</div>'
+    +'<div class="st" style="margin-left:auto;font-size:.72rem;color:var(--mu)">Drempel: '+dr+'%</div>';
+
+  var gm={};
+  LL.forEach(function(ll){
+    if(!ll.advies) return;
+    var lj=ll.advies.lj,type=ll.advies.type;
+    var zk=(ll.advies.zw||[]).slice().sort().join('+');
+    var sk='lj'+lj+'_'+type+'_'+zk;
+    if(!gm[sk]) gm[sk]={lj:lj,type:type,zw:ll.advies.zw||[],list:[]};
+    var copy=Object.assign({},ll);copy._lj=lj;copy._zw=ll.advies.zw||[];
+    gm[sk].list.push(copy);
+  });
+
+  var groot=[],klein=[];
+  Object.values(gm).forEach(function(g){
+    if(g.list.length>=2) groot.push(g);
+    else klein=klein.concat(g.list.map(function(l){var c=Object.assign({},l);c._type=g.type;return c;}));
+  });
+  klein.forEach(function(ll){
+    var matches=groot.filter(function(g){return g.lj===ll._lj&&g.type===(ll.advies?ll.advies.type:'doorstroom');});
+    if(matches.length){
+      var b=matches[0],bs=-1;
+      matches.forEach(function(g){var ov=(ll._zw||[]).filter(function(d){return g.zw.includes(d);}).length;if(ov>bs){bs=ov;b=g;}});
+      b.list.push(ll);
+    } else {
+      groot.push({lj:ll._lj,type:ll._type||'doorstroom',zw:ll._zw||[],list:[ll]});
+    }
+  });
+
+  var allLL=[];
+  groot.forEach(function(g,i){
+    var zl=g.zw.length?'Werkpunten: '+g.zw.join(', '):'Sterk op alle domeinen';
+    g.list.forEach(function(ll){
+      var c=Object.assign({},ll);c._lj=g.lj;c._zw=g.zw;c._sub='_'+i;c._subL=g.type==='herhaling'?null:zl;
+      allLL.push(c);
+    });
+  });
+  renGr(allLL,document.getElementById('auw'));
+}
+
+function expJS(){
+  var data=LL.map(function(ll){return {i:ll.i,b:ll.b,dl:ll.dl,f:ll.f,nt:ll.nt};});
+  var blob=new Blob([JSON.stringify({v:'3',d:new Date().toISOString(),data:data,verwijderd:_verwijderd,defGroepen:defGroepen},null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='rekengroepen_'+new Date().toISOString().split('T')[0]+'.json';a.click();
+  toast('Opgeslagen');
+}
+
+function impJS(e){
+  var f=e.target.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(ev){
+    var raw=ev.target.result;
+    // Wacht tot data.json volledig is ingeladen, anders vindt de import geen leerlingen om aan te koppelen
+    dataGeladen.then(function(){
+      try{
+        var d=JSON.parse(raw);
+        (d.data||d.leerlingen||[]).forEach(function(imp){
+          var b=LL.find(function(l){return l.i===imp.i||l.i===imp.id;});
+          if(b){b.b=imp.b||imp.beslissing;b.dl=imp.dl||imp.doelleerjaar;b.f=imp.f||imp.functioneel;b.nt=imp.nt||imp.notitie||'';}
+        });
+        // Herstel verwijderde leerlingen markering
+        if(d.verwijderd){
+          _verwijderd=d.verwijderd;
+          LL=LL.filter(function(l){return _verwijderd.indexOf(l.i)===-1;});
+        }
+        if(d.defGroepen&&d.defGroepen.length){defGroepen=d.defGroepen;renderDefGroepen();}
+        renderLL();updS();
+        // Auto-genereer groepsvoorstel als er beslissingen zijn
+        if(LL.some(function(l){return l.b;})){try{genGr();}catch(e){}}
+        toast('Geladen: '+f.name);
+      }catch(err){toast('Fout: '+err.message);}
+    });
+  };
+  r.readAsText(f);e.target.value='';
+}
+
+function verwijderLLdirect(id, naam){
+  if(!confirm(naam+' verwijderen? Deze leerling wordt niet meer opgenomen in de rekengroepen.')){return;}
+  LL=LL.filter(function(l){return l.i!==id;});
+  _verwijderd.push(id);
+  var el=document.getElementById('k_'+id.replace(/[^a-z0-9]/gi,'_'));
+  if(el) el.remove();
+  updS();
+  document.getElementById('fc_').textContent=LL.length+' leerlingen';
+  toast(naam+' verwijderd');
+}
+
+function verwijderLLbyKaart(btn){
+  // Zoek de kaart div op (parent van parent van parent...)
+  var kaart=btn;
+  while(kaart && !kaart.dataset.llid){ kaart=kaart.parentElement; }
+  if(!kaart || !kaart.dataset.llid){ alert('Leerling niet gevonden'); return; }
+  var id=kaart.dataset.llid;
+  var ll=LL.find(function(l){return l.i===id;});
+  if(!ll) return;
+  if(!confirm(ll.n+' verwijderen? Deze leerling wordt niet meer opgenomen in de rekengroepen.')){return;}
+  _verwijderd.push(id);
+  LL=LL.filter(function(l){return l.i!==id;});
+  kaart.remove();
+  updS();
+  document.getElementById('fc_').textContent=LL.length+' leerlingen';
+  toast(ll.n+' verwijderd');
+}
+
+function verwijderLL(id){
+  var ll=LL.find(function(l){return l.i===id;});
+  if(!ll) return;
+  if(!confirm(ll.n+' verwijderen? Deze leerling wordt niet meer opgenomen in de rekengroepen.')){return;}
+  _verwijderd.push(id);
+  LL=LL.filter(function(l){return l.i!==id;});
+  var el=document.getElementById('k_'+id.replace(/[^a-z0-9]/gi,'_'));
+  if(el) el.remove();
+  updS();
+  document.getElementById('fc_').textContent=LL.length+' leerlingen';
+  toast(ll.n+' verwijderd');
+}
+
+// ============================================================
+// DEFINITIEVE GROEPEN
+// ============================================================
+var defGroepen = []; // [{id, naam, kleur, leerlingen:[ll.i,...]}]
+var defKleuren = ['#2A6048','#1A4D8C','#B5582A','#5E4B8B','#7A5200','#2D6A8F','#3A6B2A','#1A6B5A','#8B2A5E','#6B3A2A','#C05A20','#1A7A6A'];
+
+function importeerNaarDef(wrapId){
+  var wrap=document.getElementById(wrapId);
+  if(!wrap||!wrap.querySelector('.gc')){
+    toast('Genereer eerst groepen in tabblad '+(wrapId==='grw'?'②':'③'));return;
+  }
+  if(defGroepen.length>0&&!confirm('Huidige definitieve groepen overschrijven?')) return;
+  defGroepen=[];
+  var cards=wrap.querySelectorAll('.gc');
+  cards.forEach(function(card,i){
+    var titelEl=card.querySelector('.gt');
+    if(!titelEl) return;
+    var titel=titelEl.textContent.trim();
+    var chips=card.querySelectorAll('.lc-wrap .lc');
+    var llIds=[];
+    chips.forEach(function(chip){
+      var uid=chip.id; // lc_xxx_gi
+      // Zoek leerling via naam+klas in chip
+      var naamEl=chip.querySelector('strong');
+      var klasEl=chip.querySelector('.ks');
+      if(!naamEl||!klasEl) return;
+      var naam=naamEl.textContent.trim();
+      var klasTxt=klasEl.textContent.trim().replace(/LJ\d+/,'').trim();
+      var ll=LL.find(function(l){return l.n===naam;});
+      if(ll) llIds.push(ll.i);
+    });
+    if(llIds.length>0){
+      defGroepen.push({
+        id:'dg_'+Date.now()+'_'+i,
+        naam:titel,
+        kleur:defKleuren[i%defKleuren.length],
+        leerlingen:llIds
+      });
+    }
+  });
+  renderDefGroepen();
+  toast(defGroepen.length+' groepen geïmporteerd');
+  showTab('def', document.querySelector('nav button:nth-child(4)'));
+}
+
+function nieuweDefGroep(){
+  defGroepen.push({
+    id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+    naam:'Nieuwe groep',
+    kleur:defKleuren[defGroepen.length%defKleuren.length],
+    leerlingen:[]
+  });
+  renderDefGroepen();
+}
+
+function gemScoreLL(ll){
+  var doms=Object.keys(ll.d||{});
+  if(!doms.length) return 50;
+  var som=doms.reduce(function(s,d){return s+(ll.d[d].p||0);},0);
+  return som/doms.length;
+}
+
+function verdeelInChunks(lijst,n){
+  n=Math.max(1,Math.min(n,lijst.length));
+  var chunks=[],basis=Math.floor(lijst.length/n),rest=lijst.length%n,idx=0;
+  for(var i=0;i<n;i++){
+    var grootte=basis+(i<rest?1:0);
+    chunks.push(lijst.slice(idx,idx+grootte));
+    idx+=grootte;
+  }
+  return chunks;
+}
+
+function herverdeelGroepen(){
+  var input=document.getElementById('herverdeel-aantal');
+  var target=parseInt(input.value,10);
+  if(!target||target<1){ toast('Geef een geldig aantal groepen op'); return; }
+
+  var alleIds=defGroepen.reduce(function(acc,g){return acc.concat(g.leerlingen);},[]);
+  var leerlingen=alleIds.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  if(!leerlingen.length){ toast('Geen ingedeelde leerlingen om te herverdelen'); return; }
+
+  // Groepeer per doelleerjaar (of leerjaar als er geen beslissing is) én per traject
+  // — leerjaren nooit mengen, functioneel traject nooit mengen met regulier
+  var buckets={},bucketMeta={};
+  leerlingen.forEach(function(ll){
+    var lj=ll.dl||ll.l;
+    var key=(ll.f?'FN_':'REG_')+lj;
+    if(!buckets[key]){ buckets[key]=[]; bucketMeta[key]={lj:lj,functioneel:!!ll.f}; }
+    buckets[key].push(ll);
+  });
+  var bucketKeys=Object.keys(buckets).sort(function(a,b){
+    var ma=bucketMeta[a],mb=bucketMeta[b];
+    return ma.lj-mb.lj||(ma.functioneel===mb.functioneel?0:(ma.functioneel?1:-1));
+  });
+
+  if(target<bucketKeys.length){
+    toast('Minstens '+bucketKeys.length+' groepen nodig (1 per leerjaar/traject) — aangepast');
+    target=bucketKeys.length;
+  }
+
+  if(!confirm('Dit vervangt de huidige '+defGroepen.length+' groep(en) door '+target+' nieuwe, gebalanceerde groepen. Ingedeelde leerlingen blijven behouden; groepsnamen en -kleuren gaan verloren. Doorgaan?')) return;
+
+  // Proportionele toewijzing van groepen per leerjaar-bucket (largest remainder method)
+  var totaalLL=leerlingen.length;
+  var ruw=bucketKeys.map(function(k){return Math.max(1,target*buckets[k].length/totaalLL);});
+  var vloer=ruw.map(function(n){return Math.max(1,Math.floor(n));});
+  var restCapaciteit=target-vloer.reduce(function(a,b){return a+b;},0);
+  var fracties=ruw.map(function(r,i){return {i:i,frac:r-Math.floor(r)};}).sort(function(a,b){return b.frac-a.frac;});
+  for(var fi=0;fi<fracties.length&&restCapaciteit>0;fi++){ vloer[fracties[fi].i]++; restCapaciteit--; }
+
+  var nieuweGroepen=[];
+  bucketKeys.forEach(function(key,bi){
+    var groep=buckets[key].slice().sort(function(a,b){return gemScoreLL(a)-gemScoreLL(b);});
+    var chunks=verdeelInChunks(groep,vloer[bi]);
+    chunks.forEach(function(chunk,ci){
+      var meta=bucketMeta[key];
+      nieuweGroepen.push({
+        id:'dg_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),
+        naam:(meta.functioneel?'Functioneel LJ':'LJ')+meta.lj+' — groep '+(ci+1),
+        kleur:defKleuren[nieuweGroepen.length%defKleuren.length],
+        functioneel:meta.functioneel,
+        leerlingen:chunk.map(function(ll){return ll.i;})
+      });
+    });
+  });
+
+  defGroepen=nieuweGroepen;
+  renderDefGroepen();
+  toast('Herverdeeld in '+nieuweGroepen.length+' groepen');
+}
+
+function renderDefGroepen(){
+  var wrap=document.getElementById('def-wrap');
+  wrap.innerHTML='';
+
+  // Onverdeelde leerlingen
+  var verdeeld=defGroepen.reduce(function(acc,g){return acc.concat(g.leerlingen);},[ ]);
+  var onverdeeld=LL.filter(function(ll){return verdeeld.indexOf(ll.i)===-1;});
+  if(onverdeeld.length>0){
+    var ov=document.createElement('div');
+    ov.className='def-onverdeeld';
+    ov.innerHTML='<h4>Niet ingedeeld ('+onverdeeld.length+')</h4>';
+    var chips=document.createElement('div');
+    chips.style.cssText='display:flex;flex-wrap:wrap;gap:5px';
+    onverdeeld.forEach(function(ll){
+      var adv=calcAdv(ll,75);
+      var zw=adv?adv.zw:[];
+      var chip=maakDefChip(ll,zw,null);
+      chips.appendChild(chip);
+    });
+    ov.appendChild(chips);
+    wrap.appendChild(ov);
+  }
+
+  // Groepen
+  defGroepen.forEach(function(g){
+    var card=maakDefGroepCard(g);
+    wrap.appendChild(card);
+  });
+
+  // Nieuwe groep knop
+  var addBtn=document.createElement('button');
+  addBtn.className='def-nieuw-btn';
+  addBtn.textContent='+ Nieuwe lege groep';
+  addBtn.onclick=nieuweDefGroep;
+  wrap.appendChild(addBtn);
+}
+
+function maakDefGroepCard(g){
+  var card=document.createElement('div');
+  card.className='def-groep';
+  card.id='defg_'+g.id;
+
+  // Groep verslepen om de volgorde te wijzigen
+  card.ondragover=function(e){
+    if(e.dataTransfer.types.indexOf('groupid')===-1) return;
+    e.preventDefault();
+    card.classList.add('drag-over-groep');
+  };
+  card.ondragleave=function(){ card.classList.remove('drag-over-groep'); };
+  card.ondrop=function(e){
+    var vanId=e.dataTransfer.getData('groupid');
+    if(!vanId) return;
+    e.preventDefault();
+    card.classList.remove('drag-over-groep');
+    var vanIdx=defGroepen.findIndex(function(x){return x.id===vanId;});
+    var naarIdx=defGroepen.findIndex(function(x){return x.id===g.id;});
+    if(vanIdx===-1||naarIdx===-1||vanIdx===naarIdx) return;
+    var verplaatst=defGroepen.splice(vanIdx,1)[0];
+    defGroepen.splice(naarIdx,0,verplaatst);
+    renderDefGroepen();
+  };
+
+  // Header
+  var hdr=document.createElement('div');
+  hdr.className='def-groep-hdr';
+
+  var handle=document.createElement('span');
+  handle.className='def-groep-handle';
+  handle.draggable=true;
+  handle.title='Versleep om de volgorde van groepen te wijzigen';
+  handle.innerHTML='&#9776;';
+  handle.ondragstart=function(e){
+    e.dataTransfer.setData('groupid',g.id);
+    e.dataTransfer.effectAllowed='move';
+  };
+  hdr.appendChild(handle);
+
+  var kleurEl=document.createElement('div');
+  kleurEl.className='def-groep-kleur';
+  kleurEl.style.background=g.kleur;
+  kleurEl.title='Klik om kleur te wijzigen';
+  kleurEl.onclick=function(){ wisselKleur(g.id); };
+
+  var naamEl=document.createElement('input');
+  naamEl.type='text';
+  naamEl.className='def-groep-naam';
+  naamEl.value=g.naam;
+  naamEl.onchange=function(){ g.naam=this.value; };
+  naamEl.onblur=function(){ g.naam=this.value; };
+
+  var nEl=document.createElement('span');
+  nEl.className='def-groep-n';
+  nEl.textContent=g.leerlingen.length+' leerlingen';
+
+  var fnBtn=document.createElement('button');
+  fnBtn.className='def-groep-fn'+(g.functioneel?' on':'');
+  fnBtn.title='Markeer deze groep als functioneel traject';
+  fnBtn.innerHTML='&#9670; Functioneel';
+  fnBtn.onclick=function(){ g.functioneel=!g.functioneel; renderDefGroepen(); };
+
+  var printOvBtn=document.createElement('button');
+  printOvBtn.className='def-groep-print';
+  printOvBtn.title='Print enkel deze groep — kort overzicht';
+  printOvBtn.innerHTML='&#128438; Overzicht';
+  printOvBtn.onclick=function(){ printEenDefGroep(g.id,false); };
+
+  var printDoBtn=document.createElement('button');
+  printDoBtn.className='def-groep-print';
+  printDoBtn.title='Print enkel deze groep — met doelen per domein';
+  printDoBtn.innerHTML='&#128438; Met doelen';
+  printDoBtn.onclick=function(){ printEenDefGroep(g.id,true); };
+
+  var delBtn=document.createElement('button');
+  delBtn.className='def-groep-del';
+  delBtn.innerHTML='&#128465; Groep verwijderen';
+  delBtn.onclick=function(){
+    if(confirm('"'+g.naam+'" verwijderen? Leerlingen komen terug bij Niet ingedeeld.'))
+    { defGroepen=defGroepen.filter(function(x){return x.id!==g.id;}); renderDefGroepen(); }
+  };
+
+  hdr.appendChild(kleurEl);
+  hdr.appendChild(naamEl);
+  hdr.appendChild(nEl);
+  hdr.appendChild(fnBtn);
+  hdr.appendChild(printOvBtn);
+  hdr.appendChild(printDoBtn);
+  hdr.appendChild(delBtn);
+  card.appendChild(hdr);
+
+  // Leerlingen
+  var llList=document.createElement('div');
+  llList.className='def-ll-list';
+  llList.dataset.gid=g.id;
+
+  // Drag-drop ontvanger
+  llList.ondragover=function(e){e.preventDefault();this.classList.add('drag-over');};
+  llList.ondragleave=function(){this.classList.remove('drag-over');};
+  llList.ondrop=function(e){
+    e.preventDefault();this.classList.remove('drag-over');
+    var llId=e.dataTransfer.getData('llid');
+    var vanGid=e.dataTransfer.getData('gid');
+    if(!llId) return;
+    // Verwijder uit oude groep
+    if(vanGid){
+      var vanG=defGroepen.find(function(x){return x.id===vanGid;});
+      if(vanG) vanG.leerlingen=vanG.leerlingen.filter(function(x){return x!==llId;});
+    }
+    // Voeg toe aan nieuwe groep
+    if(g.leerlingen.indexOf(llId)===-1) g.leerlingen.push(llId);
+    renderDefGroepen();
+  };
+
+  g.leerlingen.forEach(function(llId){
+    var ll=LL.find(function(l){return l.i===llId;});
+    if(!ll) return;
+    var adv=calcAdv(ll,75);
+    var zw=adv?adv.zw:[];
+    var chip=maakDefChip(ll,zw,g.id);
+    llList.appendChild(chip);
+  });
+  card.appendChild(llList);
+
+  // Werkpunten
+  var llObjs=g.leerlingen.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  var wp=wpB(llObjs);
+  if(wp.length){
+    var wpDiv=document.createElement('div');
+    wpDiv.className='gwp';
+    wpDiv.innerHTML='<div class="wt">Gedeelde werkpunten</div><div class="wcs">'
+      +wp.slice(0,8).map(function(w){return '<div class="wc" data-vol="'+escAttr(w.doelVol)+'"><span class="dd_ d'+w.dom+'"></span><span class="wc-txt">'+w.doel+'</span></div>';}).join('')
+      +'</div>';
+    card.appendChild(wpDiv);
+  }
+
+  return card;
+}
+
+function maakDefChip(ll,zw,gid){
+  var chip=document.createElement('div');
+  chip.className='def-chip';
+  chip.draggable=true;
+  chip.dataset.llid=ll.i;
+
+  chip.ondragstart=function(e){
+    if(e.target.closest('.dtt')||e.target.closest('.dtp')){e.preventDefault();return;}
+    e.dataTransfer.setData('llid',ll.i);
+    e.dataTransfer.setData('gid',gid||'');
+  };
+
+  var top=document.createElement('div');
+  top.className='def-chip-top';
+  var zds=(zw||[]).map(function(d){return '<span class="zd">'+d+'</span>';}).join('');
+  var doelLj=ll.dl||ll.l;
+  var ljCls=ll.b==='doorstroom'?'ljds':(ll.b==='herhaling'?'ljhh':'blj');
+  top.innerHTML='<strong>'+ll.n+'</strong><span class="ks">'+ll.k+'</span><span class="bdg '+ljCls+'">LJ'+doelLj+'</span>'+zds;
+
+  var removeBtn=document.createElement('button');
+  removeBtn.className='def-chip-remove';
+  removeBtn.innerHTML='&#10005;';
+  removeBtn.title='Uit groep verwijderen';
+  removeBtn.onclick=function(e){
+    e.stopPropagation();
+    if(gid){
+      var g=defGroepen.find(function(x){return x.id===gid;});
+      if(g) g.leerlingen=g.leerlingen.filter(function(x){return x!==ll.i;});
+    }
+    renderDefGroepen();
+  };
+  top.appendChild(removeBtn);
+  chip.appendChild(top);
+
+  var dttBtn=document.createElement('button');
+  dttBtn.className='dtt';
+  dttBtn.textContent='▼ Doelen per domein';
+  dttBtn.onclick=function(e){e.stopPropagation();togDet(dttBtn);};
+  chip.appendChild(dttBtn);
+
+  var dtp=document.createElement('div');
+  dtp.className='dtp';
+  chip.appendChild(dtp);
+
+  var bpBtn=document.createElement('button');
+  bpBtn.className='dtt bgt';
+  bpBtn.textContent='▼ Beste groep';
+  bpBtn.onclick=function(e){e.stopPropagation();togBestePassend(bpBtn,ll,gid);};
+  chip.appendChild(bpBtn);
+
+  var bpp=document.createElement('div');
+  bpp.className='dtp bgp';
+  chip.appendChild(bpp);
+
+  return chip;
+}
+
+function groepIsFunctioneel(g){
+  // Expliciet ingesteld label heeft voorrang; anders afgeleid uit de leden (backwards compatible)
+  if(typeof g.functioneel==='boolean') return g.functioneel;
+  var leden=g.leerlingen.map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+  return leden.length>0&&leden.every(function(l){return !!l.f;});
+}
+
+function bestePassendeGroepen(ll,top){
+  top=top||3;
+  var ljKey=ll.dl||ll.l;
+  var fnKey=!!ll.f;
+  var studentAdv=calcAdv(ll,75);
+  var studentZw=studentAdv?studentAdv.zw:[];
+  var studentGem=gemScoreLL(ll);
+  var heeftData=Object.keys(ll.d||{}).length>0;
+
+  var kandidaten=defGroepen.map(function(g){
+    var leden=g.leerlingen.filter(function(id){return id!==ll.i;}).map(function(id){return LL.find(function(l){return l.i===id;});}).filter(Boolean);
+    return {groep:g,leden:leden};
+  }).filter(function(x){
+    if(!x.leden.length) return false;
+    if(groepIsFunctioneel(x.groep)!==fnKey) return false;
+    return x.leden.every(function(lid){return (lid.dl||lid.l)===ljKey;});
+  });
+
+  var gescoord=kandidaten.map(function(x){
+    var gemGroep=x.leden.reduce(function(s,l){return s+gemScoreLL(l);},0)/x.leden.length;
+    var zwGroep={};
+    x.leden.forEach(function(l){
+      var adv=calcAdv(l,75);
+      (adv?adv.zw:[]).forEach(function(d){zwGroep[d]=(zwGroep[d]||0)+1;});
+    });
+    var overlap=studentZw.filter(function(d){return zwGroep[d];}).length;
+    return {groep:x.groep,overlap:overlap,scoreDiff:Math.abs(gemGroep-studentGem),aantal:x.leden.length};
+  });
+
+  if(heeftData){
+    gescoord.sort(function(a,b){return b.overlap-a.overlap||a.scoreDiff-b.scoreDiff;});
+  }else{
+    // Geen testdata beschikbaar: sorteer op groepsgrootte voor een evenwichtige verdeling
+    gescoord.sort(function(a,b){return a.aantal-b.aantal;});
+  }
+  return {resultaten:gescoord.slice(0,top),heeftData:heeftData};
+}
+
+function plaatsInGroep(llId,huidigeGid,nieuweGid){
+  if(huidigeGid){
+    var vanG=defGroepen.find(function(x){return x.id===huidigeGid;});
+    if(vanG) vanG.leerlingen=vanG.leerlingen.filter(function(x){return x!==llId;});
+  }
+  var naarG=defGroepen.find(function(x){return x.id===nieuweGid;});
+  if(naarG&&naarG.leerlingen.indexOf(llId)===-1) naarG.leerlingen.push(llId);
+  renderDefGroepen();
+  toast('Geplaatst in "'+(naarG?naarG.naam:'')+'"');
+}
+
+function togBestePassend(btn,ll,gid){
+  var p=btn.nextElementSibling;
+  var open=p.classList.contains('open');
+  if(open){ p.classList.remove('open'); btn.textContent='▼ Beste groep'; return; }
+
+  var r=bestePassendeGroepen(ll,3);
+  var labels=['1ste keuze','2de keuze','3de keuze'];
+  var html='';
+  if(!r.resultaten.length){
+    html='<div style="font-size:.72rem;color:var(--mu);padding:2px 0">Geen andere groepen binnen hetzelfde leerjaar'+(ll.f?'/traject':'')+' gevonden.</div>';
+  }else{
+    if(!r.heeftData) html+='<div style="font-size:.65rem;color:var(--mu);margin-bottom:4px">Geen testdata — gesorteerd op groepsgrootte voor evenwicht</div>';
+    html+=r.resultaten.map(function(x,i){
+      var uid='bp_'+x.groep.id+'_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+      return '<div class="bpr"><span class="bpl">'+(labels[i]||(i+1)+'de keuze')+'</span>'
+        +'<span class="bpn">'+x.groep.naam+'</span>'
+        +'<span class="bpi">'+x.aantal+' ll.'+(r.heeftData?', '+x.overlap+' gedeelde zwakke domeinen':'')+'</span>'
+        +'<button class="bpb" id="'+uid+'">Plaats hier</button></div>';
+    }).join('');
+  }
+  p.innerHTML=html;
+  p.classList.add('open');
+  btn.textContent='▲ Beste groep verbergen';
+  r.resultaten.forEach(function(x){
+    var uid='bp_'+x.groep.id+'_'+ll.i.replace(/[^a-z0-9]/gi,'_');
+    var b=document.getElementById(uid);
+    if(b) b.onclick=function(e){e.stopPropagation();plaatsInGroep(ll.i,gid,x.groep.id);};
+  });
+}
+
+function wisselKleur(gid){
+  var g=defGroepen.find(function(x){return x.id===gid;});
+  if(!g) return;
+  var idx=defKleuren.indexOf(g.kleur);
+  g.kleur=defKleuren[(idx+1)%defKleuren.length];
+  renderDefGroepen();
+}
+
+function bouwGroepPrintClone(g,metDoelen){
+  var card=document.getElementById('defg_'+g.id);
+  if(!card) return null;
+  var clone=card.cloneNode(true);
+  clone.querySelectorAll('.def-chip-remove,.def-groep-del,.def-groep-handle,.def-groep-fn,.def-groep-print,.bgt,.bgp').forEach(function(el){el.remove();});
+  clone.querySelectorAll('.def-chip').forEach(function(chipEl){
+    var dtp=chipEl.querySelector('.dtp');
+    var dtt=chipEl.querySelector('.dtt');
+    if(metDoelen){
+      // Doelen per domein volledig uitklappen voor iedere leerling, ongeacht of dit op scherm al open stond
+      var ll=LL.find(function(l){return l.i===chipEl.dataset.llid;});
+      if(ll&&dtp) dtp.innerHTML=bouwDoelenHTML(ll,true);
+      if(dtt) dtt.remove();
+    } else {
+      // Kort overzicht: geen doelen-knop of -paneel, enkel naam/klas/badges + gedeelde werkpunten
+      if(dtt) dtt.remove();
+      if(dtp) dtp.remove();
+    }
+  });
+  // Werkpunten voluit tonen ipv ingekort met '...'
+  clone.querySelectorAll('.wc').forEach(function(el){
+    var vol=el.dataset.vol;
+    var txt=el.querySelector('.wc-txt');
+    if(vol&&txt) txt.textContent=vol;
+  });
+  // Vervang input door span
+  var inp=clone.querySelector('.def-groep-naam');
+  if(inp){var sp=document.createElement('span');sp.className='gt';sp.textContent=inp.value;inp.replaceWith(sp);}
+  return clone;
+}
+
+function printEenDefGroep(gid,metDoelen){
+  var g=defGroepen.find(function(x){return x.id===gid;});
+  if(!g) return;
+  var pb=document.getElementById('print-block');
+  var datum=new Date().toLocaleDateString('nl-BE');
+  var titel=g.naam+(metDoelen?' &mdash; met doelen per domein':'');
+  pb.className=metDoelen?'pb-doelen':'';
+  pb.innerHTML='<div class="print-hdr"><h2>'+titel+'</h2><p>BuLO Sint-Franciscus &middot; Wiskunde &middot; '+datum+'</p></div>';
+  var clone=bouwGroepPrintClone(g,metDoelen);
+  if(clone) pb.appendChild(clone);
+  window.print();
+  setTimeout(function(){pb.innerHTML='';},1000);
+}
+
+function toast(msg){
+  var t=document.getElementById('tst');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
+</script>
+</body>
+</html>
